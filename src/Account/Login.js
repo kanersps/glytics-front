@@ -3,8 +3,10 @@ import * as React from "react";
 import { Form, Input, Button, Checkbox } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import Title from "antd/es/typography/Title";
-import { Link } from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 import axios from "axios"
+
+import { withCookies } from 'react-cookie';
 
 const api = axios.create({
     baseURL: 'https://localhost:5001/',
@@ -12,7 +14,7 @@ const api = axios.create({
     headers: { 'X-Custom-Header': 'foobar' }
 });
 
-export default class extends React.Component {
+class Login extends React.Component {
     constructor(props) {
         super(props);
 
@@ -25,17 +27,26 @@ export default class extends React.Component {
     }
 
     onFinish(values) {
+        const { cookies } = this.props;
+
         this.setState({
-            loggingIn: true
+            loggingIn: true,
+            loggedIn: false
         })
 
         api.post("account/login", values)
             .then(res => {
                 if(res.data.success) {
                     this.setState({
-                        err: "Loggin successfull, redirecting to home page...",
+                        err: "Login successful, redirecting to home page...",
                         loggingIn: false
                     })
+
+                    cookies.set("apikey", res.data.message);
+
+                    setTimeout(() => {
+                        this.props.loggedIn();
+                    }, 3000)
                 } else {
                     this.setState({
                         err: "<span style='color: red'>" + res.data.message + "</span>",
@@ -102,3 +113,5 @@ export default class extends React.Component {
         )
     }
 }
+
+export default withCookies(Login)

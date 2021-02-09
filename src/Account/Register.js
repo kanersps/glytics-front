@@ -6,6 +6,8 @@ import Title from "antd/es/typography/Title";
 import { Link } from "react-router-dom";
 import axios from "axios"
 
+import { withCookies } from "react-cookie"
+
 const api = axios.create({
     baseURL: 'https://localhost:5001/',
     timeout: 5000,
@@ -23,7 +25,7 @@ const formItemLayout = {
     },
 };
 
-export default class extends React.Component {
+class Register extends React.Component {
     constructor(props) {
         super(props);
 
@@ -44,9 +46,38 @@ export default class extends React.Component {
             .then(res => {
                 if(res.data.success) {
                     this.setState({
-                        err: "Registration successfull! Redirecting to home page...",
+                        err: "Registration successful! Logging in...",
                         registering: false
                     })
+
+                    setTimeout(() => {
+                        api.post("account/login", {username: values.username, password: values.password})
+                            .then(res => {
+                                if (res.data.success) {
+                                    this.setState({
+                                        err: "Login successful, redirecting to home page..."
+                                    })
+
+                                    this.props.setApiKey(res.data.message);
+
+                                    setTimeout(() => {
+                                        this.props.loggedIn();
+                                    }, 3000)
+                                } else {
+                                    this.setState({
+                                        err: "<span style='color: red'>" + res.data.message + "</span>",
+                                        loggingIn: false
+                                    })
+                                }
+                            })
+                            .catch(err => {
+                                this.setState({
+                                    err: "<span style='color: red'>" + err.message + "</span>",
+                                    registering: false
+                                })
+                            })
+                    }, 3000)
+
                 } else {
                     this.setState({
                         err: "<span style='color: red'>" + res.data.message + "</span>",
@@ -152,3 +183,5 @@ export default class extends React.Component {
         )
     }
 }
+
+export default Register
