@@ -7,11 +7,13 @@ const { Header } = Layout;
 
 const Pages = [
     {
-    "path": "/",
-    "title": "Home"
+        "path": "/",
+        "selector": "",
+        "title": "Home"
     },
     {
         "path": "/account",
+        "selector": "account",
         "title": "Account"
     }
 ]
@@ -20,11 +22,11 @@ class GHeader extends Component {
     render() {
         return (
             <Header>
-                <Menu theme="dark" mode="horizontal" selectedKeys={[this.props.location.pathname]}>
-                    <li className={"ant-menu-item ant-menu-item-only-child brand"}>G-Lytics</li>
+                <Menu theme="dark" mode="horizontal" selectedKeys={[""]}>
+                    <li className={"ant-menu-item ant-menu-item-only-child brand"}><Link to={"/"}><span>G-Lytics</span></Link></li>
 
                     {Pages.map(page => {
-                        return <Menu.Item isSelected={true} key={page.path}><Link to={page.path}>{page.title}</Link></Menu.Item>
+                        return <Menu.Item key={page.selector}><Link to={page.path}>{page.title}</Link></Menu.Item>
                     })}
                 </Menu>
             </Header>

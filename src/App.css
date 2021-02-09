@@ -4,13 +4,29 @@
   text-align: center;
 }
 
+.login-form {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 300px;
+}
+
+.register-form {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 500px;
+}
+
+.brand span {
+  color: white;
+}
+
 .brand {
   float: left;
   color: white !important;
   font-weight: 500;
   font-size: 1.8em;
   margin-right: 50px;
-  background: #001529;
+  background: #001529 !important;
 }
 
 .App-logo {
