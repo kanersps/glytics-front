@@ -1,5 +1,16 @@
+@import '~antd/dist/antd.css';
+
 .App {
   text-align: center;
+}
+
+.brand {
+  float: left;
+  color: white !important;
+  font-weight: 500;
+  font-size: 1.8em;
+  margin-right: 50px;
+  background: #001529;
 }
 
 .App-logo {
