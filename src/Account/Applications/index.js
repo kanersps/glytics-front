@@ -7,7 +7,7 @@ export default class Applications extends React.Component {
         return <div>
             <Switch>
                 <Route path={"/applications/websites"}>
-                    <Websites apikey={ this.props.apikey }></Websites>
+                    <Websites apikey={this.props.apikey}/>
                 </Route>
             </Switch>
         </div>
