@@ -200,7 +200,7 @@ class Websites extends React.Component {
                             this.setPopupActive("actionmenu", false);
                         }else {
                             this.setLoaderActive(key, false);
-                            this.setPopupActive("actionmenu", false)
+                            this.setPopupActive(key, false)
                         }
 
                         this.reloadWebsites()
@@ -213,7 +213,7 @@ class Websites extends React.Component {
                             this.setPopupActive("actionmenu", false);
                         }else {
                             this.setLoaderActive(key, false);
-                            this.setPopupActive("actionmenu", false)
+                            this.setPopupActive(key, false)
                         }
                     })
                 break;
@@ -224,16 +224,26 @@ class Websites extends React.Component {
                     trackingCode: action[1]
                 })
                     .then(_ => {
-                        this.setLoaderActive(key, false);
-                        this.setPopupActive(key, false)
+                        if(action[0] === "delete" || action[0] === "deactivate") {
+                            this.setLoaderActive("actionmenu", false);
+                            this.setPopupActive("actionmenu", false);
+                        }else {
+                            this.setLoaderActive(key, false);
+                            this.setPopupActive(key, false)
+                        }
 
                         this.reloadWebsites()
                     })
                     .catch(err => {
                         alert(err.message)
 
-                        this.setLoaderActive(key, false);
-                        this.setPopupActive(key, false)
+                        if(action[0] === "delete" || action[0] === "deactivate") {
+                            this.setLoaderActive("actionmenu", false);
+                            this.setPopupActive("actionmenu", false);
+                        }else {
+                            this.setLoaderActive(key, false);
+                            this.setPopupActive(key, false)
+                        }
                     })
                 break;
             }
