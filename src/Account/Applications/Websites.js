@@ -38,6 +38,8 @@ class Websites extends React.Component {
             searchColumn: "",
             addWebsiteFormVisible: false,
             websiteFormLoading: false,
+            deactivateWebsiteLoading: false,
+            deactivateWebsiteVisible: false,
             errorMessageAddWebsite: ""
         }
     }
@@ -121,8 +123,19 @@ class Websites extends React.Component {
 
         api.get("application/website/all")
             .then(res => {
+                let activeWebsites = []
+                let inactiveWebsites = []
+
+                for(let website of res.data) {
+                    if(website.active)
+                        activeWebsites.push(website);
+                    else
+                        inactiveWebsites.push(website);
+                }
+
                 this.setState({
-                    activeWebsites: res.data,
+                    activeWebsites: activeWebsites,
+                    inactiveWebsites: inactiveWebsites,
                     loadingWebsites: false
                 })
             })
@@ -154,6 +167,29 @@ class Websites extends React.Component {
         switch(action[0]) {
             case "deactivate": {
                 console.log("Deactivate: " + action[1])
+
+                this.setState({
+                    deactivateWebsiteLoading: true
+                })
+
+                api.post("application/website/deactivate", {
+                    trackingCode: action[1]
+                })
+                    .then(_ => {
+                        this.setState({
+                            deactivateWebsiteLoading: false,
+                            deactivateWebsiteVisible: false
+                        })
+
+                        this.reloadWebsites()
+                    })
+                    .catch(err => {
+                        alert(err.message)
+                        this.setState({
+                            deactivateWebsiteLoading: false,
+                            deactivateWebsiteVisible: false
+                        })
+                    })
                 break;
             }
         }
@@ -190,8 +226,8 @@ class Websites extends React.Component {
                     <Dropdown overlay={
                         <Menu>
                                 <Menu.Item key={"deactivate_" + record.trackingcode}>
-                                    <Popconfirm onConfirm={() => {
-                                        this.handleActionMenu("deactivate_" + record.trackingcode);
+                                    <Popconfirm onCancel={() => {this.setState({deactivateWebsiteVisible: false})}} onClick={() => this.setState({deactivateWebsiteVisible: true})} visible={this.state.deactivateWebsiteVisible} okButtonProps={{loading: this.state.deactivateWebsiteLoading}} onConfirm={() => {
+                                        this.handleActionMenu("deactivate_" + record.trackingCode);
                                     }} title={"Are you sure you want to de-activate " + record.name + "?"}>
                                         <div>Deactivate</div>
                                     </Popconfirm>
