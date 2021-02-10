@@ -7,13 +7,40 @@ import Sider from "antd/es/layout/Sider";
 import SubMenu from "antd/es/menu/SubMenu";
 import {Content} from "antd/es/layout/layout";
 import axios from "axios";
-import Title from "antd/es/typography/Title";
+import Applications from "./Applications"
 import AccountDetails from "./AccountDetails";
 
 const api = axios.create({
     baseURL: 'https://localhost:5001/',
     timeout: 2000
 });
+
+const categories = [
+    {
+        name: "Account",
+        icon: <UserOutlined />,
+        items: [
+            {
+                path: "/account/details",
+                name: "Details"
+            },
+            {
+                path: "/account/privacy",
+                name: "Privacy"
+            }
+        ]
+    },
+    {
+        name: "Applications",
+        icon: <HomeOutlined />,
+        items: [
+            {
+                path: "/account/applications/websites",
+                name: "Websites"
+            }
+        ]
+    }
+]
 
 class Dashboard extends React.Component {
     constructor(props) {
@@ -22,8 +49,19 @@ class Dashboard extends React.Component {
         this.state = {}
     }
 
+    getActiveCategory() {
+        for(let category of categories) {
+            for(let item of category.items) {
+                if(item.path === window.location.pathname)
+                    return category.name;
+            }
+        }
+
+        return "Account";
+    }
+
     checkApiKey(prevProps, force) {
-        if(force || this.props.apikey != prevProps.apikey) {
+        if(force || this.props.apikey !== prevProps.apikey) {
             api.defaults.headers = {
                 "key": this.props.apikey
             }
@@ -53,20 +91,20 @@ class Dashboard extends React.Component {
             <Sider width={200} className="site-layout-background">
                 <Menu
                     mode="inline"
-                    defaultSelectedKeys={['1']}
-                    defaultOpenKeys={['sub1']}
+                    defaultSelectedKeys={[window.location.pathname === "/account" ? "/account/details" : window.location.pathname]}
+                    defaultOpenKeys={[this.getActiveCategory()]}
                     style={{ height: '100%', borderRight: 0 }}
                 >
 
-
-                    <SubMenu key="sub1" icon={<UserOutlined />} title="Account">
-                        <Menu.Item key="1"><Link to={"/account/details"}>Details</Link></Menu.Item>
-                        <Menu.Item key="2"><Link to={"/account/privacy"}>Privacy</Link></Menu.Item>
-                    </SubMenu>
-
-                    <SubMenu key="sub2" icon={<HomeOutlined />} title="Applications">
-                        <Menu.Item key="3"><Link to={"/account/applications/websites"}>Websites</Link></Menu.Item>
-                    </SubMenu>
+                    { categories.map(category => {
+                        return <SubMenu key={category.name} icon={category.icon} title={category.name}>
+                            { category.items.map(item => {
+                                return <Menu.Item key={item.path}>
+                                    <Link to={item.path}>{ item.name }</Link>
+                                </Menu.Item>
+                            })}
+                        </SubMenu>
+                    }) }
                 </Menu>
             </Sider>
 
@@ -96,7 +134,8 @@ class Dashboard extends React.Component {
                         <Route path={"/account/privacy"}>
                         </Route>
 
-                        <Route path={"/account/applications/websites"}>
+                        <Route path={"/account/applications"}>
+                            <Applications></Applications>
                         </Route>
 
                         <Route path={"/account"}>

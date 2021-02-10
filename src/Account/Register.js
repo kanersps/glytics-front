@@ -1,12 +1,9 @@
 import * as React from "react";
 
-import { Form, Input, Button, Checkbox } from 'antd';
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { Form, Input, Button } from 'antd';
 import Title from "antd/es/typography/Title";
 import { Link } from "react-router-dom";
 import axios from "axios"
-
-import { withCookies } from "react-cookie"
 
 const api = axios.create({
     baseURL: 'https://localhost:5001/',

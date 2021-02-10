@@ -51,8 +51,8 @@ class App extends React.Component {
         const { cookies } = this.props;
 
         return (
-          <BrowserRouter>
-              <Layout className="layout">
+          <BrowserRouter style={{height: "100%"}}>
+              <Layout className="layout" style={{height: "100%"}}>
                   <Desktop>
                       <Header />
                   </Desktop>

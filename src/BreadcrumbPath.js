@@ -1,7 +1,7 @@
 import { Component } from "react";
 import {Breadcrumb} from "antd";
 
-import {Link, withRouter} from "react-router-dom";
+import {withRouter} from "react-router-dom";
 
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);

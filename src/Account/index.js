@@ -1,29 +1,12 @@
-import { UserOutlined, HomeOutlined } from "@ant-design/icons";
-import BreadcrumbPath from "../BreadcrumbPath";
 import * as React from "react";
 
-import { Layout, Menu } from 'antd';
+import { Layout } from 'antd';
 
-import {useMediaQuery} from "react-responsive";
-import {Route, Switch, Redirect, withRouter} from "react-router-dom";
+import {Route, Switch, Redirect} from "react-router-dom";
 import Login from "./Login";
 import Register from "./Register";
 
-import {useCookies, withCookies} from "react-cookie";
 import Dashboard from "./Dashboard";
-
-const Desktop = ({ children }) => {
-    const isDesktop = useMediaQuery({ minWidth: 992 })
-    return isDesktop ? children : null
-}
-
-const Mobile = ({ children }) => {
-    const isMobile = useMediaQuery({ maxWidth: 767 })
-    return isMobile ? children : null
-}
-
-const { Content, Footer, Sider } = Layout;
-const { SubMenu } = Menu;
 
 class Account extends React.Component {
     constructor(props) {

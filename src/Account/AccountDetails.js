@@ -1,7 +1,6 @@
 import React from "react"
 import axios from "axios";
 import Title from "antd/es/typography/Title";
-import {Content} from "antd/es/layout/layout";
 
 const api = axios.create({
     baseURL: 'https://localhost:5001/',
