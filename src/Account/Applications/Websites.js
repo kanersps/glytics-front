@@ -1,8 +1,10 @@
 import React from "react";
 import Title from "antd/es/typography/Title";
-import {DownOutlined, SearchOutlined} from '@ant-design/icons';
-import {Button, Divider, Input, Space, Table, Dropdown, Menu, Popconfirm, Row, Col} from "antd";
+import {DownOutlined, ReloadOutlined, SearchOutlined} from '@ant-design/icons';
+import {Button, Divider, Input, Space, Table, Dropdown, Menu, Popconfirm, Row, Col, Form} from "antd";
 import * as PropTypes from "prop-types";
+import Modal from "antd/es/modal/Modal";
+import axios from "axios";
 
 SearchOutlined.propTypes = {style: PropTypes.shape({color: PropTypes.any})};
 
@@ -11,6 +13,11 @@ class Highlighter extends React.Component {
         return null;
     }
 }
+
+const api = axios.create({
+    baseURL: 'https://localhost:5001/',
+    timeout: 2000
+});
 
 Highlighter.propTypes = {
     highlightStyle: PropTypes.shape({padding: PropTypes.number, backgroundColor: PropTypes.string}),
@@ -24,17 +31,35 @@ class Websites extends React.Component {
         super(props);
 
         this.state = {
-            activeWebsites: [
-                {
-                    name: "G-Lytics Main Site",
-                    address: "g-lytics.com",
-                    trackingcode: "GL-040002"
-                }
-            ],
+            activeWebsites: [],
             inactiveWebsites: [],
+            loadingWebsites: false,
             searchText: "",
-            searchColumn: ""
+            searchColumn: "",
+            addWebsiteFormVisible: false,
+            websiteFormLoading: false,
+            errorMessageAddWebsite: ""
         }
+    }
+
+    componentDidMount() {
+        api.defaults.headers = {
+            "key": this.props.apikey
+        }
+
+        this.reloadWebsites();
+    }
+
+    setWebsiteFormVisible(visible) {
+        this.setState({
+            addWebsiteFormVisible: visible
+        })
+    }
+
+    setWebsiteFormLoading(loading) {
+        this.setState({
+            websiteFormLoading: loading
+        })
     }
 
     getColumnSearchProps = dataIndex => ({
@@ -63,19 +88,6 @@ class Websites extends React.Component {
                     <Button onClick={() => this.handleReset(clearFilters)} size="small" style={{ width: 90 }}>
                         Reset
                     </Button>
-                    <Button
-                        type="link"
-                        size="small"
-                        onClick={() => {
-                            confirm({ closeDropdown: false });
-                            this.setState({
-                                searchText: selectedKeys[0],
-                                searchColumn: dataIndex,
-                            });
-                        }}
-                    >
-                        Filter
-                    </Button>
                 </Space>
             </div>
         ),
@@ -101,6 +113,26 @@ class Websites extends React.Component {
                 text
             ),
     });
+
+    reloadWebsites() {
+        this.setState({
+            loadingWebsites: true
+        })
+
+        api.get("application/website/all")
+            .then(res => {
+                this.setState({
+                    activeWebsites: res.data,
+                    loadingWebsites: false
+                })
+            })
+            .catch((err) => {
+                alert(err);
+                this.setState({
+                    loadingWebsites: false
+                })
+            })
+    }
 
     handleSearch = (selectedKeys, confirm, dataIndex) => {
         confirm();
@@ -140,11 +172,12 @@ class Websites extends React.Component {
                 title: 'Address',
                 dataIndex: 'address',
                 key: 'address',
+                ...this.getColumnSearchProps("address")
             },
             {
                 title: 'Tracking Code',
-                dataIndex: 'trackingcode',
-                key: 'trackingcode',
+                dataIndex: 'trackingCode',
+                key: 'trackingCode',
             },
             {
                 title: "Action",
@@ -184,20 +217,62 @@ class Websites extends React.Component {
             },
             {
                 title: 'Tracking Code',
-                dataIndex: 'trackingcode',
-                key: 'trackingcode',
+                dataIndex: 'trackingCode',
+                key: 'trackingCode',
             }
         ]
 
+        const handleCancel = () => {
+            this.setWebsiteFormVisible(false);
+        };
+
+        const showModal = () => {
+            this.setWebsiteFormVisible(true);
+        };
+
+        const layout = {
+            labelCol: { span: 8 },
+            wrapperCol: { span: 16 },
+        };
+        const tailLayout = {
+            wrapperCol: { offset: 8, span: 16 },
+        };
+
+        const onAddWebsite = (values) => {
+            this.setWebsiteFormLoading(true);
+
+            api.post("application/website/create", values)
+                .then(res => {
+                    if(res.data.success) {
+                        this.setWebsiteFormVisible(false);
+                        this.setWebsiteFormLoading(false);
+
+                        this.reloadWebsites()
+                    } else {
+                        this.setState({
+                            errorMessageAddWebsite: res.data.message
+                        })
+                        this.setWebsiteFormLoading(false);
+                    }
+                })
+                .catch(err => {
+                    this.setState({
+                        errorMessageAddWebsite: err.message
+                    })
+                    this.setWebsiteFormLoading(false);
+                })
+        }
+
         return <div>
-            <Table title={() => <div>
+            <Table loading={this.state.loadingWebsites} title={() => <div>
                 <Row>
                     <Col span={20}>
                         <Title level={3}>Active Websites</Title>
                     </Col>
                     <Col span={4}>
                         <div style={{textAlign: "right"}}>
-                            <Button type={"primary"}>Add</Button>
+                            <Button loading={this.state.loadingWebsites} onClick={() => { this.reloadWebsites() }} icon={<ReloadOutlined/>} />
+                            <Button onClick={showModal} type={"primary"} style={{marginLeft: 10}}>Add</Button>
                         </div>
                     </Col>
                 </Row>
@@ -205,7 +280,49 @@ class Websites extends React.Component {
 
             <Divider />
 
-            <Table title={() => <Title level={3}>Inactive Websites</Title>} size={"medium"} dataSource={this.state.inactiveWebsites} columns={inactiveWebsiteColumns} />
+            <Table loading={this.state.loadingWebsites} title={() => <Title level={3}>Inactive Websites</Title>} size={"medium"} dataSource={this.state.inactiveWebsites} columns={inactiveWebsiteColumns} />
+
+            <Modal title={"Add new website"} footer="" visible={this.state.addWebsiteFormVisible} confirmLoading={this.state.websiteFormLoading}>
+                <Form
+                    {...layout}
+                    name="basic"
+                    initialValues={{ remember: true }}
+                    onFinish={onAddWebsite}
+                    labelAlign={"left"}
+                >
+                    <Form.Item
+                        label="Name"
+                        name="name"
+                        rules={[{ required: true, message: 'Please enter a name!' }]}
+                    >
+                        <Input />
+                    </Form.Item>
+
+                    <Form.Item
+                        label="Address"
+                        name="address"
+                        rules={[{ required: true, message: 'Please enter a web address' }, {pattern: /^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\.[a-zA-Z]{2,}$/, message: "Please enter a correct domain name without http:// & www. (g-lytics.com as example)"}]}
+                    >
+                        <Input />
+                    </Form.Item>
+
+                    <div style={{textAlign: "right", padding: 10}}>
+                        { (this.state.errorMessageAddWebsite && !this.state.websiteFormLoading) ? <div dangerouslySetInnerHTML={{__html: this.state.errorMessageAddWebsite}} /> : <div>&nbsp;</div> }
+                    </div>
+
+
+                    <Row gutter={8}>
+                        <Col span={24} style={{textAlign: "right"}}>
+                            <Button onClick={this.setWebsiteFormVisible} disabled={this.state.websiteFormLoading} >
+                                Cancel
+                            </Button>
+                            <Button style={{ margin: '0 8px' }} loading={this.state.websiteFormLoading} type="primary" htmlType="submit">
+                                Submit
+                            </Button>
+                        </Col>
+                    </Row>
+                </Form>
+            </Modal>
         </div>
     }
 }

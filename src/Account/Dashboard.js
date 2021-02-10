@@ -137,7 +137,7 @@ class Dashboard extends React.Component {
                         </Route>
 
                         <Route path={"/applications"}>
-                            <Applications></Applications>
+                            <Applications apikey={this.props.apikey}></Applications>
                         </Route>
 
                         <Route path={"/account"}>
