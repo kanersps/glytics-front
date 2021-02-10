@@ -4,7 +4,6 @@ import { Form, Input, Button } from 'antd';
 import Title from "antd/es/typography/Title";
 import {Link, Redirect} from "react-router-dom";
 import axios from "axios"
-import {withCookies} from "react-cookie";
 
 const api = axios.create({
     baseURL: 'https://localhost:5001/',
@@ -93,10 +92,8 @@ class Register extends React.Component {
     }
 
     componentDidMount() {
-        const { cookies } = this.props;
-
         api.defaults.headers = {
-            "key": cookies.get("apikey")
+            "key": localStorage.getItem("apikey")
         }
 
         api.get("account/authenticated")
@@ -204,4 +201,4 @@ class Register extends React.Component {
     }
 }
 
-export default withCookies(Register)
+export default Register

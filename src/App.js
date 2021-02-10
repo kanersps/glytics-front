@@ -35,20 +35,18 @@ class App extends React.Component {
     }
 
     logout = () => {
-        const { cookies } = this.props;
+        localStorage.clear();
 
-        cookies.remove("apikey")
+        setTimeout(() => {
+            window.location.href = "/account/login"
+        }, 1500)
     }
 
     setApiKey = (key) => {
-        const { cookies } = this.props;
-
-        cookies.set("apikey", key, {sameSite: true})
+        localStorage.setItem("apikey", key)
     }
 
     render() {
-        const { cookies } = this.props;
-
         return (
           <BrowserRouter style={{height: "100%"}}>
               <Layout className="layout" style={{height: "100%"}}>
@@ -58,7 +56,7 @@ class App extends React.Component {
 
                   <Switch>
                       <Route path={["/account", "/applications"]}>
-                          <Account logout={this.logout} setApiKey={this.setApiKey} setLoggedIn={this.loggedIn} loggedIn={this.state.loggedIn} apikey={cookies.get("apikey")}></Account>
+                          <Account logout={this.logout} setApiKey={this.setApiKey} setLoggedIn={this.loggedIn} loggedIn={this.state.loggedIn} apikey={localStorage.getItem("apikey")}></Account>
                       </Route>
 
                       <Route path="/">

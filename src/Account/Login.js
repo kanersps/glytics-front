@@ -6,8 +6,6 @@ import Title from "antd/es/typography/Title";
 import {Link, Redirect} from "react-router-dom";
 import axios from "axios"
 
-import { withCookies } from 'react-cookie';
-
 const api = axios.create({
     baseURL: 'https://localhost:5001/',
     timeout: 2000,
@@ -28,8 +26,6 @@ class Login extends React.Component {
     }
 
     onFinish(values) {
-        const { cookies } = this.props;
-
         this.setState({
             loggingIn: true,
             loggedIn: false
@@ -43,7 +39,7 @@ class Login extends React.Component {
                         loggingIn: false
                     })
 
-                    cookies.set("apikey", res.data.message, {sameSite: true});
+                    localStorage.setItem("apikey", res.data.message)
 
                     setTimeout(() => {
                         this.props.loggedIn();
@@ -64,10 +60,9 @@ class Login extends React.Component {
     }
 
     componentDidMount() {
-        const { cookies } = this.props;
 
         api.defaults.headers = {
-            "key": cookies.get("apikey")
+            "key": localStorage.getItem("apikey")
         }
 
         api.get("account/authenticated")
@@ -136,4 +131,4 @@ class Login extends React.Component {
     }
 }
 
-export default withCookies(Login)
+export default Login
