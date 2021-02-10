@@ -1,13 +1,14 @@
 import {Button, Row, Col, Layout, Menu} from "antd";
 import {HomeOutlined, UserOutlined} from "@ant-design/icons";
 import BreadcrumbPath from "../BreadcrumbPath";
-import {Redirect, Route} from "react-router-dom";
+import {Link, Redirect, Route, Switch} from "react-router-dom";
 import * as React from "react";
 import Sider from "antd/es/layout/Sider";
 import SubMenu from "antd/es/menu/SubMenu";
 import {Content} from "antd/es/layout/layout";
 import axios from "axios";
 import Title from "antd/es/typography/Title";
+import AccountDetails from "./AccountDetails";
 
 const api = axios.create({
     baseURL: 'https://localhost:5001/',
@@ -18,21 +19,7 @@ class Dashboard extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            redirect: undefined,
-            username: "",
-            passwordHash: ""
-        }
-    }
-
-    getDashboard() {
-        api.get("account")
-            .then(res => {
-                this.setState({
-                    username: res.data.username,
-                    passwordHash: res.data.password
-                })
-            })
+        this.state = {}
     }
 
     checkApiKey(prevProps, force) {
@@ -44,13 +31,11 @@ class Dashboard extends React.Component {
             api.get("account/authenticated")
                 .then(res => {
                     if(!res.data.success) {
-                        this.setState({redirect: "/account/login"})
-                    } else {
-                        this.getDashboard()
+                        window.location.href = "/account/login"
                     }
                 })
                 .catch(e => {
-                    this.setState({redirect: "/account/login"})
+                    window.location.href = "/account/login"
                 })
         }
     }
@@ -64,9 +49,6 @@ class Dashboard extends React.Component {
     }
 
     render() {
-        if(this.state.redirect)
-            return <Redirect to={this.state.redirect} />
-
         return <Layout>
             <Sider width={200} className="site-layout-background">
                 <Menu
@@ -78,18 +60,17 @@ class Dashboard extends React.Component {
 
 
                     <SubMenu key="sub1" icon={<UserOutlined />} title="Account">
-                        <Menu.Item key="1">Details</Menu.Item>
-                        <Menu.Item key="2">Privacy</Menu.Item>
+                        <Menu.Item key="1"><Link to={"/account/details"}>Details</Link></Menu.Item>
+                        <Menu.Item key="2"><Link to={"/account/privacy"}>Privacy</Link></Menu.Item>
                     </SubMenu>
 
                     <SubMenu key="sub2" icon={<HomeOutlined />} title="Applications">
-                        <Menu.Item key="1">Websites</Menu.Item>
+                        <Menu.Item key="3"><Link to={"/account/applications/websites"}>Websites</Link></Menu.Item>
                     </SubMenu>
                 </Menu>
             </Sider>
 
             <Layout style={{ padding: '0 24px 24px' }}>
-                <BreadcrumbPath style={{ margin: '16px 0' }} />
                 <Content
                     className="site-layout-background"
                     style={{
@@ -100,16 +81,28 @@ class Dashboard extends React.Component {
                 >
                     <Row>
                         <Col span={20}>
-                            <Title>Welcome, { this.state.username }</Title>
+                            <BreadcrumbPath style={{ margin: '16px 0' }} />&nbsp;
                         </Col>
                         <Col span={4}>
                             <Button onClick={this.props.logout}>Logout</Button>
                         </Col>
                     </Row>
 
-                    <b>Debug Info:</b><br/>
-                    Password: <br/>{ this.state.passwordHash }<br/><br/>
-                    API Key: <br/>{ this.props.apikey }
+                    <Switch>
+                        <Route path={"/account/details"}>
+                            <AccountDetails apikey={this.props.apikey} />
+                        </Route>
+
+                        <Route path={"/account/privacy"}>
+                        </Route>
+
+                        <Route path={"/account/applications/websites"}>
+                        </Route>
+
+                        <Route path={"/account"}>
+                            <Redirect to={"/account/details"}></Redirect>
+                        </Route>
+                    </Switch>
                 </Content>
             </Layout>
         </Layout>

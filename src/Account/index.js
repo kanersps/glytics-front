@@ -39,15 +39,15 @@ class Account extends React.Component {
         return <Layout style={{ marginTop: 20 }}>
             <Switch>
                 <Route path={"/account/login"}>
-                    { this.props.loggedIn === true ? <Redirect to={"/account"} /> : <Login loggedIn={this.props.setLoggedIn} /> }
+                    { this.props.loggedIn === true ? <Redirect to={"/account/details"} /> : <Login loggedIn={this.props.setLoggedIn} /> }
                 </Route>
 
                 <Route path={"/account/register"}>
-                    { this.props.loggedIn === true ? <Redirect to={"/account"} /> : <Register setApiKey={this.props.setApiKey} loggedIn={this.props.setLoggedIn} /> }
+                    { this.props.loggedIn === true ? <Redirect to={"/account/details"} /> : <Register setApiKey={this.props.setApiKey} loggedIn={this.props.setLoggedIn} /> }
                 </Route>
 
                 <Route path={"/account"}>
-                    { this.props.loggedIn === false ? <Redirect to={"account/login"} /> : <Dashboard logout={this.props.logout} apikey={this.props.apikey} /> }
+                    { this.props.loggedIn === false && this.props.apikey === undefined ? <Redirect to={"/account/login"} /> : <Dashboard logout={this.props.logout} apikey={this.props.apikey} /> }
                 </Route>
             </Switch>
         </Layout>
