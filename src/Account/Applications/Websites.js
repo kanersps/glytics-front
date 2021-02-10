@@ -38,8 +38,8 @@ class Websites extends React.Component {
             searchColumn: "",
             addWebsiteFormVisible: false,
             websiteFormLoading: false,
-            deactivateWebsiteLoading: false,
-            deactivateWebsiteVisible: false,
+            loaderActive: {},
+            popupActive: {},
             errorMessageAddWebsite: ""
         }
     }
@@ -65,8 +65,8 @@ class Websites extends React.Component {
     }
 
     getColumnSearchProps = dataIndex => ({
-        filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
-            <div style={{ padding: 8 }}>
+        filterDropdown: ({setSelectedKeys, selectedKeys, confirm, clearFilters}) => (
+            <div style={{padding: 8}}>
                 <Input
                     ref={node => {
                         this.searchInput = node;
@@ -75,25 +75,25 @@ class Websites extends React.Component {
                     value={selectedKeys[0]}
                     onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
                     onPressEnter={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
-                    style={{ width: 188, marginBottom: 8, display: 'block' }}
+                    style={{width: 188, marginBottom: 8, display: 'block'}}
                 />
                 <Space>
                     <Button
                         type="primary"
                         onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
-                        icon={<SearchOutlined />}
+                        icon={<SearchOutlined/>}
                         size="small"
-                        style={{ width: 90 }}
+                        style={{width: 90}}
                     >
                         Search
                     </Button>
-                    <Button onClick={() => this.handleReset(clearFilters)} size="small" style={{ width: 90 }}>
+                    <Button onClick={() => this.handleReset(clearFilters)} size="small" style={{width: 90}}>
                         Reset
                     </Button>
                 </Space>
             </div>
         ),
-        filterIcon: filtered => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
+        filterIcon: filtered => <SearchOutlined style={{color: filtered ? '#1890ff' : undefined}}/>,
         onFilter: (value, record) =>
             record[dataIndex]
                 ? record[dataIndex].toString().toLowerCase().includes(value.toLowerCase())
@@ -106,7 +106,7 @@ class Websites extends React.Component {
         render: text =>
             this.state.searchedColumn === dataIndex ? (
                 <Highlighter
-                    highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+                    highlightStyle={{backgroundColor: '#ffc069', padding: 0}}
                     searchWords={[this.state.searchText]}
                     autoEscape
                     textToHighlight={text ? text.toString() : ''}
@@ -126,8 +126,8 @@ class Websites extends React.Component {
                 let activeWebsites = []
                 let inactiveWebsites = []
 
-                for(let website of res.data) {
-                    if(website.active)
+                for (let website of res.data) {
+                    if (website.active)
                         activeWebsites.push(website);
                     else
                         inactiveWebsites.push(website);
@@ -157,38 +157,69 @@ class Websites extends React.Component {
 
     handleReset = clearFilters => {
         clearFilters();
-        this.setState({ searchText: '' });
+        this.setState({searchText: ''});
     };
+
+    setLoaderActive(id, bool) {
+        this.setState(prevState => {
+            let loaderActive = Object.assign({}, prevState.loaderActive)
+            loaderActive[id] = bool;
+
+            return { loaderActive }
+        })
+    }
+
+    setPopupActive(id, bool) {
+        this.setState(prevState => {
+            let popupActive = Object.assign({}, prevState.popupActive);
+            popupActive[id] = bool;
+
+            console.log(prevState)
+
+            return { popupActive }
+        })
+    }
 
     handleActionMenu(key) {
         const action = key.split("_");
 
+        this.setLoaderActive(key, true);
+
         // eslint-disable-next-line
-        switch(action[0]) {
+        switch (action[0]) {
             case "deactivate": {
-                console.log("Deactivate: " + action[1])
-
-                this.setState({
-                    deactivateWebsiteLoading: true
-                })
-
                 api.post("application/website/deactivate", {
                     trackingCode: action[1]
                 })
                     .then(_ => {
-                        this.setState({
-                            deactivateWebsiteLoading: false,
-                            deactivateWebsiteVisible: false
-                        })
+                        this.setLoaderActive(key, false);
+                        this.setPopupActive(key, false)
 
                         this.reloadWebsites()
                     })
                     .catch(err => {
                         alert(err.message)
-                        this.setState({
-                            deactivateWebsiteLoading: false,
-                            deactivateWebsiteVisible: false
-                        })
+
+                        this.setLoaderActive(key, false);
+                        this.setPopupActive(key, false)
+                    })
+                break;
+            }
+            case "delete": {
+                api.post("application/website/delete", {
+                    trackingCode: action[1]
+                })
+                    .then(_ => {
+                        this.setLoaderActive(key, false);
+                        this.setPopupActive(key, false)
+
+                        this.reloadWebsites()
+                    })
+                    .catch(err => {
+                        alert(err.message)
+
+                        this.setLoaderActive(key, false);
+                        this.setPopupActive(key, false)
                     })
                 break;
             }
@@ -225,13 +256,29 @@ class Websites extends React.Component {
                     &nbsp;
                     <Dropdown overlay={
                         <Menu>
-                                <Menu.Item key={"deactivate_" + record.trackingcode}>
-                                    <Popconfirm onCancel={() => {this.setState({deactivateWebsiteVisible: false})}} onClick={() => this.setState({deactivateWebsiteVisible: true})} visible={this.state.deactivateWebsiteVisible} okButtonProps={{loading: this.state.deactivateWebsiteLoading}} onConfirm={() => {
-                                        this.handleActionMenu("deactivate_" + record.trackingCode);
-                                    }} title={"Are you sure you want to de-activate " + record.name + "?"}>
-                                        <div>Deactivate</div>
-                                    </Popconfirm>
-                                </Menu.Item>
+                            <Menu.Item key={"deactivate_" + record.trackingcode}>
+                                <Popconfirm onCancel={() => this.setPopupActive("deactivate_" + record.trackingCode, false)}
+                                            onClick={() => this.setPopupActive("deactivate_" + record.trackingCode, true)}
+                                            visible={this.state.popupActive["deactivate_" + record.trackingCode]}
+                                            okButtonProps={{loading: this.state.loaderActive["deactivate_" + record.trackingCode]}}
+                                            onConfirm={() => {
+                                                this.handleActionMenu("deactivate_" + record.trackingCode);
+                                            }} title={"Are you sure you want to de-activate " + record.name + "?"}>
+                                    <div>Deactivate</div>
+                                </Popconfirm>
+                            </Menu.Item>
+
+                            <Menu.Item className={"ant-btn-dangerous"} key={"delete_" + record.trackingcode}>
+                                <Popconfirm onCancel={() => this.setPopupActive("delete_" + record.trackingCode, false)}
+                                            onClick={() => this.setPopupActive("delete_" + record.trackingCode, true)}
+                                            visible={this.state.popupActive["delete_" + record.trackingCode]}
+                                            okButtonProps={{loading: this.state.loaderActive["delete_" + record.trackingCode]}}
+                                            onConfirm={() => {
+                                                this.handleActionMenu("delete_" + record.trackingCode);
+                                            }} title={"Are you sure you want to delete " + record.name + "?"}>
+                                    <div>Delete</div>
+                                </Popconfirm>
+                            </Menu.Item>
                         </Menu>
                     }>
                         <Button>Extra Actions <DownOutlined/> </Button>
@@ -267,11 +314,11 @@ class Websites extends React.Component {
         };
 
         const layout = {
-            labelCol: { span: 8 },
-            wrapperCol: { span: 16 },
+            labelCol: {span: 8},
+            wrapperCol: {span: 16},
         };
         const tailLayout = {
-            wrapperCol: { offset: 8, span: 16 },
+            wrapperCol: {offset: 8, span: 16},
         };
 
         const onAddWebsite = (values) => {
@@ -279,7 +326,7 @@ class Websites extends React.Component {
 
             api.post("application/website/create", values)
                 .then(res => {
-                    if(res.data.success) {
+                    if (res.data.success) {
                         this.setWebsiteFormVisible(false);
                         this.setWebsiteFormLoading(false);
 
@@ -307,52 +354,65 @@ class Websites extends React.Component {
                     </Col>
                     <Col span={4}>
                         <div style={{textAlign: "right"}}>
-                            <Button loading={this.state.loadingWebsites} onClick={() => { this.reloadWebsites() }} icon={<ReloadOutlined/>} />
+                            <Button loading={this.state.loadingWebsites} onClick={() => {
+                                this.reloadWebsites()
+                            }} icon={<ReloadOutlined/>}/>
                             <Button onClick={showModal} type={"primary"} style={{marginLeft: 10}}>Add</Button>
                         </div>
                     </Col>
                 </Row>
-            </div>} size={"medium"} dataSource={this.state.activeWebsites} columns={activeWebsiteColumns} />
+            </div>} size={"medium"} dataSource={this.state.activeWebsites} columns={activeWebsiteColumns}/>
 
-            <Divider />
+            <Divider/>
 
-            <Table loading={this.state.loadingWebsites} title={() => <Title level={3}>Inactive Websites</Title>} size={"medium"} dataSource={this.state.inactiveWebsites} columns={inactiveWebsiteColumns} />
+            <Table loading={this.state.loadingWebsites} title={() => <Title level={3}>Inactive Websites</Title>}
+                   size={"medium"} dataSource={this.state.inactiveWebsites} columns={inactiveWebsiteColumns}/>
 
-            <Modal title={"Add new website"} footer="" visible={this.state.addWebsiteFormVisible} confirmLoading={this.state.websiteFormLoading}>
+            <Modal title={"Add new website"} footer="" visible={this.state.addWebsiteFormVisible}
+                   confirmLoading={this.state.websiteFormLoading}>
                 <Form
                     {...layout}
                     name="basic"
-                    initialValues={{ remember: true }}
+                    initialValues={{remember: true}}
                     onFinish={onAddWebsite}
                     labelAlign={"left"}
                 >
                     <Form.Item
                         label="Name"
                         name="name"
-                        rules={[{ required: true, message: 'Please enter a name!' }]}
+                        rules={[{required: true, message: 'Please enter a name!'}]}
                     >
-                        <Input />
+                        <Input/>
                     </Form.Item>
 
                     <Form.Item
                         label="Address"
                         name="address"
-                        rules={[{ required: true, message: 'Please enter a web address' }, {pattern: /^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\.[a-zA-Z]{2,}$/, message: "Please enter a correct domain name without http:// & www. (g-lytics.com as example)"}]}
+                        rules={[{
+                            required: true,
+                            message: 'Please enter a web address'
+                        }, {
+                            pattern: /^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\.[a-zA-Z]{2,}$/,
+                            message: "Please enter a correct domain name without http:// & www. (g-lytics.com as example)"
+                        }]}
                     >
-                        <Input />
+                        <Input/>
                     </Form.Item>
 
                     <div style={{textAlign: "right", padding: 10}}>
-                        { (this.state.errorMessageAddWebsite && !this.state.websiteFormLoading) ? <div dangerouslySetInnerHTML={{__html: this.state.errorMessageAddWebsite}} /> : <div>&nbsp;</div> }
+                        {(this.state.errorMessageAddWebsite && !this.state.websiteFormLoading) ?
+                            <div dangerouslySetInnerHTML={{__html: this.state.errorMessageAddWebsite}}/> :
+                            <div>&nbsp;</div>}
                     </div>
 
 
                     <Row gutter={8}>
                         <Col span={24} style={{textAlign: "right"}}>
-                            <Button onClick={this.setWebsiteFormVisible} disabled={this.state.websiteFormLoading} >
+                            <Button onClick={this.setWebsiteFormVisible} disabled={this.state.websiteFormLoading}>
                                 Cancel
                             </Button>
-                            <Button style={{ margin: '0 8px' }} loading={this.state.websiteFormLoading} type="primary" htmlType="submit">
+                            <Button style={{margin: '0 8px'}} loading={this.state.websiteFormLoading} type="primary"
+                                    htmlType="submit">
                                 Submit
                             </Button>
                         </Col>
