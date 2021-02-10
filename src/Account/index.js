@@ -29,7 +29,7 @@ class Account extends React.Component {
                     { this.props.loggedIn === true ? <Redirect to={"/account/details"} /> : <Register setApiKey={this.props.setApiKey} loggedIn={this.props.setLoggedIn} /> }
                 </Route>
 
-                <Route path={"/account"}>
+                <Route path={["/account", "/applications"]}>
                     { this.props.loggedIn === false && this.props.apikey === undefined ? <Redirect to={"/account/login"} /> : <Dashboard logout={this.props.logout} apikey={this.props.apikey} /> }
                 </Route>
             </Switch>

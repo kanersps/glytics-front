@@ -1,7 +1,7 @@
 import React from "react";
 import Title from "antd/es/typography/Title";
 import {DownOutlined, SearchOutlined} from '@ant-design/icons';
-import {Button, Divider, Input, Space, Table, Dropdown, Menu, Popconfirm, Col, Row, Form} from "antd";
+import {Button, Divider, Input, Space, Table, Dropdown, Menu, Popconfirm, Row, Col} from "antd";
 import * as PropTypes from "prop-types";
 
 SearchOutlined.propTypes = {style: PropTypes.shape({color: PropTypes.any})};
@@ -190,13 +190,22 @@ class Websites extends React.Component {
         ]
 
         return <div>
-            <Title level={2}>Active Websites</Title>
-            <Table title={() => <div style={{textAlign: "right"}}> <Button type={"primary"}>Add</Button> </div>} size={"medium"} dataSource={this.state.activeWebsites} columns={activeWebsiteColumns} />
+            <Table title={() => <div>
+                <Row>
+                    <Col span={20}>
+                        <Title level={3}>Active Websites</Title>
+                    </Col>
+                    <Col span={4}>
+                        <div style={{textAlign: "right"}}>
+                            <Button type={"primary"}>Add</Button>
+                        </div>
+                    </Col>
+                </Row>
+            </div>} size={"medium"} dataSource={this.state.activeWebsites} columns={activeWebsiteColumns} />
 
             <Divider />
 
-            <Title level={2}>Inactive Websites</Title>
-            <Table size={"medium"} dataSource={this.state.inactiveWebsites} columns={inactiveWebsiteColumns} />
+            <Table title={() => <Title level={3}>Inactive Websites</Title>} size={"medium"} dataSource={this.state.inactiveWebsites} columns={inactiveWebsiteColumns} />
         </div>
     }
 }

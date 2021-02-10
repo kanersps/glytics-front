@@ -9,6 +9,7 @@ import {Content} from "antd/es/layout/layout";
 import axios from "axios";
 import Applications from "./Applications"
 import AccountDetails from "./AccountDetails";
+import Title from "antd/es/typography/Title";
 
 const api = axios.create({
     baseURL: 'https://localhost:5001/',
@@ -35,7 +36,7 @@ const categories = [
         icon: <HomeOutlined />,
         items: [
             {
-                path: "/account/applications/websites",
+                path: "/applications/websites",
                 name: "Websites"
             }
         ]
@@ -121,7 +122,7 @@ class Dashboard extends React.Component {
                         <Col span={20}>
                             <BreadcrumbPath style={{ margin: '16px 0' }} />&nbsp;
                         </Col>
-                        <Col span={4}>
+                        <Col span={4} style={{textAlign: "right"}}>
                             <Button onClick={this.props.logout}>Logout</Button>
                         </Col>
                     </Row>
@@ -132,9 +133,10 @@ class Dashboard extends React.Component {
                         </Route>
 
                         <Route path={"/account/privacy"}>
+                            <Title>WIP</Title>
                         </Route>
 
-                        <Route path={"/account/applications"}>
+                        <Route path={"/applications"}>
                             <Applications></Applications>
                         </Route>
 

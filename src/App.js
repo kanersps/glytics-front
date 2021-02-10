@@ -58,7 +58,7 @@ class App extends React.Component {
                   </Desktop>
 
                   <Switch>
-                      <Route path="/account">
+                      <Route path={["/account", "/applications"]}>
                           <Account logout={this.logout} setApiKey={this.setApiKey} setLoggedIn={this.loggedIn} loggedIn={this.state.loggedIn} apikey={cookies.get("apikey")}></Account>
                       </Route>
 
