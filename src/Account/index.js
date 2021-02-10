@@ -22,11 +22,11 @@ class Account extends React.Component {
         return <Layout style={{ marginTop: 20 }}>
             <Switch>
                 <Route path={"/account/login"}>
-                    { this.props.loggedIn === true ? <Redirect to={"/account/details"} /> : <Login loggedIn={this.props.setLoggedIn} /> }
+                    { this.props.loggedIn === true ? <Redirect to={"/account/details"} /> : <Login apikey={this.props.apikey} loggedIn={this.props.setLoggedIn} /> }
                 </Route>
 
                 <Route path={"/account/register"}>
-                    { this.props.loggedIn === true ? <Redirect to={"/account/details"} /> : <Register setApiKey={this.props.setApiKey} loggedIn={this.props.setLoggedIn} /> }
+                    { this.props.loggedIn === true ? <Redirect to={"/account/details"} /> : <Register apikey={this.props.apikey} setApiKey={this.props.setApiKey} loggedIn={this.props.setLoggedIn} /> }
                 </Route>
 
                 <Route path={["/account", "/applications"]}>

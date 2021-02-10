@@ -43,7 +43,7 @@ class Login extends React.Component {
                         loggingIn: false
                     })
 
-                    cookies.set("apikey", res.data.message);
+                    cookies.set("apikey", res.data.message, {sameSite: true});
 
                     setTimeout(() => {
                         this.props.loggedIn();
@@ -72,7 +72,6 @@ class Login extends React.Component {
 
         api.get("account/authenticated")
             .then(res => {
-                console.log(cookies.get("apikey"))
                 if(res.data.success) {
                     this.setState({
                         redirect: true

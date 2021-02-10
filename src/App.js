@@ -43,7 +43,7 @@ class App extends React.Component {
     setApiKey = (key) => {
         const { cookies } = this.props;
 
-        cookies.set("apikey", key)
+        cookies.set("apikey", key, {sameSite: true})
     }
 
     render() {

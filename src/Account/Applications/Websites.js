@@ -363,19 +363,17 @@ class Websites extends React.Component {
                     <Button onClick={() => this.activateWebsite("d-activate_" + record.trackingCode)}
                             loading={this.state.loaderActive["d-activate_" + record.trackingCode]}
                             style={{marginRight: 5}}>Activate</Button>
-                    <Button danger>
+
                         <Popconfirm onCancel={() => this.setPopupActive("d-delete_" + record.trackingCode, false)}
                                     onClick={() => this.setPopupActive("d-delete_" + record.trackingCode, true)}
                                     visible={this.state.popupActive["d-delete_" + record.trackingCode]}
                                     okButtonProps={{loading: this.state.loaderActive["d-delete_" + record.trackingCode]}}
                                     onConfirm={() => {
-                                        this.handleActionMenu();
                                         this.setActionMenuTarget("d-delete_" + record.trackingCode)
+                                        this.handleActionMenu();
                                     }} title={"Are you sure you want to delete " + record.name + "?"}>
-                            Delete
+                            <Button danger>Delete</Button>
                         </Popconfirm>
-                    </Button>
-                    &nbsp;
                 </div>
             }
         ]

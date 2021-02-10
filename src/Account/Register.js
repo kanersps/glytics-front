@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { Form, Input, Button } from 'antd';
 import Title from "antd/es/typography/Title";
-import { Link } from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 import axios from "axios"
 import {withCookies} from "react-cookie";
 
@@ -29,7 +29,8 @@ class Register extends React.Component {
 
         this.state = {
             err: null,
-            registering: false
+            registering: false,
+            redirect: null
         }
 
         this.onFinish = this.onFinish.bind(this);
@@ -100,7 +101,6 @@ class Register extends React.Component {
 
         api.get("account/authenticated")
             .then(res => {
-                console.log(cookies.get("apikey"))
                 if(res.data.success) {
                     this.setState({
                         redirect: true
@@ -111,6 +111,9 @@ class Register extends React.Component {
     }
 
     render() {
+        if(this.state.redirect)
+            return <Redirect to={"/account/details"}></Redirect>
+
         return (
             <div style={{textAlign: "center"}}>
                 <Title>Register</Title>
