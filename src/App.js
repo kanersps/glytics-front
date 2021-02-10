@@ -49,7 +49,7 @@ class App extends React.Component {
     render() {
         return (
           <BrowserRouter style={{height: "100%"}}>
-              <Layout className="layout" style={{height: "100%"}}>
+              <Layout className="layout" style={{minHeight:"100vh"}}>
                   <Desktop>
                       <Header />
                   </Desktop>

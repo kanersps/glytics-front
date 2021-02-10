@@ -1,7 +1,7 @@
 import React from "react"
 import axios from "axios";
 import Title from "antd/es/typography/Title";
-import {Spin} from "antd";
+import {Skeleton, Spin} from "antd";
 
 const api = axios.create({
     baseURL: 'https://localhost:5001/',
@@ -39,13 +39,16 @@ class AccountDetails extends React.Component {
     }
 
     render() {
-        return <Spin spinning={this.state.loading}>
+        if(this.state.loading)
+            return <Skeleton paragraph={{ rows: 20 }}/>
+
+        return <div>
             <Title>Welcome, { this.state.username }</Title>
 
             <b>Debug Info:</b><br/>
             Password: <br/>{ this.state.passwordHash }<br/><br/>
             API Key: <br/>{ this.props.apikey }
-        </Spin>
+        </div>
     }
 }
 
