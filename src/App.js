@@ -38,7 +38,6 @@ class App extends React.Component {
         const { cookies } = this.props;
 
         cookies.remove("apikey")
-        window.location.reload(false);
     }
 
     setApiKey = (key) => {

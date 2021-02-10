@@ -123,7 +123,7 @@ class Dashboard extends React.Component {
                             <BreadcrumbPath style={{ margin: '16px 0' }} />&nbsp;
                         </Col>
                         <Col span={4} style={{textAlign: "right"}}>
-                            <Button onClick={this.props.logout}>Logout</Button>
+                            <Button loading={this.state.loggingOut} onClick={() => {this.props.logout(); this.setState({loggingOut: true})}}>Logout</Button>
                         </Col>
                     </Row>
 

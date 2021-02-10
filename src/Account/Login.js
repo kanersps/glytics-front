@@ -3,7 +3,7 @@ import * as React from "react";
 import { Form, Input, Button, Checkbox } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import Title from "antd/es/typography/Title";
-import {Link} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 import axios from "axios"
 
 import { withCookies } from 'react-cookie';
@@ -20,7 +20,8 @@ class Login extends React.Component {
 
         this.state = {
             err: null,
-            loggingIn: false
+            loggingIn: false,
+            redirect: null
         }
 
         this.onFinish = this.onFinish.bind(this);
@@ -46,7 +47,7 @@ class Login extends React.Component {
 
                     setTimeout(() => {
                         this.props.loggedIn();
-                    }, 3000)
+                    }, 2000)
                 } else {
                     this.setState({
                         err: "<span style='color: red'>" + res.data.message + "</span>",
@@ -62,7 +63,29 @@ class Login extends React.Component {
             })
     }
 
+    componentDidMount() {
+        const { cookies } = this.props;
+
+        api.defaults.headers = {
+            "key": cookies.get("apikey")
+        }
+
+        api.get("account/authenticated")
+            .then(res => {
+                console.log(cookies.get("apikey"))
+                if(res.data.success) {
+                    this.setState({
+                        redirect: true
+                    })
+                }
+            })
+            .catch(e => {})
+    }
+
     render() {
+        if(this.state.redirect)
+            return <Redirect to={"/account/details"}></Redirect>
+
         return (
             <div style={{textAlign: "center"}}>
                 <Title>Login</Title>

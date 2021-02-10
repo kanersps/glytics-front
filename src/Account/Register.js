@@ -4,6 +4,7 @@ import { Form, Input, Button } from 'antd';
 import Title from "antd/es/typography/Title";
 import { Link } from "react-router-dom";
 import axios from "axios"
+import {withCookies} from "react-cookie";
 
 const api = axios.create({
     baseURL: 'https://localhost:5001/',
@@ -59,7 +60,7 @@ class Register extends React.Component {
 
                                     setTimeout(() => {
                                         this.props.loggedIn();
-                                    }, 3000)
+                                    }, 1500)
                                 } else {
                                     this.setState({
                                         err: "<span style='color: red'>" + res.data.message + "</span>",
@@ -73,7 +74,7 @@ class Register extends React.Component {
                                     registering: false
                                 })
                             })
-                    }, 3000)
+                    }, 1000)
 
                 } else {
                     this.setState({
@@ -88,6 +89,25 @@ class Register extends React.Component {
                     registering: false
                 })
             })
+    }
+
+    componentDidMount() {
+        const { cookies } = this.props;
+
+        api.defaults.headers = {
+            "key": cookies.get("apikey")
+        }
+
+        api.get("account/authenticated")
+            .then(res => {
+                console.log(cookies.get("apikey"))
+                if(res.data.success) {
+                    this.setState({
+                        redirect: true
+                    })
+                }
+            })
+            .catch(e => {})
     }
 
     render() {
@@ -181,4 +201,4 @@ class Register extends React.Component {
     }
 }
 
-export default Register
+export default withCookies(Register)
