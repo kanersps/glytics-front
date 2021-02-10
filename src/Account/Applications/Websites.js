@@ -380,10 +380,6 @@ class Websites extends React.Component {
             }
         ]
 
-        const handleCancel = () => {
-            this.setWebsiteFormVisible(false);
-        };
-
         const showModal = () => {
             this.setWebsiteFormVisible(true);
         };
@@ -391,9 +387,6 @@ class Websites extends React.Component {
         const layout = {
             labelCol: {span: 8},
             wrapperCol: {span: 16},
-        };
-        const tailLayout = {
-            wrapperCol: {offset: 8, span: 16},
         };
 
         const onAddWebsite = (values) => {
