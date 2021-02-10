@@ -3,16 +3,11 @@ import Title from "antd/es/typography/Title";
 import {DownOutlined, ReloadOutlined, SearchOutlined} from '@ant-design/icons';
 import {Button, Divider, Input, Space, Table, Dropdown, Menu, Popconfirm, Row, Col, Form} from "antd";
 import * as PropTypes from "prop-types";
+import Highlighter from 'react-highlight-words';
 import Modal from "antd/es/modal/Modal";
 import axios from "axios";
 
 SearchOutlined.propTypes = {style: PropTypes.shape({color: PropTypes.any})};
-
-class Highlighter extends React.Component {
-    render() {
-        return null;
-    }
-}
 
 const api = axios.create({
     baseURL: 'https://localhost:5001/',
@@ -40,7 +35,9 @@ class Websites extends React.Component {
             websiteFormLoading: false,
             loaderActive: {},
             popupActive: {},
-            errorMessageAddWebsite: ""
+            errorMessageAddWebsite: "",
+            actionMenuTarget: "",
+            actionMenuAction: ""
         }
     }
 
@@ -104,7 +101,7 @@ class Websites extends React.Component {
             }
         },
         render: text =>
-            this.state.searchedColumn === dataIndex ? (
+            this.state.searchColumn === dataIndex ? (
                 <Highlighter
                     highlightStyle={{backgroundColor: '#ffc069', padding: 0}}
                     searchWords={[this.state.searchText]}
@@ -165,25 +162,31 @@ class Websites extends React.Component {
             let loaderActive = Object.assign({}, prevState.loaderActive)
             loaderActive[id] = bool;
 
-            return { loaderActive }
+            return {loaderActive}
         })
     }
 
     setPopupActive(id, bool) {
         this.setState(prevState => {
+            if(id.split("_")[0] === ("delete") || id.split("_")[0] === ("deactivate")) {
+                id = "actionmenu";
+            }
+
             let popupActive = Object.assign({}, prevState.popupActive);
             popupActive[id] = bool;
 
-            console.log(prevState)
-
-            return { popupActive }
+            return {popupActive}
         })
     }
 
-    handleActionMenu(key) {
+    handleActionMenu() {
+        const key = this.state.actionMenuTarget;
         const action = key.split("_");
 
-        this.setLoaderActive(key, true);
+        if(action[0] === "delete" || action[0] === "deactivate")
+            this.setLoaderActive("actionmenu", true);
+        else
+            this.setLoaderActive(key, true);
 
         // eslint-disable-next-line
         switch (action[0]) {
@@ -192,19 +195,30 @@ class Websites extends React.Component {
                     trackingCode: action[1]
                 })
                     .then(_ => {
-                        this.setLoaderActive(key, false);
-                        this.setPopupActive(key, false)
+                        if(action[0] === "delete" || action[0] === "deactivate") {
+                            this.setLoaderActive("actionmenu", false);
+                            this.setPopupActive("actionmenu", false);
+                        }else {
+                            this.setLoaderActive(key, false);
+                            this.setPopupActive("actionmenu", false)
+                        }
 
                         this.reloadWebsites()
                     })
                     .catch(err => {
                         alert(err.message)
 
-                        this.setLoaderActive(key, false);
-                        this.setPopupActive(key, false)
+                        if(action[0] === "delete" || action[0] === "deactivate") {
+                            this.setLoaderActive("actionmenu", false);
+                            this.setPopupActive("actionmenu", false);
+                        }else {
+                            this.setLoaderActive(key, false);
+                            this.setPopupActive("actionmenu", false)
+                        }
                     })
                 break;
             }
+            case "d-delete":
             case "delete": {
                 api.post("application/website/delete", {
                     trackingCode: action[1]
@@ -226,6 +240,34 @@ class Websites extends React.Component {
         }
     }
 
+    activateWebsite(key) {
+        const action = key.split("_");
+
+        this.setLoaderActive(key, true);
+
+        api.post("application/website/activate", {
+            trackingCode: action[1]
+        })
+            .then(_ => {
+                this.setLoaderActive(key, false);
+                this.setPopupActive(key, false)
+
+                this.reloadWebsites()
+            })
+            .catch(err => {
+                alert(err.message)
+
+                this.setLoaderActive(key, false);
+                this.setPopupActive(key, false)
+            })
+    }
+
+    setActionMenuTarget(target) {
+        this.setState({
+            actionMenuTarget: target,
+            actionMenuAction: target.split("_")[0]
+        })
+    }
 
     render() {
         const activeWebsiteColumns = [
@@ -254,35 +296,34 @@ class Websites extends React.Component {
                 render: (_, record) => <div>
                     <Button>Details</Button>
                     &nbsp;
-                    <Dropdown overlay={
-                        <Menu>
-                            <Menu.Item key={"deactivate_" + record.trackingcode}>
-                                <Popconfirm onCancel={() => this.setPopupActive("deactivate_" + record.trackingCode, false)}
-                                            onClick={() => this.setPopupActive("deactivate_" + record.trackingCode, true)}
-                                            visible={this.state.popupActive["deactivate_" + record.trackingCode]}
-                                            okButtonProps={{loading: this.state.loaderActive["deactivate_" + record.trackingCode]}}
-                                            onConfirm={() => {
-                                                this.handleActionMenu("deactivate_" + record.trackingCode);
-                                            }} title={"Are you sure you want to de-activate " + record.name + "?"}>
-                                    <div>Deactivate</div>
-                                </Popconfirm>
-                            </Menu.Item>
+                    <Popconfirm onCancel={() => this.setPopupActive("actionmenu", false)}
+                                visible={this.state.popupActive["actionmenu"]}
+                                okButtonProps={{loading: this.state.loaderActive["actionmenu"]}}
+                                onConfirm={() => {
+                                    this.handleActionMenu();
+                                }} title={"Are you sure you want to " + this.state.actionMenuAction + " " + record.name + "?"}>
+                        <Dropdown trigger={"click"} overlay={
+                            <Menu>
+                                <Menu.Item onClick={() => {
+                                    this.setPopupActive("deactivate_" + record.trackingCode, true);
+                                    this.setActionMenuTarget("deactivate_" + record.trackingCode)
+                                }} key={"deactivate_" + record.trackingcode}>
 
-                            <Menu.Item className={"ant-btn-dangerous"} key={"delete_" + record.trackingcode}>
-                                <Popconfirm onCancel={() => this.setPopupActive("delete_" + record.trackingCode, false)}
-                                            onClick={() => this.setPopupActive("delete_" + record.trackingCode, true)}
-                                            visible={this.state.popupActive["delete_" + record.trackingCode]}
-                                            okButtonProps={{loading: this.state.loaderActive["delete_" + record.trackingCode]}}
-                                            onConfirm={() => {
-                                                this.handleActionMenu("delete_" + record.trackingCode);
-                                            }} title={"Are you sure you want to delete " + record.name + "?"}>
+                                    <div style={{width: "100%", height: "calc(100% + 5px)"}}>Deactivate</div>
+
+                                </Menu.Item>
+
+                                <Menu.Item onClick={() => {
+                                    this.setPopupActive("delete_" + record.trackingCode, true);
+                                    this.setActionMenuTarget("delete_" + record.trackingCode)
+                                }} danger key={"delete_" + record.trackingcode}>
                                     <div>Delete</div>
-                                </Popconfirm>
-                            </Menu.Item>
-                        </Menu>
-                    }>
-                        <Button>Extra Actions <DownOutlined/> </Button>
-                    </Dropdown>
+                                </Menu.Item>
+                            </Menu>
+                        }>
+                            <Button>Extra Actions <DownOutlined/> </Button>
+                        </Dropdown>
+                    </Popconfirm>
                 </div>
             }
         ]
@@ -302,6 +343,30 @@ class Websites extends React.Component {
                 title: 'Tracking Code',
                 dataIndex: 'trackingCode',
                 key: 'trackingCode',
+            },
+            {
+                title: "Action",
+                dataIndex: "",
+                width: 300,
+                key: "action",
+                render: (_, record) => <div>
+                    <Button onClick={() => this.activateWebsite("d-activate_" + record.trackingCode)}
+                            loading={this.state.loaderActive["d-activate_" + record.trackingCode]}
+                            style={{marginRight: 5}}>Activate</Button>
+                    <Button danger>
+                        <Popconfirm onCancel={() => this.setPopupActive("d-delete_" + record.trackingCode, false)}
+                                    onClick={() => this.setPopupActive("d-delete_" + record.trackingCode, true)}
+                                    visible={this.state.popupActive["d-delete_" + record.trackingCode]}
+                                    okButtonProps={{loading: this.state.loaderActive["d-delete_" + record.trackingCode]}}
+                                    onConfirm={() => {
+                                        this.handleActionMenu();
+                                        this.setActionMenuTarget("d-delete_" + record.trackingCode)
+                                    }} title={"Are you sure you want to delete " + record.name + "?"}>
+                            Delete
+                        </Popconfirm>
+                    </Button>
+                    &nbsp;
+                </div>
             }
         ]
 
