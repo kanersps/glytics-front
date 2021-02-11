@@ -13,7 +13,7 @@ import Title from "antd/es/typography/Title";
 
 const api = axios.create({
     baseURL: 'https://localhost:5001/',
-    timeout: 2000
+    timeout: 5000
 });
 
 const categories = [

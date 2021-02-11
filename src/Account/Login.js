@@ -8,8 +8,7 @@ import axios from "axios"
 
 const api = axios.create({
     baseURL: 'https://localhost:5001/',
-    timeout: 2000,
-    headers: { 'X-Custom-Header': 'foobar' }
+    timeout: 5000
 });
 
 class Login extends React.Component {

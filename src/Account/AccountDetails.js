@@ -5,7 +5,7 @@ import {Skeleton, Spin} from "antd";
 
 const api = axios.create({
     baseURL: 'https://localhost:5001/',
-    timeout: 2000
+    timeout: 5000
 });
 
 class AccountDetails extends React.Component {
