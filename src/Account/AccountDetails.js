@@ -35,6 +35,12 @@ class AccountDetails extends React.Component {
             "key": this.props.apikey
         }
 
+        setInterval(() => {
+            this.setState({
+                test: this.state.test + 1
+            })
+        }, 1000)
+
         this.getAccountDetails()
     }
 

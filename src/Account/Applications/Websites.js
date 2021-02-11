@@ -6,6 +6,7 @@ import * as PropTypes from "prop-types";
 import Highlighter from 'react-highlight-words';
 import Modal from "antd/es/modal/Modal";
 import axios from "axios";
+import WebsiteSimpleDetails from "./WebsiteSimpleDetails";
 
 SearchOutlined.propTypes = {style: PropTypes.shape({color: PropTypes.any})};
 
@@ -37,13 +38,16 @@ class Websites extends React.Component {
             popupActive: {},
             errorMessageAddWebsite: "",
             actionMenuTarget: "",
-            actionMenuAction: ""
+            actionMenuAction: "",
+            websiteDetailsVisible: false,
+            websiteDetailsID: ""
         }
     }
 
     componentDidMount() {
         api.defaults.headers = {
-            "key": this.props.apikey
+            "key": this.props.apikey,
+            "Content-Type": "application/json"
         }
 
         this.reloadWebsites();
@@ -169,7 +173,7 @@ class Websites extends React.Component {
     setPopupActive(id, bool) {
         this.setState(prevState => {
             if(id.split("_")[0] === ("delete") || id.split("_")[0] === ("deactivate")) {
-                id = "actionmenu";
+                id = "actionmenu_" + id.split("_")[1];
             }
 
             let popupActive = Object.assign({}, prevState.popupActive);
@@ -184,7 +188,7 @@ class Websites extends React.Component {
         const action = key.split("_");
 
         if(action[0] === "delete" || action[0] === "deactivate")
-            this.setLoaderActive("actionmenu", true);
+            this.setLoaderActive("actionmenu_" + action[1], true);
         else
             this.setLoaderActive(key, true);
 
@@ -196,8 +200,8 @@ class Websites extends React.Component {
                 })
                     .then(_ => {
                         if(action[0] === "delete" || action[0] === "deactivate") {
-                            this.setLoaderActive("actionmenu", false);
-                            this.setPopupActive("actionmenu", false);
+                            this.setLoaderActive("actionmenu_" + action[1], false);
+                            this.setPopupActive("actionmenu_" + action[1], false);
                         }else {
                             this.setLoaderActive(key, false);
                             this.setPopupActive(key, false)
@@ -209,8 +213,8 @@ class Websites extends React.Component {
                         alert(err.message)
 
                         if(action[0] === "delete" || action[0] === "deactivate") {
-                            this.setLoaderActive("actionmenu", false);
-                            this.setPopupActive("actionmenu", false);
+                            this.setLoaderActive("actionmenu_" + action[1], false);
+                            this.setPopupActive("actionmenu_" + action[1], false);
                         }else {
                             this.setLoaderActive(key, false);
                             this.setPopupActive(key, false)
@@ -225,8 +229,8 @@ class Websites extends React.Component {
                 })
                     .then(_ => {
                         if(action[0] === "delete" || action[0] === "deactivate") {
-                            this.setLoaderActive("actionmenu", false);
-                            this.setPopupActive("actionmenu", false);
+                            this.setLoaderActive("actionmenu_" + action[1], false);
+                            this.setPopupActive("actionmenu_" + action[1], false);
                         }else {
                             this.setLoaderActive(key, false);
                             this.setPopupActive(key, false)
@@ -238,8 +242,8 @@ class Websites extends React.Component {
                         alert(err.message)
 
                         if(action[0] === "delete" || action[0] === "deactivate") {
-                            this.setLoaderActive("actionmenu", false);
-                            this.setPopupActive("actionmenu", false);
+                            this.setLoaderActive("actionmenu_" + action[1], false);
+                            this.setPopupActive("actionmenu_" + action[1], false);
                         }else {
                             this.setLoaderActive(key, false);
                             this.setPopupActive(key, false)
@@ -279,6 +283,19 @@ class Websites extends React.Component {
         })
     }
 
+    showWebsiteDetails(id) {
+        this.setState({
+            websiteDetailsVisible: true,
+            websiteDetailsID: id
+        })
+    }
+
+    hideWebsiteDetails() {
+        this.setState({
+            websiteDetailsVisible: false
+        })
+    }
+
     render() {
         const activeWebsiteColumns = [
             {
@@ -304,11 +321,13 @@ class Websites extends React.Component {
                 width: 300,
                 key: "action",
                 render: (_, record) => <div>
-                    <Button>Details</Button>
+                    <Button onClick={() => {
+                        this.showWebsiteDetails(record.trackingCode)
+                    }}>Details</Button>
                     &nbsp;
-                    <Popconfirm onCancel={() => this.setPopupActive("actionmenu", false)}
-                                visible={this.state.popupActive["actionmenu"]}
-                                okButtonProps={{loading: this.state.loaderActive["actionmenu"]}}
+                    <Popconfirm onCancel={() => this.setPopupActive("actionmenu_" + record.trackingCode, false)}
+                                visible={this.state.popupActive["actionmenu_" + record.trackingCode]}
+                                okButtonProps={{loading: this.state.loaderActive["actionmenu_" + record.trackingCode]}}
                                 onConfirm={() => {
                                     this.handleActionMenu();
                                 }} title={"Are you sure you want to " + this.state.actionMenuAction + " " + record.name + "?"}>
@@ -474,7 +493,9 @@ class Websites extends React.Component {
 
                     <Row gutter={8}>
                         <Col span={24} style={{textAlign: "right"}}>
-                            <Button onClick={this.setWebsiteFormVisible} disabled={this.state.websiteFormLoading}>
+                            <Button onClick={() => {
+                                this.setWebsiteFormVisible();
+                            }} disabled={this.state.websiteFormLoading}>
                                 Cancel
                             </Button>
                             <Button style={{margin: '0 8px'}} loading={this.state.websiteFormLoading} type="primary"
@@ -485,6 +506,10 @@ class Websites extends React.Component {
                     </Row>
                 </Form>
             </Modal>
+
+            <WebsiteSimpleDetails api={api} code={this.state.websiteDetailsID} visible={this.state.websiteDetailsVisible} close={() => {
+                this.hideWebsiteDetails();
+            }}/>
         </div>
     }
 }
