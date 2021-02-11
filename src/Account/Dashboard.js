@@ -70,10 +70,12 @@ class Dashboard extends React.Component {
             api.get("account/authenticated")
                 .then(res => {
                     if(!res.data.success) {
+                        localStorage.clear();
                         window.location.href = "/account/login"
                     }
                 })
                 .catch(e => {
+                    localStorage.clear();
                     window.location.href = "/account/login"
                 })
         }

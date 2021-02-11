@@ -40,7 +40,8 @@ class Websites extends React.Component {
             actionMenuTarget: "",
             actionMenuAction: "",
             websiteDetailsVisible: false,
-            websiteDetailsID: ""
+            websiteDetailsID: "",
+            shouldReloadWebsiteDetails: 0
         }
     }
 
@@ -286,7 +287,8 @@ class Websites extends React.Component {
     showWebsiteDetails(id) {
         this.setState({
             websiteDetailsVisible: true,
-            websiteDetailsID: id
+            websiteDetailsID: id,
+            shouldReloadWebsiteDetails: this.state.shouldReloadWebsiteDetails + 1
         })
     }
 
@@ -507,7 +509,7 @@ class Websites extends React.Component {
                 </Form>
             </Modal>
 
-            <WebsiteSimpleDetails api={api} code={this.state.websiteDetailsID} visible={this.state.websiteDetailsVisible} close={() => {
+            <WebsiteSimpleDetails api={api} reload={this.state.shouldReloadWebsiteDetails} code={this.state.websiteDetailsID} visible={this.state.websiteDetailsVisible} close={() => {
                 this.hideWebsiteDetails();
             }}/>
         </div>
