@@ -50,6 +50,11 @@ class Dashboard extends React.Component {
         this.state = {}
     }
 
+    capitalizeFirstLetter(string)
+    {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
     getActiveCategory() {
         for(let category of categories) {
             for(let item of category.items) {
@@ -58,7 +63,20 @@ class Dashboard extends React.Component {
             }
         }
 
+        if(window.location.pathname.split("/").length > 1) {
+            return this.capitalizeFirstLetter(window.location.pathname.split("/")[1]);
+        }
+
         return "Account";
+    }
+
+    getActivePage() {
+        if(window.location.pathname.split("/").length > 1) {
+            if(window.location.pathname.split("/")[2] === "website")
+                return "/applications/websites";
+        }
+
+        return window.location.pathname === "/account" ? "/account/details" : window.location.pathname;
     }
 
     checkApiKey(prevProps, force) {
@@ -94,7 +112,7 @@ class Dashboard extends React.Component {
             <Sider width={200} className="site-layout-background">
                 <Menu
                     mode="inline"
-                    defaultSelectedKeys={[window.location.pathname === "/account" ? "/account/details" : window.location.pathname]}
+                    defaultSelectedKeys={[this.getActivePage()]}
                     defaultOpenKeys={[this.getActiveCategory()]}
                     style={{ height: '100%', borderRight: 0 }}
                 >

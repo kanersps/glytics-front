@@ -2,6 +2,8 @@ import React from 'react';
 import {Button, Row, Card, Col, Drawer, Skeleton, Statistic, Divider} from "antd";
 import Title from "antd/es/typography/Title";
 import Highlight from "react-highlight.js"
+import {ReloadOutlined} from "@ant-design/icons";
+import {Link} from "react-router-dom";
 
 class WebsiteSimpleDetails extends React.Component {
     constructor(props) {
@@ -16,6 +18,7 @@ class WebsiteSimpleDetails extends React.Component {
             lastHourViews: 0,
             lastMonthVisitors: 0,
             lastMonthViews: 0,
+            reloading: false,
 
             copied: false
         }
@@ -23,7 +26,27 @@ class WebsiteSimpleDetails extends React.Component {
         this.trackingRef = React.createRef();
     }
 
-    componentDidMount() {
+    reloadOverview() {
+        this.setState({
+            reloading: true
+        })
+
+        this.props.api.post("application/website/details/simple", { trackingCode: this.props.code })
+            .then(res => {
+                console.log(res);
+
+                this.setState({
+                    loading: false,
+                    address: res.data.address,
+                    name: res.data.name,
+                    lastHourViews: res.data.lastHourViews,
+                    lastHourVisitors: res.data.lastHourVisitors,
+                    lastMonthViews: res.data.lastMonthViews,
+                    lastMonthVisitors: res.data.lastMonthVisitors,
+                    trackingSnippet: res.data.trackingSnippet,
+                    reloading: false
+                })
+            })
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -32,21 +55,7 @@ class WebsiteSimpleDetails extends React.Component {
                 loading: true
             })
 
-            this.props.api.post("application/website/details/simple", { trackingCode: this.props.code })
-                .then(res => {
-                    console.log(res);
-
-                    this.setState({
-                        loading: false,
-                        address: res.data.address,
-                        name: res.data.name,
-                        lastHourViews: res.data.lastHourViews,
-                        lastHourVisitors: res.data.lastHourVisitors,
-                        lastMonthViews: res.data.lastMonthViews,
-                        lastMonthVisitors: res.data.lastMonthVisitors,
-                        trackingSnippet: res.data.trackingSnippet
-                    })
-                })
+            this.reloadOverview();
         }
     }
 
@@ -92,7 +101,15 @@ class WebsiteSimpleDetails extends React.Component {
                 </Col>
 
                 <Col span={24}>
-                    <Title level={3}>Quick Overview</Title>
+                    <Row>
+                        <Col span={12}>
+                            <Title level={3}>Quick Overview</Title>
+                        </Col>
+                        <Col span={12} style={{textAlign: "right"}}>
+                            <Link to={"/applications/website/" + this.props.code }><Button type={"primary"} style={{marginRight: 10}}>More Details</Button></Link>
+                            <Button onClick={() => {this.reloadOverview()}} loading={ this.state.reloading } icon={ <ReloadOutlined/> }>Reload</Button>
+                        </Col>
+                    </Row>
                     <Title level={4}>Past Hour</Title>
 
                     <Row gutter={16}>
