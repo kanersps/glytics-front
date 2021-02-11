@@ -74,7 +74,7 @@ class Dashboard extends React.Component {
                         window.location.href = "/account/login"
                     }
                 })
-                .catch(e => {
+                .catch(_ => {
                     localStorage.clear();
                     window.location.href = "/account/login"
                 })
@@ -139,11 +139,11 @@ class Dashboard extends React.Component {
                         </Route>
 
                         <Route path={"/applications"}>
-                            <Applications apikey={this.props.apikey}></Applications>
+                            <Applications apikey={this.props.apikey}/>
                         </Route>
 
                         <Route path={"/account"}>
-                            <Redirect to={"/account/details"}></Redirect>
+                            <Redirect to={"/account/details"}/>
                         </Route>
                     </Switch>
                 </Content>

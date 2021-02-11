@@ -1,8 +1,7 @@
 import React from 'react';
-import {Button, Row, Card, Col, Drawer, Skeleton, Statistic, PageHeader, Divider} from "antd";
+import {Button, Row, Card, Col, Drawer, Skeleton, Statistic, Divider} from "antd";
 import Title from "antd/es/typography/Title";
 import Highlight from "react-highlight.js"
-import {CheckOutlined} from "@ant-design/icons";
 
 class WebsiteSimpleDetails extends React.Component {
     constructor(props) {
@@ -56,7 +55,7 @@ class WebsiteSimpleDetails extends React.Component {
         var el = document.querySelector("code"); //get element id
         if (window.getSelection && document.createRange) { //Browser compatibility
             sel = window.getSelection();
-            if(sel.toString() == ''){ //no text selection
+            if(sel.toString() === ''){ //no text selection
                 window.setTimeout(function(){
                     range = document.createRange(); //range object
                     range.selectNodeContents(el); //sets Range
@@ -66,7 +65,7 @@ class WebsiteSimpleDetails extends React.Component {
             }
         }else if (document.selection) { //older ie
             sel = document.selection.createRange();
-            if(sel.text == ''){ //no text selection
+            if(sel.text === ''){ //no text selection
                 range = document.body.createTextRange();//Creates TextRange object
                 range.moveToElementText(el);//sets Range
                 range.select(); //make selection.
@@ -83,7 +82,7 @@ class WebsiteSimpleDetails extends React.Component {
 
         if (!this.state.loading) {
             content = <Row gutter={8}>
-                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/default.min.css" />
+                <link rel="stylesheet" href={"https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/default.min.css"} />
 
                 <Col span={24}>
                     <span style={{ fontWeight: "bold", fontSize: "2.3em" }}> {this.state.name }</span>
