@@ -10,11 +10,6 @@ import WebsiteSimpleDetails from "./WebsiteSimpleDetails";
 
 SearchOutlined.propTypes = {style: PropTypes.shape({color: PropTypes.any})};
 
-const api = axios.create({
-    baseURL: 'https://localhost:5001/',
-    timeout: 2000
-});
-
 Highlighter.propTypes = {
     highlightStyle: PropTypes.shape({padding: PropTypes.number, backgroundColor: PropTypes.string}),
     textToHighlight: PropTypes.any,
@@ -46,11 +41,6 @@ class Websites extends React.Component {
     }
 
     componentDidMount() {
-        api.defaults.headers = {
-            "key": this.props.apikey,
-            "Content-Type": "application/json"
-        }
-
         this.reloadWebsites();
     }
 
@@ -123,7 +113,7 @@ class Websites extends React.Component {
             loadingWebsites: true
         })
 
-        api.get("application/website/all")
+        this.props.api.get("application/website/all")
             .then(res => {
                 let activeWebsites = []
                 let inactiveWebsites = []
@@ -196,7 +186,7 @@ class Websites extends React.Component {
         // eslint-disable-next-line
         switch (action[0]) {
             case "deactivate": {
-                api.post("application/website/deactivate", {
+                this.props.api.post("application/website/deactivate", {
                     trackingCode: action[1]
                 })
                     .then(_ => {
@@ -225,7 +215,7 @@ class Websites extends React.Component {
             }
             case "d-delete":
             case "delete": {
-                api.post("application/website/delete", {
+                this.props.api.post("application/website/delete", {
                     trackingCode: action[1]
                 })
                     .then(_ => {
@@ -260,7 +250,7 @@ class Websites extends React.Component {
 
         this.setLoaderActive(key, true);
 
-        api.post("application/website/activate", {
+        this.props.api.post("application/website/activate", {
             trackingCode: action[1]
         })
             .then(_ => {
@@ -411,7 +401,7 @@ class Websites extends React.Component {
         const onAddWebsite = (values) => {
             this.setWebsiteFormLoading(true);
 
-            api.post("application/website/create", values)
+            this.props.api.post("application/website/create", values)
                 .then(res => {
                     if (res.data.success) {
                         this.setWebsiteFormVisible(false);
@@ -509,7 +499,7 @@ class Websites extends React.Component {
                 </Form>
             </Modal>
 
-            <WebsiteSimpleDetails api={api} reload={this.state.shouldReloadWebsiteDetails} code={this.state.websiteDetailsID} visible={this.state.websiteDetailsVisible} close={() => {
+            <WebsiteSimpleDetails api={this.props.api} reload={this.state.shouldReloadWebsiteDetails} code={this.state.websiteDetailsID} visible={this.state.websiteDetailsVisible} close={() => {
                 this.hideWebsiteDetails();
             }}/>
         </div>
