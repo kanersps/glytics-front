@@ -1,6 +1,6 @@
 import React from "react";
 import { Line } from '@ant-design/charts';
-import {Button, Card, Col, Divider, PageHeader, Row, Skeleton, Statistic} from "antd";
+import {Button, Card, Col, Divider, PageHeader, Row, Skeleton, Statistic, Table} from "antd";
 import Title from "antd/lib/typography/Title";
 import {Link} from "react-router-dom";
 import {ReloadOutlined} from "@ant-design/icons";
@@ -11,6 +11,8 @@ class Website extends React.Component {
 
         this.state = {
             hourly: [],
+            hourlyPaths: [],
+            hourlyPathsTable: [],
             fullData: [],
             name: "",
             loading: true,
@@ -35,6 +37,8 @@ class Website extends React.Component {
         this.props.api.post("application/website/details", { trackingCode: this.props.match.params.id })
             .then(res => {
                 let data = [];
+                let dataPaths = [];
+                let hourlyPathsTableTemp = []
 
                 res.data.hourly.map(hour => {
                     data.push({
@@ -46,6 +50,57 @@ class Website extends React.Component {
                     data.push({
                         timestamp: this.formatDate(new Date(hour.timestamp)),
                         key: "Views",
+                        value: hour.pageViews
+                    })
+                })
+
+                let thisHour = new Date();
+
+                let pathsThisHour = []
+
+                res.data.hourlyPaths.map(hour => {
+                    if(hour.timestamp !== thisHour) {
+                        // Sort and add all to dataPaths
+
+                        pathsThisHour = pathsThisHour.sort((a, b) => {
+                            return a.timestamp < b.timestamp ? 1 : -1;
+                        }).slice(0, 10)
+
+                        dataPaths.push(...pathsThisHour);
+
+                        let temp = undefined;
+                        pathsThisHour.map((path) => {
+                            if(path.type === "visit") {
+                                temp = {
+                                    path: path.path,
+                                    visits: path.value,
+                                    views: 0
+                                }
+                            } else {
+                                temp.views = path.value;
+
+                                hourlyPathsTableTemp.push(temp)
+                            }
+                        })
+
+                        pathsThisHour = []
+                    }
+
+                    thisHour = hour.timestamp
+
+                    pathsThisHour.push({
+                        timestamp: this.formatDate(new Date(hour.timestamp)),
+                        type: "visit",
+                        path: hour.path,
+                        key: "Visits for " + hour.path,
+                        value: hour.visits
+                    })
+
+                    pathsThisHour.push({
+                        timestamp: this.formatDate(new Date(hour.timestamp)),
+                        type: "view",
+                        path: hour.path,
+                        key: "Views for " + hour.path,
                         value: hour.pageViews
                     })
                 })
@@ -66,14 +121,18 @@ class Website extends React.Component {
                     lastMonthVisits += h.visits
                 })
 
+                console.log(hourlyPathsTableTemp)
+
                 this.setState({
                     hourly: data,
+                    hourlyPaths: dataPaths,
                     name: res.data.name,
                     loading: false,
                     reloading: false,
                     fullData: res.data.hourly,
                     lastMonthViews: lastMonthViews,
-                    lastMonthVisits: lastMonthVisits
+                    lastMonthVisits: lastMonthVisits,
+                    hourlyPathsTable: hourlyPathsTableTemp
                 })
             })
     }
@@ -91,10 +150,41 @@ class Website extends React.Component {
         if(this.state.loading)
             return <Skeleton/>
 
+        const activeWebsiteColumns = [
+            {
+                title: 'Path',
+                dataIndex: 'path',
+                key: 'path'
+            },
+            {
+                title: 'Visitors',
+                dataIndex: 'visitors',
+                key: 'visitors',
+            },
+            {
+                title: 'Views',
+                dataIndex: 'views',
+                key: 'views',
+            }
+        ]
+
         let data = this.state.hourly;
+        let dataPath = this.state.hourlyPaths;
 
         const configHourlyData = {
             data,
+            height: 300,
+            xField: 'timestamp',
+            yField: 'value',
+            point: {
+                size: 5,
+                shape: 'diamond',
+            },
+            seriesField: 'key',
+        };
+
+        const configHourlyDataPath = {
+            data: this.state.hourlyPaths,
             height: 300,
             xField: 'timestamp',
             yField: 'value',
@@ -165,13 +255,29 @@ class Website extends React.Component {
                 <Divider/>
             </Col>
 
-            <Col span={24}>
-                <Title level={3}>Graphs</Title>
+            <Col span={12}>
+                <Title level={3}>Hourly Visitors</Title>
+            </Col>
+            <Col span={12}>
+                <Title level={3}>Hourly Paths</Title>
             </Col>
 
-            <Col span={10}>
+            <Col span={11}>
                 <Line {...configHourlyData} />
             </Col>
+
+            <Col span={1}></Col>
+
+            <Col span={11}>
+                <Line {...configHourlyDataPath} />
+            </Col>
+
+            { this.state.hourlyPathsTable.length <= 1 ? "" : (
+                <Col span={24}>
+                    <Divider/>
+                    <Title level={3}>Top { this.state.hourlyPathsTable.length } paths</Title>
+                    <Table dataSource={this.state.hourlyPathsTable} columns={activeWebsiteColumns} />
+                </Col>) }
         </Row>;
     }
 }

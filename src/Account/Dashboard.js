@@ -109,7 +109,7 @@ class Dashboard extends React.Component {
 
     render() {
         return <Layout>
-            <Sider width={200} className="site-layout-background">
+            <Sider width={200} className="site-layout-background" style={{position: "fixed", bottom: 40, top: 80}}>
                 <Menu
                     mode="inline"
                     defaultSelectedKeys={[this.getActivePage()]}
@@ -129,7 +129,7 @@ class Dashboard extends React.Component {
                 </Menu>
             </Sider>
 
-            <Layout style={{ padding: '0 24px 24px' }}>
+            <Layout style={{ padding: '0 24px 24px', marginLeft: 200 }}>
                 <Content
                     className="site-layout-background"
                     style={{
