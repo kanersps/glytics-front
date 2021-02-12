@@ -85,7 +85,7 @@ class Websites extends React.Component {
                 </Space>
             </div>
         ),
-        filterIcon: filtered => <SearchOutlined style={{color: filtered ? '#1890ff' : undefined}}/>,
+        filterIcon: filtered => <SearchOutlined style={{color: filtered ? 'rgb(0, 0, 200)' : "rgb(0,0,0)"}}/>,
         onFilter: (value, record) =>
             record[dataIndex]
                 ? record[dataIndex].toString().toLowerCase().includes(value.toLowerCase())
