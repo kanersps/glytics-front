@@ -7,11 +7,6 @@ const { Header } = Layout;
 
 const Pages = [
     {
-        "path": "/",
-        "selector": "",
-        "title": "Home"
-    },
-    {
         "path": "/account",
         "selector": "account",
         "title": "Account"
