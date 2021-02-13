@@ -12,7 +12,7 @@ import AccountDetails from "./AccountDetails";
 import Title from "antd/es/typography/Title";
 
 const api = axios.create({
-    baseURL: process.env.API_URL,
+    baseURL: process.env.REACT_APP_API_URL,
     timeout: 5000
 });
 
