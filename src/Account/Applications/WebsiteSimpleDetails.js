@@ -95,7 +95,7 @@ class WebsiteSimpleDetails extends React.Component {
 
                 <Col span={24}>
                     <span style={{ fontWeight: "bold", fontSize: "2.3em" }}> {this.state.name }</span>
-                    <span>&nbsp;&nbsp;&nbsp;&nbsp;<a href={this.state.address} target={"_blank"}>{ this.state.address }</a> </span>
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;<a href={this.state.address} rel={"noreferrer"} target={"_blank"}>{ this.state.address }</a> </span>
 
                     <Divider/>
                 </Col>

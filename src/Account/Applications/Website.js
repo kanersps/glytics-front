@@ -1,8 +1,7 @@
 import React from "react";
 import { Line } from '@ant-design/charts';
-import {Button, Card, Col, Divider, PageHeader, Row, Skeleton, Statistic, Table} from "antd";
+import {Button, Card, Col, Divider, Row, Skeleton, Statistic, Table} from "antd";
 import Title from "antd/lib/typography/Title";
-import {Link} from "react-router-dom";
 import {ReloadOutlined} from "@ant-design/icons";
 
 class Website extends React.Component {
@@ -52,6 +51,8 @@ class Website extends React.Component {
                         key: "Views",
                         value: hour.pageViews
                     })
+
+                    return "";
                 })
 
                 let thisHour = new Date();
@@ -81,6 +82,8 @@ class Website extends React.Component {
 
                                 hourlyPathsTableTemp.push(temp)
                             }
+
+                            return "";
                         })
 
                         pathsThisHour = []
@@ -103,6 +106,8 @@ class Website extends React.Component {
                         key: "Views for " + hour.path,
                         value: hour.pageViews
                     })
+
+                    return "";
                 })
 
                 data.sort((a, b) => {
@@ -119,6 +124,8 @@ class Website extends React.Component {
                 res.data.hourly.map(h => {
                     lastMonthViews += h.pageViews
                     lastMonthVisits += h.visits
+
+                    return "";
                 })
 
                 console.log(hourlyPathsTableTemp)
@@ -169,7 +176,6 @@ class Website extends React.Component {
         ]
 
         let data = this.state.hourly;
-        let dataPath = this.state.hourlyPaths;
 
         const configHourlyData = {
             data,

@@ -5,7 +5,6 @@ import {Button, Divider, Input, Space, Table, Dropdown, Menu, Popconfirm, Row, C
 import * as PropTypes from "prop-types";
 import Highlighter from 'react-highlight-words';
 import Modal from "antd/es/modal/Modal";
-import axios from "axios";
 import WebsiteSimpleDetails from "./WebsiteSimpleDetails";
 
 SearchOutlined.propTypes = {style: PropTypes.shape({color: PropTypes.any})};

@@ -1,10 +1,10 @@
 import React from "react"
 import axios from "axios";
 import Title from "antd/es/typography/Title";
-import {Skeleton, Spin} from "antd";
+import {Skeleton} from "antd";
 
 const api = axios.create({
-    baseURL: 'https://localhost:5001/',
+    baseURL: process.env.API_URL,
     timeout: 5000
 });
 

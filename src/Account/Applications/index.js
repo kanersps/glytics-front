@@ -5,7 +5,7 @@ import Website from "./Website";
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: 'https://localhost:5001/',
+    baseURL: process.env.API_URL,
     timeout: 5000
 });
 
