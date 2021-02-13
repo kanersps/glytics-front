@@ -81,7 +81,7 @@ class Website extends React.Component {
                 }
 
                 tempPathsArray = tempPathsArray.sort((a, b) => {
-                    return a.visitors > b.visitors ? 0 : -1;
+                    return a.visits > b.visits ? 0 : -1;
                 })
 
                 tempPathsArray = tempPathsArray.slice(0, 10)
