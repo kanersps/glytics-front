@@ -37,7 +37,6 @@ class Website extends React.Component {
             .then(res => {
                 let data = [];
                 let dataPaths = [];
-                let hourlyPathsTableTemp = []
 
                 res.data.hourly.map(hour => {
                     data.push({
@@ -73,6 +72,8 @@ class Website extends React.Component {
                         tempPaths[hour.path].visits += hour.visits;
                         tempPaths[hour.path].views += hour.pageViews;
                     }
+
+                    return "";
                 })
 
                 for(let path in tempPaths) {
