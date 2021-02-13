@@ -1,7 +1,6 @@
 import React from 'react';
 import {Button, Row, Card, Col, Drawer, Skeleton, Statistic, Divider} from "antd";
 import Title from "antd/es/typography/Title";
-import Highlight from "react-highlight.js"
 import {ReloadOutlined} from "@ant-design/icons";
 import {Link} from "react-router-dom";
 
@@ -91,8 +90,6 @@ class WebsiteSimpleDetails extends React.Component {
 
         if (!this.state.loading) {
             content = <Row gutter={8}>
-                <link rel="stylesheet" href={"https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/default.min.css"} />
-
                 <Col span={24}>
                     <span style={{ fontWeight: "bold", fontSize: "2.3em" }}> {this.state.name }</span>
                     <span>&nbsp;&nbsp;&nbsp;&nbsp;<a href={this.state.address} rel={"noreferrer"} target={"_blank"}>{ this.state.address }</a> </span>
@@ -177,9 +174,9 @@ class WebsiteSimpleDetails extends React.Component {
                         </Col>
                     </Row>
 
-                    <Highlight ref={this.trackingRef} language={"html"}>
+                    <pre><code ref={this.trackingRef}>
                         { this.state.trackingSnippet }
-                    </Highlight>
+                    </code></pre>
                 </Col>
 
             </Row>
