@@ -26,6 +26,8 @@ class App extends React.Component {
         this.state = {
             loggedIn: false
         }
+        console.log(process.env.REACT_APP_API_URL)
+        console.log(process.env.REACT_APP_API_URL)
     }
 
     loggedIn = () => {
