@@ -2,7 +2,7 @@
     let returnObject = {};
     
     returnObject.send = (type) => {
-        fetch("https://localhost:5001/app/web", {
+        fetch("https://api.g-lytics.com/app/web", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
