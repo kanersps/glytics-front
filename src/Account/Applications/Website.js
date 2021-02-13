@@ -81,8 +81,10 @@ class Website extends React.Component {
                 }
 
                 tempPathsArray = tempPathsArray.sort((a, b) => {
-                    return a.visitors < b.visitors ? 1 : -1;
+                    return a.visitors > b.visitors ? 0 : -1;
                 })
+
+                tempPathsArray = tempPathsArray.slice(0, 10)
 
                 res.data.hourlyPaths.map(hour => {
                     if(hour.timestamp !== thisHour) {
