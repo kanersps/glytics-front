@@ -1,8 +1,8 @@
 import React from "react";
 import {Button, Card, Col, Divider, Row, Skeleton, Statistic, Table} from "antd";
 import Title from "antd/lib/typography/Title";
-import Line from "antd/lib/progress/Line";
 import {ReloadOutlined} from "@ant-design/icons";
+import {Line} from "@ant-design/charts";
 
 class Website extends React.Component {
     constructor(props) {
