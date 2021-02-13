@@ -165,8 +165,8 @@ class Website extends React.Component {
             },
             {
                 title: 'Visitors',
-                dataIndex: 'visitors',
-                key: 'visitors',
+                dataIndex: 'visits',
+                key: 'visits',
             },
             {
                 title: 'Views',
