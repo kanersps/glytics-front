@@ -1,7 +1,7 @@
 import React from "react";
-import { Line } from '@ant-design/charts';
 import {Button, Card, Col, Divider, Row, Skeleton, Statistic, Table} from "antd";
 import Title from "antd/lib/typography/Title";
+import Line from "antd/lib/progress/Line";
 import {ReloadOutlined} from "@ant-design/icons";
 
 class Website extends React.Component {
