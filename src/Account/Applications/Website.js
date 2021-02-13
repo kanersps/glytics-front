@@ -59,6 +59,30 @@ class Website extends React.Component {
 
                 let pathsThisHour = []
 
+                let tempPaths = {};
+                let tempPathsArray = [];
+
+                res.data.hourlyPaths.map(hour => {
+                    if(!tempPaths[hour.path]) {
+                        tempPaths[hour.path] = {
+                            path: hour.path,
+                            visits: hour.visits,
+                            views: hour.pageViews
+                        }
+                    } else {
+                        tempPaths[hour.path].visits += hour.visits;
+                        tempPaths[hour.path].views += hour.pageViews;
+                    }
+                })
+
+                for(let path in tempPaths) {
+                    tempPathsArray.push(tempPaths[path]);
+                }
+
+                tempPathsArray = tempPathsArray.sort((a, b) => {
+                    return a.visitors < b.visitors ? 1 : -1;
+                })
+
                 res.data.hourlyPaths.map(hour => {
                     if(hour.timestamp !== thisHour) {
                         // Sort and add all to dataPaths
@@ -68,23 +92,6 @@ class Website extends React.Component {
                         }).slice(0, 10)
 
                         dataPaths.push(...pathsThisHour);
-
-                        let temp = undefined;
-                        pathsThisHour.map((path) => {
-                            if(path.type === "visit") {
-                                temp = {
-                                    path: path.path,
-                                    visits: path.value,
-                                    views: 0
-                                }
-                            } else {
-                                temp.views = path.value;
-
-                                hourlyPathsTableTemp.push(temp)
-                            }
-
-                            return "";
-                        })
 
                         pathsThisHour = []
                     }
@@ -128,8 +135,6 @@ class Website extends React.Component {
                     return "";
                 })
 
-                console.log(hourlyPathsTableTemp)
-
                 this.setState({
                     hourly: data,
                     hourlyPaths: dataPaths,
@@ -139,7 +144,7 @@ class Website extends React.Component {
                     fullData: res.data.hourly,
                     lastMonthViews: lastMonthViews,
                     lastMonthVisits: lastMonthVisits,
-                    hourlyPathsTable: hourlyPathsTableTemp
+                    hourlyPathsTable: tempPathsArray
                 })
             })
     }
