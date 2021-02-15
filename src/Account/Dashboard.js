@@ -131,7 +131,7 @@ class Dashboard extends React.Component {
                 </Menu>
             </Sider>
 
-            <Layout style={{ padding: '0 24px 24px', marginLeft: 200 }}>
+            <Layout style={{ padding: '0 24px 24px', marginLeft: 200, marginTop: 50}}>
                 <Content
                     className="site-layout-background"
                     style={{

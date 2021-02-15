@@ -50,7 +50,7 @@ class App extends React.Component {
         return (
           <BrowserRouter style={{height: "100%"}}>
               <Layout className="layout" style={{minHeight:"100vh"}}>
-                  <Desktop>
+                  <Desktop style={{position: "fixed"}}>
                       <Header logout={() => {
                           this.logout();
                       }} loggedIn={this.state.loggedIn} />

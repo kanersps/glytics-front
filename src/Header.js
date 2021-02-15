@@ -24,7 +24,7 @@ class GHeader extends Component {
             </Menu>
         );
         return (
-            <Header>
+            <Header style={{position: "fixed", width: "100%", zIndex: 99}}>
                 <Menu theme="dark" mode="horizontal" selectedKeys={[""]}>
                     <li className={"ant-menu-item ant-menu-item-only-child brand"}><Link to={"/"}><span>G-Lytics</span></Link></li>
 
