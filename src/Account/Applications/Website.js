@@ -23,9 +23,14 @@ class Website extends React.Component {
         }
     }
 
-    formatDate(date) {
-        let t = date;
-        return (t.getDay() < 10 ? "0" + t.getDay() : t.getDay()) + "-" + (t.getMonth() < 10 ? "0" + t.getMonth() : t.getMonth()) + " " + (t.getHours() < 10 ? "0" + t.getHours() : t.getHours()) + ":00"
+    formatDate(d) {
+        return (("0" + d.getDate()).slice(-2) + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +
+        d.getFullYear());
+    }
+
+    formatTooltip(d) {
+        return ("0" + d.getDate()).slice(-2) + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +
+            d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
     }
 
     reloadWebsite() {
@@ -40,13 +45,15 @@ class Website extends React.Component {
 
                 res.data.hourly.map(hour => {
                     data.push({
-                        timestamp: this.formatDate(new Date(hour.timestamp)),
+                        timestamp: hour.timestamp,
+                        formattedTooltip: this.formatTooltip(new Date(hour.timestamp)),
                         key: "Visits",
                         value: hour.visits
                     })
 
                     data.push({
-                        timestamp: this.formatDate(new Date(hour.timestamp)),
+                        timestamp: hour.timestamp,
+                        formattedTooltip: this.formatTooltip(new Date(hour.timestamp)),
                         key: "Views",
                         value: hour.pageViews
                     })
@@ -85,40 +92,6 @@ class Website extends React.Component {
                 })
 
                 tempPathsArray = tempPathsArray.slice(0, 10)
-
-                res.data.hourlyPaths.map(hour => {
-                    if(hour.timestamp !== thisHour) {
-                        // Sort and add all to dataPaths
-
-                        pathsThisHour = pathsThisHour.sort((a, b) => {
-                            return a.timestamp < b.timestamp ? 1 : -1;
-                        }).slice(0, 10)
-
-                        dataPaths.push(...pathsThisHour);
-
-                        pathsThisHour = []
-                    }
-
-                    thisHour = hour.timestamp
-
-                    pathsThisHour.push({
-                        timestamp: this.formatDate(new Date(hour.timestamp)),
-                        type: "visit",
-                        path: hour.path,
-                        key: "Visits for " + hour.path,
-                        value: hour.visits
-                    })
-
-                    pathsThisHour.push({
-                        timestamp: this.formatDate(new Date(hour.timestamp)),
-                        type: "view",
-                        path: hour.path,
-                        key: "Views for " + hour.path,
-                        value: hour.pageViews
-                    })
-
-                    return "";
-                })
 
                 data.sort((a, b) => {
                     return a.timestamp > b.timestamp ? 1 : 0
@@ -196,7 +169,17 @@ class Website extends React.Component {
             },
             seriesField: 'key',
             isGroup: true,
-            legend: false
+            legend: false,
+            xAxis: {
+                label: {
+                    formatter: (name) => {
+                        return this.formatDate(new Date(name))
+                    }
+                }
+            },
+            tooltip: {
+                title: "formattedTooltip",
+            }
         }
 
         return <Row gutter={8}>
