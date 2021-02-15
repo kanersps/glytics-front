@@ -2,7 +2,7 @@ import React from "react";
 import {Button, Card, Col, Divider, Row, Skeleton, Statistic, Table} from "antd";
 import Title from "antd/lib/typography/Title";
 import {ReloadOutlined} from "@ant-design/icons";
-import Line from "@ant-design/charts/lib/line";
+import Column from "@ant-design/charts/lib/column";
 
 class Website extends React.Component {
     constructor(props) {
@@ -187,7 +187,7 @@ class Website extends React.Component {
 
         const configHourlyData = {
             data,
-            height: 300,
+            height: 400,
             xField: 'timestamp',
             yField: 'value',
             point: {
@@ -195,19 +195,9 @@ class Website extends React.Component {
                 shape: 'diamond',
             },
             seriesField: 'key',
-        };
-
-        const configHourlyDataPath = {
-            data: this.state.hourlyPaths,
-            height: 300,
-            xField: 'timestamp',
-            yField: 'value',
-            point: {
-                size: 5,
-                shape: 'diamond',
-            },
-            seriesField: 'key',
-        };
+            isGroup: true,
+            legend: false
+        }
 
         return <Row gutter={8}>
             <Col span={24}>
@@ -265,31 +255,25 @@ class Website extends React.Component {
                         </Card>
                     </Col>
                 </Row>
+            </Col>
 
+            <Col style={{marginTop: 25}} span={24}>
+                <Column {...configHourlyData} />
+            </Col>
+
+            <Col span={24}>
                 <Divider/>
             </Col>
 
-            <Col span={12}>
-                <Title level={3}>Hourly Visitors</Title>
-            </Col>
-            <Col span={12}>
-                <Title level={3}>Hourly Paths</Title>
-            </Col>
-
-            <Col span={11}>
-                <Line {...configHourlyData} />
-            </Col>
-
-            <Col span={1}></Col>
-
-            <Col span={11}>
-                <Line {...configHourlyDataPath} />
-            </Col>
+            { this.state.hourlyPathsTable.length <= 1 ? "" : (
+                <Col span={12}>
+                    <Title level={3}>Top { this.state.hourlyPathsTable.length } paths</Title>
+                    <Table dataSource={this.state.hourlyPathsTable} columns={activeWebsiteColumns} />
+                </Col>) }
 
             { this.state.hourlyPathsTable.length <= 1 ? "" : (
-                <Col span={24}>
-                    <Divider/>
-                    <Title level={3}>Top { this.state.hourlyPathsTable.length } paths</Title>
+                <Col span={12}>
+                    <Title level={3}>Top { this.state.hourlyPathsTable.length } browsers</Title>
                     <Table dataSource={this.state.hourlyPathsTable} columns={activeWebsiteColumns} />
                 </Col>) }
         </Row>;

@@ -51,7 +51,9 @@ class App extends React.Component {
           <BrowserRouter style={{height: "100%"}}>
               <Layout className="layout" style={{minHeight:"100vh"}}>
                   <Desktop>
-                      <Header />
+                      <Header logout={() => {
+                          this.logout();
+                      }} loggedIn={this.state.loggedIn} />
                   </Desktop>
 
                   <Switch>

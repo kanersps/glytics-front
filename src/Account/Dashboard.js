@@ -1,4 +1,4 @@
-import {Button, Row, Col, Layout, Menu} from "antd";
+import {Row, Col, Layout, Menu} from "antd";
 import {HomeOutlined, UserOutlined} from "@ant-design/icons";
 import BreadcrumbPath from "../BreadcrumbPath";
 import {Link, Redirect, Route, Switch} from "react-router-dom";
@@ -90,6 +90,8 @@ class Dashboard extends React.Component {
                     if(!res.data.success) {
                         localStorage.clear();
                         window.location.href = "/account/login"
+                    } else {
+                        this.props.loggedIn();
                     }
                 })
                 .catch(_ => {
@@ -139,11 +141,8 @@ class Dashboard extends React.Component {
                     }}
                 >
                     <Row>
-                        <Col span={20}>
+                        <Col span={24}>
                             <BreadcrumbPath style={{ margin: '16px 0' }} />&nbsp;
-                        </Col>
-                        <Col span={4} style={{textAlign: "right"}}>
-                            <Button loading={this.state.loggingOut} onClick={() => {this.props.logout(); this.setState({loggingOut: true})}}>Logout</Button>
                         </Col>
                     </Row>
 
