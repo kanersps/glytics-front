@@ -61,10 +61,6 @@ class Website extends React.Component {
                     return "";
                 })
 
-                let thisHour = new Date();
-
-                let pathsThisHour = []
-
                 let tempPaths = {};
                 let tempPathsArray = [];
 
