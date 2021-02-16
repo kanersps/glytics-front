@@ -19,7 +19,7 @@ class Account extends React.Component {
     }
 
     render() {
-        return <Layout style={{ marginTop: 20 }}>
+        return <Layout style={{marginTop: 50 }}>
             <Switch>
                 <Route path={"/account/login"}>
                     { this.props.loggedIn === true || localStorage.getItem("apikey")  ? <Redirect to={"/account/details"} /> : <Login apikey={this.props.apikey} loggedIn={this.props.setLoggedIn} /> }

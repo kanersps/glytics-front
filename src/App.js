@@ -57,21 +57,23 @@ class App extends React.Component {
                       }} loggedIn={this.state.loggedIn} apikey={this.state.apiKey}  />
                   </Desktop>
 
-                  <Switch>
-                      <Route path={["/account", "/applications"]}>
-                          <Account logout={this.logout} setApiKey={this.setApiKey} setLoggedIn={this.loggedIn} loggedIn={this.state.loggedIn} apikey={localStorage.getItem("apikey")}/>
-                      </Route>
+                  <div style={{marginTop: 20}}>
+                      <Switch>
+                          <Route path={["/account", "/applications"]}>
+                              <Account logout={this.logout} setApiKey={this.setApiKey} setLoggedIn={this.loggedIn} loggedIn={this.state.loggedIn} apikey={localStorage.getItem("apikey")}/>
+                          </Route>
 
-                      <Route path="/">
-                          <Content style={{ padding: '0 50px' }}>
-                              <BreadcrumbPath style={{ margin: '16px 0' }} />
+                          <Route path="/">
+                              <Content style={{ padding: '0 50px' }}>
+                                  <BreadcrumbPath style={{ margin: '16px 0' }} />
 
-                              <div className="site-layout-content" style={{ margin: "16px 0"}}>
-                                  <Home />
-                              </div>
-                          </Content>
-                      </Route>
-                  </Switch>
+                                  <div className="site-layout-content" style={{ margin: "16px 0"}}>
+                                      <Home />
+                                  </div>
+                              </Content>
+                          </Route>
+                      </Switch>
+                  </div>
                   <Footer style={{ textAlign: 'center' }}>G-Development, Kane Petra &#xa9; { new Date().getFullYear() === 2021 ? new Date().getFullYear() : `2021 - ${ new Date().getFullYear() }`}</Footer>
               </Layout>
           </BrowserRouter>
