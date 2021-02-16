@@ -4,6 +4,7 @@ import { Form, Input, Button } from 'antd';
 import Title from "antd/es/typography/Title";
 import {Link, Redirect} from "react-router-dom";
 import axios from "axios"
+import ReCAPTCHA from "react-google-recaptcha";
 
 const api = axios.create({
     baseURL: process.env.REACT_APP_API_URL,
@@ -38,6 +39,8 @@ class Register extends React.Component {
         this.setState({
             registering: true
         })
+
+        console.log(values)
 
         api.post("account/register", values)
             .then(res => {
@@ -180,6 +183,10 @@ class Register extends React.Component {
                         ]}
                     >
                         <Input.Password />
+                    </Form.Item>
+
+                    <Form.Item label={"Captcha"} style={{textAlign: "center", width: "100%"}} name="RecaptchaToken">
+                        <ReCAPTCHA sitekey={"6Lec9loaAAAAAHS_hxY4lrBzZIeP2tUIgn90KVBK"} />
                     </Form.Item>
 
                         <div style={{ marginTop: 10, marginBottom: 10 }}>
