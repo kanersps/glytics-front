@@ -24,7 +24,8 @@ class App extends React.Component {
         super(props);
 
         this.state = {
-            loggedIn: false
+            loggedIn: false,
+            apiKey: ""
         }
     }
 
@@ -53,7 +54,7 @@ class App extends React.Component {
                   <Desktop style={{position: "fixed"}}>
                       <Header logout={() => {
                           this.logout();
-                      }} loggedIn={this.state.loggedIn} />
+                      }} loggedIn={this.state.loggedIn} apikey={this.state.apiKey}  />
                   </Desktop>
 
                   <Switch>

@@ -40,6 +40,16 @@
   }
 }
 
+.anticon-loading {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+.anticon-search {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
