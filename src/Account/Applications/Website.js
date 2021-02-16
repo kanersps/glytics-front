@@ -373,13 +373,13 @@ class Website extends React.Component {
             { this.state.hourlyPathsTable.length <= 1 ? "" : (
                 <Col span={12}>
                     <Title level={3}>Top { this.state.hourlyPathsTable.length } paths</Title>
-                    <Table dataSource={this.state.hourlyPathsTable} columns={activeWebsiteColumns} />
+                    <Table dataSource={this.state.hourlyPathsTable} columns={activeWebsiteColumns} pagination={false} />
                 </Col>) }
 
             { this.state.hourlyBrowsersTable.length <= 0 ? "" : (
                 <Col span={12}>
                     <Title level={3}>Top { this.state.hourlyBrowsersTable.length } browsers</Title>
-                    <Table dataSource={this.state.hourlyBrowsersTable} columns={browserColumns} />
+                    <Table dataSource={this.state.hourlyBrowsersTable} columns={browserColumns} pagination={false} />
                 </Col>) }
         </Row>;
     }
