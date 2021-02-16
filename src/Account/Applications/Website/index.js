@@ -281,6 +281,14 @@ class Website extends React.Component {
             }
         }
 
+        if(this.state.hourly.length <= 24) {
+            return <div>
+                <Title>{ this.state.name }</Title>
+                <p>Currently we have not gathered enough information about this application, please check back later.</p>
+                <p>Gathered { this.state.hourly.length } out of 25 entries needed </p>
+            </div>
+        }
+
         return <Row gutter={8}>
             <Col span={24}>
                 <Header reloading={this.state.reloading} name={this.state.name} reloadWebsite={() => {
