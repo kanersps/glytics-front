@@ -30,7 +30,7 @@ class Account extends React.Component {
                 </Route>
 
                 <Route path={["/account", "/applications"]}>
-                    { this.props.loggedIn === false && !localStorage.getItem("apikey") ? <Redirect to={"/account/login"} /> : <Dashboard logout={this.props.logout} apikey={this.props.apikey} loggedIn={this.props.setLoggedIn} /> }
+                    { this.props.loggedIn === false && !localStorage.getItem("apikey") ? <Redirect to={"/account/login"} /> : <Dashboard update={this.props.shouldUpdateDashboard} logout={this.props.logout} apikey={this.props.apikey} loggedIn={this.props.setLoggedIn} /> }
                 </Route>
             </Switch>
         </Layout>

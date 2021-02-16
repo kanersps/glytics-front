@@ -47,7 +47,16 @@ class Dashboard extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {}
+        this.state = {
+            openSelection: {},
+            activeMenus: [this.getActiveCategory()]
+        }
+
+        this.menuRef = null;
+
+        this.setMenuRef = element => {
+            this.menuRef = element;
+        }
     }
 
     capitalizeFirstLetter(string)
@@ -101,12 +110,33 @@ class Dashboard extends React.Component {
         }
     }
 
+    onMenuOpenChange(menus) {
+        this.setState({
+            activeMenus: menus
+        })
+    }
+
     componentDidMount() {
         this.checkApiKey(null, true)
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         this.checkApiKey(prevProps);
+
+        console.log(this.menuRef)
+
+        if(prevProps.update !== this.props.update) {
+            this.setState({
+                openSelection: {
+                    openKeys: [...this.state.activeMenus, "Applications"],
+                    selectedKeys: ["/applications/websites"],
+                }
+            }, () => {
+                this.setState({
+                    openSelection: {}
+                })
+            })
+        }
     }
 
     render() {
@@ -117,6 +147,11 @@ class Dashboard extends React.Component {
                     defaultSelectedKeys={[this.getActivePage()]}
                     defaultOpenKeys={[this.getActiveCategory()]}
                     style={{ height: '100%', borderRight: 0 }}
+                    onOpenChange={(v) => {
+                        this.onMenuOpenChange(v)
+                    }}
+                    ref={this.setMenuRef}
+                    {...this.state.openSelection}
                 >
 
                     { categories.map(category => {

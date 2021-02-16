@@ -15,7 +15,6 @@ const Pages = [
 ]
 
 class GHeader extends Component {
-
     render() {
         return (
             <Header style={{position: "fixed", width: "100%", zIndex: 99}}>
@@ -27,7 +26,7 @@ class GHeader extends Component {
                     })}
 
 
-                    { !this.props.loggedIn ? null : <LoggedIn logout={this.props.logout} /> }
+                    { !this.props.loggedIn ? null : <LoggedIn updateDashboard={this.props.updateDashboard} logout={this.props.logout} /> }
 
                 </Menu>
             </Header>

@@ -42,15 +42,17 @@ class LoggedIn extends React.Component {
         return {
             value: title,
             label: (
-                <div style={{
+                <Link key={title} onClick={() => {
+                    this.props.updateDashboard();
+                }} to={location} style={{
                     display: 'flex',
                     justifyContent: 'space-between',
-                }} >
-                    <Link to={location}> {title} </Link>
+                }}>
+                    { title }
                     <span>
                           <GlobalOutlined/>
                         </span>
-                </div>
+                </Link>
             ),
         };
     };

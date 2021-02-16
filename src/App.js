@@ -25,7 +25,8 @@ class App extends React.Component {
 
         this.state = {
             loggedIn: false,
-            apiKey: ""
+            apiKey: "",
+            updateDashboard: 0
         }
     }
 
@@ -47,6 +48,15 @@ class App extends React.Component {
         localStorage.setItem("apikey", key)
     }
 
+    updateDashboard() {
+        this.setState((prevState) => {
+            let updateDashboard = prevState.updateDashboard;
+            updateDashboard++;
+
+            return { updateDashboard }
+        })
+    }
+
     render() {
         return (
           <BrowserRouter style={{height: "100%"}}>
@@ -54,13 +64,13 @@ class App extends React.Component {
                   <Desktop style={{position: "fixed"}}>
                       <Header logout={() => {
                           this.logout();
-                      }} loggedIn={this.state.loggedIn} apikey={this.state.apiKey}  />
+                      }} updateDashboard={() => {this.updateDashboard()}} loggedIn={this.state.loggedIn} apikey={this.state.apiKey}  />
                   </Desktop>
 
                   <div style={{marginTop: 20}}>
                       <Switch>
                           <Route path={["/account", "/applications"]}>
-                              <Account logout={this.logout} setApiKey={this.setApiKey} setLoggedIn={this.loggedIn} loggedIn={this.state.loggedIn} apikey={localStorage.getItem("apikey")}/>
+                              <Account logout={this.logout} shouldUpdateDashboard={this.state.updateDashboard} setApiKey={this.setApiKey} setLoggedIn={this.loggedIn} loggedIn={this.state.loggedIn} apikey={localStorage.getItem("apikey")}/>
                           </Route>
 
                           <Route path="/">
