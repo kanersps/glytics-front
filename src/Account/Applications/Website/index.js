@@ -29,6 +29,8 @@ class Website extends React.Component {
             chartType: "Line",
             dataRange: []
         }
+
+        this.loadedEnough = false;
     }
 
     formatDate(d) {
@@ -281,7 +283,7 @@ class Website extends React.Component {
             }
         }
 
-        if(this.state.hourly.length <= 24) {
+        if(!this.loadedEnough && this.state.hourly.length <= 24) {
             return <div>
                 <Title>{ this.state.name }</Title>
                 <p>Currently we have not gathered enough information about this application, please check back later.</p>
@@ -289,9 +291,13 @@ class Website extends React.Component {
             </div>
         }
 
+        this.loadedEnough = true;
+
         return <Row gutter={8}>
             <Col span={24}>
-                <Header reloading={this.state.reloading} name={this.state.name} reloadWebsite={() => {
+                <Header setDataRange={(range) => {
+                    this.setDataRange(range);
+                }} reloading={this.state.reloading} name={this.state.name} reloadWebsite={() => {
                     this.reloadWebsite();
                 }} />
             </Col>
