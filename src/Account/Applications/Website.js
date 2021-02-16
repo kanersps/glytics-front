@@ -1,10 +1,14 @@
 import React from "react";
-import {Button, Card, Col, Divider, Row, Skeleton, Statistic, Table} from "antd";
+import {Button, Card, Col, Divider, Row, Skeleton, Statistic, Table, Radio} from "antd";
 import Title from "antd/lib/typography/Title";
 import {ReloadOutlined} from "@ant-design/icons";
+import Line from "@ant-design/charts/lib/line";
 import Column from "@ant-design/charts/lib/column";
 
 class Website extends React.Component {
+    hourlyBrowsers;
+    pageViews;
+
     constructor(props) {
         super(props);
 
@@ -12,6 +16,7 @@ class Website extends React.Component {
             hourly: [],
             hourlyPaths: [],
             hourlyPathsTable: [],
+            hourlyBrowsersTable: [],
             fullData: [],
             name: "",
             loading: true,
@@ -20,6 +25,7 @@ class Website extends React.Component {
             lastMonthViews: 0,
             previousMonthVisitors: 0,
             previousMonthViews: 0,
+            chartType: "Line"
         }
     }
 
@@ -46,6 +52,7 @@ class Website extends React.Component {
                 res.data.hourly.map(hour => {
                     data.push({
                         timestamp: hour.timestamp,
+                        label: "test",
                         formattedTooltip: this.formatTooltip(new Date(hour.timestamp)),
                         key: "Visits",
                         value: hour.visits
@@ -53,6 +60,7 @@ class Website extends React.Component {
 
                     data.push({
                         timestamp: hour.timestamp,
+                        label: "test",
                         formattedTooltip: this.formatTooltip(new Date(hour.timestamp)),
                         key: "Views",
                         value: hour.pageViews
@@ -89,6 +97,34 @@ class Website extends React.Component {
 
                 tempPathsArray = tempPathsArray.slice(0, 10)
 
+                let tempBrowsers = {};
+                let tempBrowsersArray = [];
+
+                res.data.hourlyBrowsers.map(hour => {
+                    if(!tempBrowsers[hour.browser]) {
+                        tempBrowsers[hour.browser] = {
+                            browser: hour.browser,
+                            visits: hour.visits,
+                            views: hour.pageViews
+                        }
+                    } else {
+                        tempBrowsers[hour.browser].visits += hour.visits;
+                        tempBrowsers[hour.browser].views += hour.pageViews;
+                    }
+
+                    return "";
+                })
+
+                for(let path in tempBrowsers) {
+                    tempBrowsersArray.push(tempBrowsers[path]);
+                }
+
+                tempBrowsersArray = tempBrowsersArray.sort((a, b) => {
+                    return b.views - a.views
+                })
+
+                tempBrowsersArray = tempBrowsersArray.slice(0, 10)
+
                 data.sort((a, b) => {
                     return a.timestamp > b.timestamp ? 1 : 0
                 })
@@ -116,7 +152,8 @@ class Website extends React.Component {
                     fullData: res.data.hourly,
                     lastMonthViews: lastMonthViews,
                     lastMonthVisits: lastMonthVisits,
-                    hourlyPathsTable: tempPathsArray
+                    hourlyPathsTable: tempPathsArray,
+                    hourlyBrowsersTable: tempBrowsersArray
                 })
             })
     }
@@ -128,6 +165,12 @@ class Website extends React.Component {
         if(prevProps.match.params.id !== this.props.match.params.id) {
             this.reloadWebsite();
         }
+    }
+
+    setChartType(t) {
+        this.setState({
+            chartType: t.target.value
+        })
     }
 
     render() {
@@ -152,6 +195,24 @@ class Website extends React.Component {
             }
         ]
 
+        const browserColumns = [
+            {
+                title: 'Browser',
+                dataIndex: 'browser',
+                key: 'browser'
+            },
+            {
+                title: 'Visitors',
+                dataIndex: 'visits',
+                key: 'visits',
+            },
+            {
+                title: 'Views',
+                dataIndex: 'views',
+                key: 'views',
+            }
+        ]
+
         let data = this.state.hourly;
 
         const configHourlyData = {
@@ -159,13 +220,10 @@ class Website extends React.Component {
             height: 400,
             xField: 'timestamp',
             yField: 'value',
-            point: {
-                size: 5,
-                shape: 'diamond',
-            },
             seriesField: 'key',
             isGroup: true,
             legend: false,
+            animate: false,
             xAxis: {
                 label: {
                     formatter: (name) => {
@@ -236,8 +294,14 @@ class Website extends React.Component {
                 </Row>
             </Col>
 
-            <Col style={{marginTop: 25}} span={24}>
-                <Column {...configHourlyData} />
+            <Col span={24} style={{marginTop: 25, width: 300}} >
+                <Radio.Group options={["Line", "Bar"]} onChange={(t) => {
+                    this.setChartType(t)
+                }} value={this.state.chartType} buttonStyle={"solid"} optionType="button" />
+            </Col>
+
+            <Col span={24} style={{marginTop: 25}} >
+                { this.state.chartType === "Line" ? <Line {...configHourlyData} /> : <Column {...configHourlyData} /> }
             </Col>
 
             <Col span={24}>
@@ -250,10 +314,10 @@ class Website extends React.Component {
                     <Table dataSource={this.state.hourlyPathsTable} columns={activeWebsiteColumns} />
                 </Col>) }
 
-            { this.state.hourlyPathsTable.length <= 1 ? "" : (
+            { this.state.hourlyBrowsersTable.length <= 0 ? "" : (
                 <Col span={12}>
-                    <Title level={3}>Top { this.state.hourlyPathsTable.length } browsers</Title>
-                    <Table dataSource={this.state.hourlyPathsTable} columns={activeWebsiteColumns} />
+                    <Title level={3}>Top { this.state.hourlyBrowsersTable.length } browsers</Title>
+                    <Table dataSource={this.state.hourlyBrowsersTable} columns={browserColumns} />
                 </Col>) }
         </Row>;
     }
