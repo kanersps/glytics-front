@@ -1,12 +1,10 @@
 import React from "react";
-import {Button, Card, Col, Divider, Row, Skeleton, Statistic, Table, Radio, DatePicker} from "antd";
+import {Col, Divider, Row, Skeleton, Table, Radio} from "antd";
 import Title from "antd/lib/typography/Title";
-import {ReloadOutlined} from "@ant-design/icons";
 import Line from "@ant-design/charts/lib/line";
 import Column from "@ant-design/charts/lib/column";
-import moment from 'moment';
-
-const { RangePicker } = DatePicker
+import Header from "./Header"
+import Statistics from "./Statistics";
 
 class Website extends React.Component {
     hourlyBrowsers;
@@ -35,7 +33,7 @@ class Website extends React.Component {
 
     formatDate(d) {
         return (("0" + d.getDate()).slice(-2) + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +
-        d.getFullYear());
+            d.getFullYear());
     }
 
     formatTooltip(d) {
@@ -47,8 +45,6 @@ class Website extends React.Component {
         this.setState({
             reloading: true
         })
-
-        console.log(range ? range : this.state.dataRange)
 
         this.props.api.post("application/website/details", { trackingCode: this.props.match.params.id, range: range ? range : this.state.dataRange })
             .then(res => {
@@ -182,8 +178,6 @@ class Website extends React.Component {
                         otherData.push(otherTempData[d][0]);
                         otherData.push(otherTempData[d][1]);
                     }
-
-                    console.log(otherData)
                 }
 
                 this.setState({
@@ -289,71 +283,13 @@ class Website extends React.Component {
 
         return <Row gutter={8}>
             <Col span={24}>
-                <Row>
-                    <Col span={12}>
-                        <Title>{ this.state.name }</Title>
-                    </Col>
-                    <Col span={12} style={{textAlign: "right"}}>
-                        <RangePicker onChange={(date) => {
-                            this.setDataRange(date);
-                        }} ranges={{
-                            Today: [moment().startOf("day"), moment()],
-                            'Last Week': [moment().add(-7, 'days'), moment()],
-                            'This Week': [moment().startOf("week"), moment()],
-                            'This Month': [moment().startOf('month'), moment().endOf('month')],
-                            'Last 30 days': [moment().add(-30, 'days'), moment()],
-                            'Last Year': [moment().add(-365, 'days'), moment()],
-                            'All Time': [moment("1970-1-1"), moment()],
-                        }}  defaultValue={[moment().add(-30, 'days'), moment()]} format="YYYY-MM-DD"/>
-                        <Button onClick={() => {this.reloadWebsite()}} loading={ this.state.reloading } icon={ <ReloadOutlined/> }>Reload</Button>
-                    </Col>
-                </Row>
+                <Header reloading={this.state.reloading} name={this.state.name} reloadWebsite={() => {
+                    this.reloadWebsite();
+                }} />
             </Col>
 
             <Col span={24}>
-                <Row gutter={16}>
-                    <Col span={6}>
-                        <Card>
-                            <Statistic
-                                title="Visitors in the last hour"
-                                value={ this.state.fullData.length === 0 ? 0 : this.state.fullData[this.state.fullData.length - 1].visits }
-                                precision={0}
-                                suffix={this.state.fullData.length === 0 ? " people" : (this.state.fullData[this.state.fullData.length - 1].visits > 1 ? " people" : " person")}
-                            />
-                        </Card>
-                    </Col>
-                    <Col span={6}>
-                        <Card>
-                            <Statistic
-                                title="Views in the last hour"
-                                value={ this.state.fullData.length === 0 ? 0 : this.state.fullData[this.state.fullData.length - 1].pageViews }
-                                precision={0}
-                                suffix={this.state.fullData.length === 0 ? " pages" : (this.state.fullData[this.state.fullData.length - 1].pageViews > 1 ? " pages" : " page")}
-                            />
-                        </Card>
-                    </Col>
-
-                    <Col span={6}>
-                        <Card>
-                            <Statistic
-                                title="Visitors in the last month"
-                                value={ this.state.lastMonthVisits }
-                                precision={0}
-                                suffix={ this.state.lastMonthVisits > 1 ? " people" : " person"}
-                            />
-                        </Card>
-                    </Col>
-                    <Col span={6}>
-                        <Card>
-                            <Statistic
-                                title="Views in the last month"
-                                value={ this.state.lastMonthViews }
-                                precision={0}
-                                suffix={ this.state.lastMonthViews > 1 ? " pages" : " page"}
-                            />
-                        </Card>
-                    </Col>
-                </Row>
+                <Statistics fullData={this.state.fullData} lastMonthVisits={this.state.lastMonthVisits} lastMonthViews={this.state.lastMonthViews} />
             </Col>
 
             <Col span={24} style={{marginTop: 25, width: 300}} >
