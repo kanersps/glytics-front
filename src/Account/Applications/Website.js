@@ -149,8 +149,45 @@ class Website extends React.Component {
                     return "";
                 })
 
+                let otherData = false;
+                if(data.length > 720) {
+                    otherData = []
+                    let otherTempData = {}
+
+                    for(let d of data) {
+                        if(!otherTempData[this.formatDate(new Date(d.timestamp))]) {
+                            otherTempData[this.formatDate(new Date(d.timestamp))] = [{
+                                timestamp: d.timestamp,
+                                formattedTooltip: this.formatTooltip(new Date(d.timestamp)),
+                                key: d.key,
+                                value: d.value
+                            }]
+                        } else {
+                            if(!otherTempData[this.formatDate(new Date(d.timestamp))][1])
+                                otherTempData[this.formatDate(new Date(d.timestamp))].push({
+                                    timestamp: d.timestamp,
+                                    formattedTooltip: this.formatTooltip(new Date(d.timestamp)),
+                                    key: d.key,
+                                    value: d.value
+                                })
+
+                            if(d.key === otherTempData[this.formatDate(new Date(d.timestamp))][0].key)
+                                otherTempData[this.formatDate(new Date(d.timestamp))][0].value += d.value;
+                            if(d.key === otherTempData[this.formatDate(new Date(d.timestamp))][1].key)
+                                otherTempData[this.formatDate(new Date(d.timestamp))][1].value += d.value;
+                        }
+                    }
+
+                    for(let d in otherTempData) {
+                        otherData.push(otherTempData[d][0]);
+                        otherData.push(otherTempData[d][1]);
+                    }
+
+                    console.log(otherData)
+                }
+
                 this.setState({
-                    hourly: data,
+                    hourly: otherData ? otherData : data,
                     hourlyPaths: dataPaths,
                     name: res.data.name,
                     loading: false,
