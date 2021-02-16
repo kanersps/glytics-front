@@ -12,6 +12,7 @@
     "antd": "^4.12.2",
     "axios": "^0.21.1",
     "css-loader": "^5.0.2",
+    "moment": "^2.29.1",
     "react": "^17.0.1",
     "react-axios": "^2.0.4",
     "react-cookie": "^4.0.3",

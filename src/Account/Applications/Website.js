@@ -1,9 +1,12 @@
 import React from "react";
-import {Button, Card, Col, Divider, Row, Skeleton, Statistic, Table, Radio} from "antd";
+import {Button, Card, Col, Divider, Row, Skeleton, Statistic, Table, Radio, DatePicker} from "antd";
 import Title from "antd/lib/typography/Title";
 import {ReloadOutlined} from "@ant-design/icons";
 import Line from "@ant-design/charts/lib/line";
 import Column from "@ant-design/charts/lib/column";
+import moment from 'moment';
+
+const { RangePicker } = DatePicker
 
 class Website extends React.Component {
     hourlyBrowsers;
@@ -25,7 +28,8 @@ class Website extends React.Component {
             lastMonthViews: 0,
             previousMonthVisitors: 0,
             previousMonthViews: 0,
-            chartType: "Line"
+            chartType: "Line",
+            dataRange: []
         }
     }
 
@@ -39,12 +43,14 @@ class Website extends React.Component {
             d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
     }
 
-    reloadWebsite() {
+    reloadWebsite(range) {
         this.setState({
             reloading: true
         })
 
-        this.props.api.post("application/website/details", { trackingCode: this.props.match.params.id })
+        console.log(range ? range : this.state.dataRange)
+
+        this.props.api.post("application/website/details", { trackingCode: this.props.match.params.id, range: range ? range : this.state.dataRange })
             .then(res => {
                 let data = [];
                 let dataPaths = [];
@@ -173,6 +179,14 @@ class Website extends React.Component {
         })
     }
 
+    setDataRange(range) {
+        this.setState({
+            dataRange: [range[0].valueOf(), range[1].valueOf()]
+        })
+
+        this.reloadWebsite([range[0].valueOf(), range[1].valueOf()]);
+    }
+
     render() {
         if(this.state.loading)
             return <Skeleton/>
@@ -239,10 +253,21 @@ class Website extends React.Component {
         return <Row gutter={8}>
             <Col span={24}>
                 <Row>
-                    <Col span={20}>
+                    <Col span={12}>
                         <Title>{ this.state.name }</Title>
                     </Col>
-                    <Col span={4} style={{textAlign: "right"}}>
+                    <Col span={12} style={{textAlign: "right"}}>
+                        <RangePicker onChange={(date) => {
+                            this.setDataRange(date);
+                        }} ranges={{
+                            Today: [moment().startOf("day"), moment()],
+                            'Last Week': [moment().add(-7, 'days'), moment()],
+                            'This Week': [moment().startOf("week"), moment()],
+                            'This Month': [moment().startOf('month'), moment().endOf('month')],
+                            'Last 30 days': [moment().add(-30, 'days'), moment()],
+                            'Last Year': [moment().add(-365, 'days'), moment()],
+                            'All Time': [moment("1970-1-1"), moment()],
+                        }}  defaultValue={[moment().add(-30, 'days'), moment()]} format="YYYY-MM-DD"/>
                         <Button onClick={() => {this.reloadWebsite()}} loading={ this.state.reloading } icon={ <ReloadOutlined/> }>Reload</Button>
                     </Col>
                 </Row>
