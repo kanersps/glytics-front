@@ -43,7 +43,7 @@ class LoggedIn extends React.Component {
             value: title,
             label: (
                 <Link key={title} onClick={() => {
-                    this.props.updateDashboard();
+                    this.props.updateDashboard("Applications", "/applications/websites");
                 }} to={location} style={{
                     display: 'flex',
                     justifyContent: 'space-between',

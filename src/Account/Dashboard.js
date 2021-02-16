@@ -123,19 +123,33 @@ class Dashboard extends React.Component {
     componentDidUpdate(prevProps, prevState, snapshot) {
         this.checkApiKey(prevProps);
 
-        console.log(this.menuRef)
-
         if(prevProps.update !== this.props.update) {
-            this.setState({
-                openSelection: {
-                    openKeys: [...this.state.activeMenus, "Applications"],
-                    selectedKeys: ["/applications/websites"],
-                }
-            }, () => {
+            if(!this.props.updateDashboardTo) {
                 this.setState({
-                    openSelection: {}
+                    openSelection: {
+                        openKeys: [...this.state.activeMenus, "Applications"],
+                        selectedKeys: ["/applications/websites"],
+                    }
+                }, () => {
+                    this.setState({
+                        openSelection: {}
+                    })
                 })
-            })
+            } else {
+                console.log(this.props.updateDashboardToCategory)
+                console.log(this.props.updateDashboardTo)
+
+                this.setState({
+                    openSelection: {
+                        openKeys: [...this.state.activeMenus, this.props.updateDashboardToCategory],
+                        selectedKeys: [this.props.updateDashboardTo],
+                    }
+                }, () => {
+                    this.setState({
+                        openSelection: {}
+                    })
+                })
+            }
         }
     }
 
@@ -166,7 +180,7 @@ class Dashboard extends React.Component {
                 </Menu>
             </Sider>
 
-            <Layout style={{ padding: '0 24px 24px', marginLeft: 200, marginTop: 50}}>
+            <Layout style={{ padding: '0 24px 24px', marginLeft: 200 }}>
                 <Content
                     className="site-layout-background"
                     style={{

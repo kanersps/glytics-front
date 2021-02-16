@@ -26,7 +26,9 @@ class App extends React.Component {
         this.state = {
             loggedIn: false,
             apiKey: "",
-            updateDashboard: 0
+            updateDashboard: 0,
+            updateDashboardTo: "",
+            updateDashboardToCategory: ""
         }
     }
 
@@ -48,12 +50,18 @@ class App extends React.Component {
         localStorage.setItem("apikey", key)
     }
 
-    updateDashboard() {
+    updateDashboard(category, to) {
+        console.log(to)
         this.setState((prevState) => {
             let updateDashboard = prevState.updateDashboard;
+            let updateDashboardTo = prevState.updateDashboardTo;
+            let updateDashboardToCategory = prevState.updateDashboardToCategory;
+
+            updateDashboardTo = to;
+            updateDashboardToCategory = category;
             updateDashboard++;
 
-            return { updateDashboard }
+            return { updateDashboard, updateDashboardTo, updateDashboardToCategory }
         })
     }
 
@@ -64,13 +72,13 @@ class App extends React.Component {
                   <Desktop style={{position: "fixed"}}>
                       <Header logout={() => {
                           this.logout();
-                      }} updateDashboard={() => {this.updateDashboard()}} loggedIn={this.state.loggedIn} apikey={this.state.apiKey}  />
+                      }} updateDashboard={(a, b) => {this.updateDashboard(a, b)}} loggedIn={this.state.loggedIn} apikey={this.state.apiKey}  />
                   </Desktop>
 
                   <div style={{marginTop: 20}}>
                       <Switch>
                           <Route path={["/account", "/applications"]}>
-                              <Account logout={this.logout} shouldUpdateDashboard={this.state.updateDashboard} setApiKey={this.setApiKey} setLoggedIn={this.loggedIn} loggedIn={this.state.loggedIn} apikey={localStorage.getItem("apikey")}/>
+                              <Account logout={this.logout} updateDashboardTo={this.state.updateDashboardTo} updateDashboardToCategory={this.state.updateDashboardToCategory} shouldUpdateDashboard={this.state.updateDashboard} setApiKey={this.setApiKey} setLoggedIn={this.loggedIn} loggedIn={this.state.loggedIn} apikey={localStorage.getItem("apikey")}/>
                           </Route>
 
                           <Route path="/">
