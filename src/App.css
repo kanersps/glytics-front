@@ -20,6 +20,18 @@
   color: white;
 }
 
+.darkmode.autocomplete {
+  background: #303030;
+}
+
+.darkmode.autocomplete span {
+  color: white;
+}
+
+.darkmode.autocomplete .global-outlined {
+  color: #40a9ff;
+}
+
 .darkmode .ant-table {
   background: #303030;
   color: white;

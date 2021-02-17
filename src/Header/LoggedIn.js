@@ -50,7 +50,7 @@ class LoggedIn extends React.Component {
                 }}>
                     { title }
                     <span>
-                          <GlobalOutlined/>
+                          <GlobalOutlined className={"global-outlined"}/>
                         </span>
                 </Link>
             ),
@@ -135,11 +135,12 @@ class LoggedIn extends React.Component {
                 </Dropdown>
                 <li className={"ant-menu-item ant-menu-item-only-child"} style={{float: "right"}}>
                         <AutoComplete
-                            dropdownClassName="certain-category-search-dropdown"
+                            dropdownClassName={`${this.props.darkmode ? "darkmode" : null} autocomplete`}
                             dropdownMatchSelectWidth={500}
                             style={{width: 250}}
                             options={options}
                             onChange={(t) => {this.search(t)}}
+                            visible={true}
                         >
                         <Search allowClear enterButton loading={this.state.searchLoading} placeholder="Enter search term"/>
                       </AutoComplete>
