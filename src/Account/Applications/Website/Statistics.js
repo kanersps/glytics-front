@@ -1,7 +1,33 @@
 import {Card, Col, Row, Statistic} from "antd";
 import React from "react";
+import Moment from "moment"
+
 
 class Statistics extends React.Component {
+    constructor(props) {
+        super(props);
+
+
+        this.state = { statisticTitleTimeframe: "between " + (Moment().add(-30, "days").format("DD-MM-YYYY")) + "—" + Moment().format("DD-MM-YYYY") };
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if(prevProps.range !== this.props.range) {
+            const From = Moment(this.props.range[0]).format("DD-MM-YYYY")
+            const Till = Moment(this.props.range[1]).format("DD-MM-YYYY")
+
+            if(From === Till) {
+                this.setState({
+                    statisticTitleTimeframe: `on ${Till}`
+                })
+            } else {
+                this.setState({
+                    statisticTitleTimeframe: `between ${From}—${Till}`
+                })
+            }
+        }
+    }
+
     render() {
         return <Row gutter={16}>
             <Col span={6}>
@@ -28,7 +54,7 @@ class Statistics extends React.Component {
             <Col span={6}>
                 <Card>
                     <Statistic
-                        title="Visitors in the last month"
+                        title={"Visitors " + this.state.statisticTitleTimeframe}
                         value={ this.props.lastMonthVisits }
                         precision={0}
                         suffix={ this.props.lastMonthVisits > 1 ? " people" : " person"}
@@ -38,7 +64,7 @@ class Statistics extends React.Component {
             <Col span={6}>
                 <Card>
                     <Statistic
-                        title="Views in the last month"
+                        title={"Visitors " + this.state.statisticTitleTimeframe}
                         value={ this.props.lastMonthViews }
                         precision={0}
                         suffix={ this.props.lastMonthViews > 1 ? " pages" : " page"}

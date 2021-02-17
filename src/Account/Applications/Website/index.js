@@ -303,7 +303,7 @@ class Website extends React.Component {
             </Col>
 
             <Col span={24}>
-                <Statistics fullData={this.state.fullData} lastMonthVisits={this.state.lastMonthVisits} lastMonthViews={this.state.lastMonthViews} />
+                <Statistics range={this.state.dataRange}  fullData={this.state.fullData} lastMonthVisits={this.state.lastMonthVisits} lastMonthViews={this.state.lastMonthViews} />
             </Col>
 
             <Col span={24} style={{marginTop: 25, width: 300}} >
