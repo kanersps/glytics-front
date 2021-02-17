@@ -29,8 +29,17 @@ class App extends React.Component {
             apiKey: "",
             updateDashboard: 0,
             updateDashboardTo: "",
-            updateDashboardToCategory: ""
+            updateDashboardToCategory: "",
+            darkmode: (localStorage.getItem("darkmode") == "1")
         }
+    }
+
+    toggleDarkMode() {
+        this.setState({
+            darkmode: !this.state.darkmode
+        }, () => {
+            localStorage.setItem("darkmode", (this.state.darkmode ? "1" : "0"))
+        })
     }
 
     loggedIn = () => {
@@ -70,9 +79,9 @@ class App extends React.Component {
         return (
           <BrowserRouter style={{height: "100%"}}>
               <Suspense fallback={<Skeleton />}>
-                  <Layout className="layout" style={{minHeight:"100vh"}}>
+                  <Layout className="layout" style={{minHeight:"100vh", background: this.state.darkmode ? "#222222" : null }}>
                       <Desktop style={{position: "fixed"}}>
-                          <Header logout={() => {
+                          <Header darkmode={this.state.darkmode} toggleDarkMode={() => {this.toggleDarkMode()}} logout={() => {
                               this.logout();
                           }} updateDashboard={(a, b) => {this.updateDashboard(a, b)}} loggedIn={this.state.loggedIn} apikey={this.state.apiKey}  />
                       </Desktop>
@@ -80,21 +89,19 @@ class App extends React.Component {
                       <div style={{marginTop: 20}}>
                           <Switch>
                               <Route path={["/account", "/applications"]}>
-                                  <Account logout={this.logout} updateDashboardTo={this.state.updateDashboardTo} updateDashboardToCategory={this.state.updateDashboardToCategory} shouldUpdateDashboard={this.state.updateDashboard} setApiKey={this.setApiKey} setLoggedIn={this.loggedIn} loggedIn={this.state.loggedIn} apikey={localStorage.getItem("apikey")}/>
+                                  <Account darkmode={this.state.darkmode} logout={this.logout} updateDashboardTo={this.state.updateDashboardTo} updateDashboardToCategory={this.state.updateDashboardToCategory} shouldUpdateDashboard={this.state.updateDashboard} setApiKey={this.setApiKey} setLoggedIn={this.loggedIn} loggedIn={this.state.loggedIn} apikey={localStorage.getItem("apikey")}/>
                               </Route>
 
                               <Route path="/">
-                                  <Content style={{ padding: '0 50px' }}>
-                                      <BreadcrumbPath style={{ margin: '16px 0' }} />
-
+                                  <Content style={{ padding: '0 50px'}}>
                                       <div className="site-layout-content" style={{ margin: "16px 0"}}>
-                                          <Home />
+                                          <Home darkmode={this.state.darkmode}  />
                                       </div>
                                   </Content>
                               </Route>
                           </Switch>
                       </div>
-                      <Footer style={{ textAlign: 'center' }}>G-Development, Kane Petra &#xa9; { new Date().getFullYear() === 2021 ? new Date().getFullYear() : `2021 - ${ new Date().getFullYear() }`}</Footer>
+                      <Footer  style={{backgroundColor: this.state.darkmode ? "#222222" : null, color: this.state.darkmode ? "white" : "black", textAlign: "center"}}>G-Development, Kane Petra &#xa9; { new Date().getFullYear() === 2021 ? new Date().getFullYear() : `2021 - ${ new Date().getFullYear() }`}</Footer>
                   </Layout>
               </Suspense>
           </BrowserRouter>

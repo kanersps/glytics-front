@@ -89,7 +89,7 @@ class WebsiteSimpleDetails extends React.Component {
         let content = <Skeleton paragraph={{ rows: 10 }} />
 
         if (!this.state.loading) {
-            content = <Row gutter={8}>
+            content = <Row style={{background: this.props.darkmode ? "#222222" : null, color: this.props.darkmode ? "white" : "black"}} gutter={8}>
                 <Col span={24}>
                     <span style={{ fontWeight: "bold", fontSize: "2.3em" }}> {this.state.name }</span>
                     <span>&nbsp;&nbsp;&nbsp;&nbsp;<a href={this.state.address} rel={"noreferrer"} target={"_blank"}>{ this.state.address }</a> </span>
@@ -100,20 +100,20 @@ class WebsiteSimpleDetails extends React.Component {
                 <Col span={24}>
                     <Row>
                         <Col span={12}>
-                            <Title level={3}>Quick Overview</Title>
+                            <Title style={{color: this.props.darkmode ? "white" : "black"}} level={3}>Quick Overview</Title>
                         </Col>
                         <Col span={12} style={{textAlign: "right"}}>
                             <Link to={"/applications/website/" + this.props.code }><Button type={"primary"} style={{marginRight: 10}}>More Details</Button></Link>
                             <Button onClick={() => {this.reloadOverview()}} loading={ this.state.reloading } icon={ <ReloadOutlined/> }>Reload</Button>
                         </Col>
                     </Row>
-                    <Title level={4}>Past Hour</Title>
+                    <Title style={{color: this.props.darkmode ? "white" : "black"}} level={4}>Past Hour</Title>
 
                     <Row gutter={16}>
                         <Col span={12}>
-                            <Card>
+                            <Card className={this.props.darkmode ? "darkmode" : null}>
                                 <Statistic
-                                    title="Visitors"
+                                    title={<span style={{color: "white"}}>Visitors</span>}
                                     value={ this.state.lastHourVisitors }
                                     precision={0}
                                     suffix=" people"
@@ -134,7 +134,7 @@ class WebsiteSimpleDetails extends React.Component {
                 </Col>
 
                 <Col span={24} style={{marginTop: 20}}>
-                    <Title level={4}>30 Days</Title>
+                    <Title style={{color: this.props.darkmode ? "white" : "black"}} level={4}>30 Days</Title>
 
                     <Row gutter={16}>
                         <Col span={12}>
@@ -165,7 +165,7 @@ class WebsiteSimpleDetails extends React.Component {
                 <Col span={24}>
                     <Row>
                         <Col span={20}>
-                            <Title level={3}>Tracking Code</Title>
+                            <Title style={{color: this.props.darkmode ? "white" : "black"}} level={3}>Tracking Code</Title>
                         </Col>
                         <Col span={4} style={{textAlign: "right"}}>
                             <Button onClick={() => {
@@ -184,10 +184,11 @@ class WebsiteSimpleDetails extends React.Component {
 
         return <Drawer
             title="Website Details"
+            className={"darkmode"}
             width={720}
             onClose={this.props.close}
             visible={this.props.visible}
-            bodyStyle={{ paddingBottom: 80 }}
+            bodyStyle={{ paddingBottom: 80, background: this.props.darkmode ? "#303030" : null, color: this.props.darkmode ? "white" : "black" }}
             footer={
                 <div
                     style={{

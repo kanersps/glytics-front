@@ -114,7 +114,7 @@ class Register extends React.Component {
             return <Redirect to={"/account/details"}></Redirect>
 
         return (
-            <div style={{textAlign: "center"}}>
+            <div style={{textAlign: "center", backgroundColor: this.props.darkmode ? "#222222" : null, color: this.props.darkmode ? "white" : "black"}}>
                 <Title>Register</Title>
                 <Form
                     {...formItemLayout}
@@ -124,7 +124,7 @@ class Register extends React.Component {
                     labelAlign={"left"}
                 >
                     <Form.Item
-                        label="Username"
+                        label={<span style={{color: this.props.darkmode ? "white" : "black"}}>Username</span>}
                         name="username"
                         rules={[{ required: true, message: 'Please input your Username!' }]}
                     >
@@ -133,7 +133,7 @@ class Register extends React.Component {
 
                     <Form.Item
                         name="email"
-                        label="E-mail"
+                        label={<span style={{color: this.props.darkmode ? "white" : "black"}}>E-Mail</span>}
                         rules={[
                             {
                                 type: 'email',
@@ -150,7 +150,7 @@ class Register extends React.Component {
 
                     <Form.Item
                         name="password"
-                        label="Password"
+                        label={<span style={{color: this.props.darkmode ? "white" : "black"}}>Password</span>}
                         rules={[
                             {
                                 required: true,
@@ -164,7 +164,7 @@ class Register extends React.Component {
 
                     <Form.Item
                         name="confirm"
-                        label="Confirm Password"
+                        label={<span style={{color: this.props.darkmode ? "white" : "black"}}>Confirm Password</span>}
                         dependencies={['password']}
                         hasFeedback
                         rules={[
@@ -185,18 +185,18 @@ class Register extends React.Component {
                         <Input.Password />
                     </Form.Item>
 
-                    <Form.Item label={"Captcha"} style={{textAlign: "center", width: "100%"}} name="RecaptchaToken">
+                    <Form.Item label={<span style={{color: this.props.darkmode ? "white" : "black"}}>Captcha</span>} style={{textAlign: "center", width: "100%"}} name="RecaptchaToken">
                         <ReCAPTCHA sitekey={"6Lec9loaAAAAAHS_hxY4lrBzZIeP2tUIgn90KVBK"} />
                     </Form.Item>
 
                         <div style={{ marginTop: 10, marginBottom: 10 }}>
-                            { (this.state.err && !this.state.registering) ? <div dangerouslySetInnerHTML={{__html: this.state.err}} /> : <div>&nbsp;</div> }
+                            { (this.state.err && !this.state.registering) ? <div style={{color: this.props.darkmode ? "white" : "black"}} dangerouslySetInnerHTML={{__html: this.state.err}} /> : <div>&nbsp;</div> }
                         </div>
 
                         <Button loading={this.state.registering} style={{width: "70%"}} size={"large"} type="primary" htmlType="submit" className="login-form-button">
                             Register
                         </Button> <br />
-                        Or <br /><Link to={"/account/login"}>
+                    <span style={{color: this.props.darkmode ? "white" : "black"}}>Or</span> <br /><Link to={"/account/login"}>
                         <Button style={{width: "70%"}}>
                             Login
                         </Button>

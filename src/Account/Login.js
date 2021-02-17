@@ -80,8 +80,8 @@ class Login extends React.Component {
             return <Redirect to={"/account/details"}></Redirect>
 
         return (
-            <div style={{textAlign: "center"}}>
-                <Title>Login</Title>
+            <div style={{textAlign: "center", backgroundColor: this.props.darkmode ? "#222222" : null, color: this.props.darkmode ? "white" : "black"}}>
+                <Title style={{color: this.props.darkmode ? "white" : "black"}}>Login</Title>
                 <Form
                     name="normal_login"
                     className="login-form"
@@ -106,19 +106,19 @@ class Login extends React.Component {
                 </Form.Item>
                 <Form.Item>
                     <Form.Item name="remember" valuePropName="checked" noStyle>
-                        <Checkbox>Remember me</Checkbox>
+                        <Checkbox style={{color: this.props.darkmode ? "white" : "black"}} >Remember me</Checkbox>
                     </Form.Item>
                 </Form.Item>
 
                 <Form.Item>
                     <div style={{ marginTop: 10, marginBottom: 10 }}>
-                        { (this.state.err && !this.state.loggingIn) ? <div dangerouslySetInnerHTML={{__html: this.state.err}} /> : <div>&nbsp;</div> }
+                        { (this.state.err && !this.state.loggingIn) ? <div style={{color: this.props.darkmode ? "white" : "black"}} dangerouslySetInnerHTML={{__html: this.state.err}} /> : <div>&nbsp;</div> }
                     </div>
 
                     <Button loading={this.state.loggingIn} type="primary" htmlType="submit" className="login-form-button">
                         Log in
                     </Button> <br />
-                    Or <br /><Link to={"/account/register"}>
+                    <span style={{color: this.props.darkmode ? "white" : "black"}} >Or</span> <br /><Link to={"/account/register"}>
                         <Button>
                             Register now
                         </Button>

@@ -155,13 +155,14 @@ class Dashboard extends React.Component {
     }
 
     render() {
-        return <Layout>
+        return <Layout style={{background: this.props.darkmode ? "#222222" : null, color: this.props.darkmode ? "white" : "black"}}>
             <Sider width={200} className="site-layout-background" style={{position: "fixed", bottom: 40, top: 80}}>
                 <Menu
+                    theme={this.props.darkmode ? "dark" : "light"}
                     mode="inline"
                     defaultSelectedKeys={[this.getActivePage()]}
                     defaultOpenKeys={[this.getActiveCategory()]}
-                    style={{ height: '100%', borderRight: 0 }}
+                    style={{ height: '100%', borderRight: 0, background: this.props.darkmode ? "#141414" : null }}
                     onOpenChange={(v) => {
                         this.onMenuOpenChange(v)
                     }}
@@ -181,7 +182,7 @@ class Dashboard extends React.Component {
                 </Menu>
             </Sider>
 
-            <Layout style={{ padding: '0 24px 24px', marginLeft: 200 }}>
+            <Layout style={{ padding: '0 24px 24px', marginLeft: 200, background: this.props.darkmode ? "#222222" : null, color: this.props.darkmode ? "white" : "black" }}>
                 <Content
                     className="site-layout-background"
                     style={{
@@ -192,21 +193,21 @@ class Dashboard extends React.Component {
                 >
                     <Row>
                         <Col span={24}>
-                            <BreadcrumbPath style={{ margin: '16px 0' }} />&nbsp;
+                            <BreadcrumbPath darkmode={this.props.darkmode} style={{ margin: '16px 0' }} />&nbsp;
                         </Col>
                     </Row>
 
                     <Switch>
                         <Route path={"/account/details"}>
-                            <AccountDetails apikey={this.props.apikey} />
+                            <AccountDetails darkmode={this.props.darkmode} apikey={this.props.apikey} />
                         </Route>
 
                         <Route path={"/account/privacy"}>
-                            <Title>WIP</Title>
+                            <Title style={{color: this.props.darkmode ? "white" : "black"}}>WIP</Title>
                         </Route>
 
                         <Route path={"/applications"}>
-                            <Applications apikey={this.props.apikey}/>
+                            <Applications darkmode={this.props.darkmode} apikey={this.props.apikey}/>
                         </Route>
 
                         <Route path={"/account"}>

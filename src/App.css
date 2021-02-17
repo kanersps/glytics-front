@@ -20,13 +20,71 @@
   color: white;
 }
 
+.darkmode .ant-table {
+  background: #303030;
+  color: white;
+}
+
+.darkmode .ant-drawer-header {
+  background: #303030;
+  border-radius: 0;
+  border-top: none;
+  border-bottom: 1px solid black;
+}
+
+.darkmode .ant-drawer-footer {
+  background: #303030;
+  border-radius: 0;
+  border-top: 1px solid black;
+}
+
+.darkmode .ant-card {
+  background: #303030;
+  border: 1px solid gray;
+}
+
+.darkmode .ant-statistic-content-value {
+  color: white;
+}
+
+.darkmode .ant-card-body {
+  background: #303030;
+}
+
+.darkmode .ant-statistic-title {
+  color: white;
+}
+
+.darkmode .ant-statistic-content-suffix {
+  color: white;
+}
+
+.darkmode .ant-drawer-header .ant-drawer-title {
+  color: white;
+}
+
+.darkmode th {
+  background: #212121 !important;
+  color: white !important;
+  border: none !important;
+}
+
+.darkmode td {
+  background: #303030 !important;
+  color: white;
+  border: none !important;
+}
+
+.darkmode-toggle:hover {
+  cursor: pointer;
+}
+
 .brand {
   float: left;
   color: white !important;
   font-weight: 500;
   font-size: 1.8em;
   margin-right: 50px;
-  background: #001529 !important;
 }
 
 .App-logo {

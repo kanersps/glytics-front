@@ -10,7 +10,7 @@ class Header extends React.Component {
     render() {
         return <Row>
             <Col span={12}>
-                <Title>{ this.props.name }</Title>
+                <Title style={{color: this.props.darkmode ? "white" : "black"}}>{ this.props.name }</Title>
             </Col>
             <Col span={12} style={{textAlign: "right"}}>
                 <RangePicker onChange={(date) => {

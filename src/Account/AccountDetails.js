@@ -49,7 +49,7 @@ class AccountDetails extends React.Component {
             return <Skeleton paragraph={{ rows: 20 }}/>
 
         return <div>
-            <Title>Welcome, { this.state.username }</Title>
+            <Title style={{color: this.props.darkmode ? "white" : "black"}}>Welcome, { this.state.username }</Title>
 
             <b>Debug Info:</b><br/>
             Password: <br/>{ this.state.passwordHash }<br/><br/>

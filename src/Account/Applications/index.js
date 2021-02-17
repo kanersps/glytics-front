@@ -24,10 +24,10 @@ export default class Applications extends React.Component {
     render() {
         return <div>
             <Switch>
-                <Route path={"/applications/website/:id"} render={(props) => <Website api={api} apikey={this.props.apikey} {...props} />} />
+                <Route path={"/applications/website/:id"} render={(props) => <Website darkmode={this.props.darkmode} api={api} apikey={this.props.apikey} {...props} />} />
 
                 <Route path={"/applications/websites"}>
-                    <Websites api={api} apikey={this.props.apikey}/>
+                    <Websites darkmode={this.props.darkmode} api={api} apikey={this.props.apikey}/>
                 </Route>
             </Switch>
         </div>

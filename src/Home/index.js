@@ -16,7 +16,7 @@ const Mobile = ({ children }) => {
 export default class Home extends Component {
     render() {
         return (
-            <Layout>
+            <Layout style={{background: this.props.darkmode ? "#222222" : null, color: this.props.darkmode ? "white" : "black"}}>
                 <div style={{textAlign: "center", marginTop: 100 }}>
                     <div style={{ fontSize: "2.5em", fontWeight: "600"}}>G-Lytics</div>
                     <div style={{ fontSize: "1.8em", marginBottom: 30 }}>Simple, private and open source web analytics</div>

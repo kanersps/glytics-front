@@ -285,7 +285,7 @@ class Website extends React.Component {
 
         if(!this.loadedEnough && this.state.hourly.length <= 24) {
             return <div>
-                <Title>{ this.state.name }</Title>
+                <Title style={{color: this.props.darkmode ? "white" : "black"}}>{ this.state.name }</Title>
                 <p>Currently we have not gathered enough information about this application, please check back later.</p>
                 <p>Gathered { this.state.hourly.length } out of 25 entries needed </p>
             </div>
@@ -295,7 +295,7 @@ class Website extends React.Component {
 
         return <Row gutter={8}>
             <Col span={24}>
-                <Header setDataRange={(range) => {
+                <Header darkmode={this.props.darkmode} setDataRange={(range) => {
                     this.setDataRange(range);
                 }} reloading={this.state.reloading} name={this.state.name} reloadWebsite={() => {
                     this.reloadWebsite();
@@ -303,7 +303,7 @@ class Website extends React.Component {
             </Col>
 
             <Col span={24}>
-                <Statistics range={this.state.dataRange}  fullData={this.state.fullData} lastMonthVisits={this.state.lastMonthVisits} lastMonthViews={this.state.lastMonthViews} />
+                <Statistics darkmode={this.props.darkmode} range={this.state.dataRange}  fullData={this.state.fullData} lastMonthVisits={this.state.lastMonthVisits} lastMonthViews={this.state.lastMonthViews} />
             </Col>
 
             <Col span={24} style={{marginTop: 25, width: 300}} >
@@ -322,14 +322,14 @@ class Website extends React.Component {
 
             { this.state.hourlyPathsTable.length <= 1 ? "" : (
                 <Col span={12}>
-                    <Title level={3}>Top { this.state.hourlyPathsTable.length } paths</Title>
-                    <Table dataSource={this.state.hourlyPathsTable} columns={activeWebsiteColumns} pagination={false} />
+                    <Title style={{color: this.props.darkmode ? "white" : "black"}} level={3}>Top { this.state.hourlyPathsTable.length } paths</Title>
+                    <Table className={this.props.darkmode ? "darkmode" : null} dataSource={this.state.hourlyPathsTable} columns={activeWebsiteColumns} pagination={false} />
                 </Col>) }
 
             { this.state.hourlyBrowsersTable.length <= 0 ? "" : (
                 <Col span={12}>
-                    <Title level={3}>Top { this.state.hourlyBrowsersTable.length } browsers</Title>
-                    <Table dataSource={this.state.hourlyBrowsersTable} columns={browserColumns} pagination={false} />
+                    <Title style={{color: this.props.darkmode ? "white" : "black"}} level={3}>Top { this.state.hourlyBrowsersTable.length } browsers</Title>
+                    <Table className={this.props.darkmode ? "darkmode" : null} dataSource={this.state.hourlyBrowsersTable} columns={browserColumns} pagination={false} />
                 </Col>) }
         </Row>;
     }

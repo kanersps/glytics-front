@@ -103,7 +103,7 @@ class Websites extends React.Component {
                     textToHighlight={text ? text.toString() : ''}
                 />
             ) : (
-                text
+                <span>{ text }</span>
             ),
     });
 
@@ -305,6 +305,9 @@ class Websites extends React.Component {
                 title: 'Tracking Code',
                 dataIndex: 'trackingCode',
                 key: 'trackingCode',
+                render: (_, record) => <div>
+                    { record.trackingCode }
+                </div>
             },
             {
                 title: "Action",
@@ -423,10 +426,10 @@ class Websites extends React.Component {
         }
 
         return <div>
-            <Table loading={this.state.loadingWebsites} title={() => <div>
-                <Row>
+            <Table className={this.props.darkmode ? "darkmode" : null} loading={this.state.loadingWebsites} title={() => <div>
+                <Row style={{background: this.props.darkmode ? "#303030" : null, color: this.props.darkmode ? "white" : "black"}}>
                     <Col span={20}>
-                        <Title level={3}>Active Websites</Title>
+                        <Title style={{color: this.props.darkmode ? "white" : "black"}} level={3}>Active Websites</Title>
                     </Col>
                     <Col span={4}>
                         <div style={{textAlign: "right"}}>
@@ -441,7 +444,7 @@ class Websites extends React.Component {
 
             <Divider/>
 
-            <Table loading={this.state.loadingWebsites} title={() => <Title level={3}>Inactive Websites</Title>}
+            <Table className={this.props.darkmode ? "darkmode" : null} loading={this.state.loadingWebsites} title={() => <Title style={{color: this.props.darkmode ? "white" : "black"}} level={3}>Inactive Websites</Title>}
                    size={"medium"} dataSource={this.state.inactiveWebsites} columns={inactiveWebsiteColumns}/>
 
             <Modal title={"Add new website"} footer="" visible={this.state.addWebsiteFormVisible}
@@ -498,7 +501,7 @@ class Websites extends React.Component {
                 </Form>
             </Modal>
 
-            <WebsiteSimpleDetails api={this.props.api} reload={this.state.shouldReloadWebsiteDetails} code={this.state.websiteDetailsID} visible={this.state.websiteDetailsVisible} close={() => {
+            <WebsiteSimpleDetails darkmode={this.props.darkmode} api={this.props.api} reload={this.state.shouldReloadWebsiteDetails} code={this.state.websiteDetailsID} visible={this.state.websiteDetailsVisible} close={() => {
                 this.hideWebsiteDetails();
             }}/>
         </div>

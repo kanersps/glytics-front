@@ -29,9 +29,9 @@ class Statistics extends React.Component {
     }
 
     render() {
-        return <Row gutter={16}>
+        return <Row style={{background: this.props.darkmode ? "#222222" : null, color: this.props.darkmode ? "white" : "black"}} gutter={16}>
             <Col span={6}>
-                <Card>
+                <Card className={this.props.darkmode ? "darkmode" : null}>
                     <Statistic
                         title="Visitors in the last hour"
                         value={ this.props.fullData.length === 0 ? 0 : this.props.fullData[this.props.fullData.length - 1].visits }
@@ -41,7 +41,7 @@ class Statistics extends React.Component {
                 </Card>
             </Col>
             <Col span={6}>
-                <Card>
+                <Card className={this.props.darkmode ? "darkmode" : null}>
                     <Statistic
                         title="Views in the last hour"
                         value={ this.props.fullData.length === 0 ? 0 : this.props.fullData[this.props.fullData.length - 1].pageViews }
@@ -52,7 +52,7 @@ class Statistics extends React.Component {
             </Col>
 
             <Col span={6}>
-                <Card>
+                <Card className={this.props.darkmode ? "darkmode" : null}>
                     <Statistic
                         title={"Visitors " + this.state.statisticTitleTimeframe}
                         value={ this.props.lastMonthVisits }
@@ -62,7 +62,7 @@ class Statistics extends React.Component {
                 </Card>
             </Col>
             <Col span={6}>
-                <Card>
+                <Card className={this.props.darkmode ? "darkmode" : null}>
                     <Statistic
                         title={"Visitors " + this.state.statisticTitleTimeframe}
                         value={ this.props.lastMonthViews }
