@@ -7,9 +7,10 @@ import Sider from "antd/es/layout/Sider";
 import SubMenu from "antd/es/menu/SubMenu";
 import {Content} from "antd/es/layout/layout";
 import axios from "axios";
-import Applications from "./Applications"
-import AccountDetails from "./AccountDetails";
 import Title from "antd/es/typography/Title";
+
+const Applications = React.lazy(() => import("./Applications"))
+const AccountDetails = React.lazy(() => import("./AccountDetails"))
 
 const api = axios.create({
     baseURL: process.env.REACT_APP_API_URL,

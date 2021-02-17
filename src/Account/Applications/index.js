@@ -1,8 +1,9 @@
 import React from "react"
 import {Route, Switch} from "react-router-dom";
-import Websites from "./Websites";
-import Website from "./Website";
 import axios from "axios";
+
+const Websites = React.lazy(() => import("./Websites"))
+const Website = React.lazy(() => import("./Website"))
 
 const api = axios.create({
     baseURL: process.env.REACT_APP_API_URL,

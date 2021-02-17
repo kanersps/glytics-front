@@ -3,10 +3,10 @@ import * as React from "react";
 import { Layout } from 'antd';
 
 import {Route, Switch, Redirect} from "react-router-dom";
-import Login from "./Login";
-import Register from "./Register";
 
-import Dashboard from "./Dashboard";
+const Login = React.lazy(() => import("./Login"))
+const Register = React.lazy(() => import("./Register"))
+const Dashboard = React.lazy(() => import("./Dashboard"))
 
 class Account extends React.Component {
     constructor(props) {
