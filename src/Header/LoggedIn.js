@@ -1,7 +1,7 @@
 import React from "react";
 import Avatar from "antd/lib/avatar/avatar";
 import {UserOutlined, GlobalOutlined} from "@ant-design/icons";
-import {AutoComplete, Divider, Dropdown, Menu} from "antd";
+import {AutoComplete, Dropdown, Menu} from "antd";
 import Search from "antd/lib/input/Search";
 import axios from "axios";
 import {Link} from "react-router-dom";

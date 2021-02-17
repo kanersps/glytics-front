@@ -293,21 +293,24 @@ class Websites extends React.Component {
                 title: 'Name',
                 dataIndex: 'name',
                 key: 'name',
-                ...this.getColumnSearchProps("name")
+                sorter: (a, b) => {
+                    if(a.name < b.name) return -1;
+                    if(a.name > b.name) return 1;
+                },
             },
             {
                 title: 'Address',
                 dataIndex: 'address',
                 key: 'address',
-                ...this.getColumnSearchProps("address")
+                sorter: (a, b) => {
+                    if(a.address < b.address) return -1;
+                    if(a.address > b.address) return 1;
+                },
             },
             {
                 title: 'Tracking Code',
                 dataIndex: 'trackingCode',
-                key: 'trackingCode',
-                render: (_, record) => <div>
-                    { record.trackingCode }
-                </div>
+                key: 'trackingCode'
             },
             {
                 title: "Action",
@@ -356,11 +359,19 @@ class Websites extends React.Component {
                 title: 'Name',
                 dataIndex: 'name',
                 key: 'name',
+                sorter: (a, b) => {
+                    if(a.name < b.name) return -1;
+                    if(a.name > b.name) return 1;
+                },
             },
             {
                 title: 'Address',
                 dataIndex: 'address',
                 key: 'address',
+                sorter: (a, b) => {
+                    if(a.address < b.address) return -1;
+                    if(a.address > b.address) return 1;
+                },
             },
             {
                 title: 'Tracking Code',
@@ -426,7 +437,7 @@ class Websites extends React.Component {
         }
 
         return <div>
-            <Table className={this.props.darkmode ? "darkmode" : null} loading={this.state.loadingWebsites} title={() => <div>
+            <Table showSorterTooltip={false} className={this.props.darkmode ? "darkmode" : null} loading={this.state.loadingWebsites} title={() => <div>
                 <Row style={{background: this.props.darkmode ? "#303030" : null, color: this.props.darkmode ? "white" : "black"}}>
                     <Col span={20}>
                         <Title style={{color: this.props.darkmode ? "white" : "black"}} level={3}>Active Websites</Title>
@@ -444,7 +455,7 @@ class Websites extends React.Component {
 
             <Divider/>
 
-            <Table className={this.props.darkmode ? "darkmode" : null} loading={this.state.loadingWebsites} title={() => <Title style={{color: this.props.darkmode ? "white" : "black"}} level={3}>Inactive Websites</Title>}
+            <Table showSorterTooltip={false} className={this.props.darkmode ? "darkmode" : null} loading={this.state.loadingWebsites} title={() => <Title style={{color: this.props.darkmode ? "white" : "black"}} level={3}>Inactive Websites</Title>}
                    size={"medium"} dataSource={this.state.inactiveWebsites} columns={inactiveWebsiteColumns}/>
 
             <Modal title={"Add new website"} footer="" visible={this.state.addWebsiteFormVisible}
