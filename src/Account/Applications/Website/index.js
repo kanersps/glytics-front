@@ -203,6 +203,7 @@ class Website extends React.Component {
     componentDidUpdate(prevProps, prevState, snapshot) {
         if(prevProps.match.params.id !== this.props.match.params.id) {
             this.reloadWebsite();
+            this.loadedEnough = false;
         }
     }
 
