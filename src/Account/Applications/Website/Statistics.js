@@ -64,7 +64,7 @@ class Statistics extends React.Component {
             <Col span={6}>
                 <Card className={this.props.darkmode ? "darkmode" : null}>
                     <Statistic
-                        title={"Visitors " + this.state.statisticTitleTimeframe}
+                        title={"Views " + this.state.statisticTitleTimeframe}
                         value={ this.props.lastMonthViews }
                         precision={0}
                         suffix={ this.props.lastMonthViews > 1 ? " pages" : " page"}
