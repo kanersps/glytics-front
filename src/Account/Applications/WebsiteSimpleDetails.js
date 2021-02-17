@@ -89,7 +89,7 @@ class WebsiteSimpleDetails extends React.Component {
         let content = <Skeleton paragraph={{ rows: 10 }} />
 
         if (!this.state.loading) {
-            content = <Row style={{background: this.props.darkmode ? "#222222" : null, color: this.props.darkmode ? "white" : "black"}} gutter={8}>
+            content = <Row style={{background: this.props.darkmode ? "#303030" : null, color: this.props.darkmode ? "white" : "black"}} gutter={8}>
                 <Col span={24}>
                     <span style={{ fontWeight: "bold", fontSize: "2.3em" }}> {this.state.name }</span>
                     <span>&nbsp;&nbsp;&nbsp;&nbsp;<a href={this.state.address} rel={"noreferrer"} target={"_blank"}>{ this.state.address }</a> </span>
