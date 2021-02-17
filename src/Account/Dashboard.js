@@ -1,4 +1,4 @@
-import {Row, Col, Layout, Menu} from "antd";
+import {Row, Col, Layout, Menu, Skeleton} from "antd";
 import {HomeOutlined, UserOutlined} from "@ant-design/icons";
 import BreadcrumbPath from "../BreadcrumbPath";
 import {Link, Redirect, Route, Switch} from "react-router-dom";
@@ -8,6 +8,7 @@ import SubMenu from "antd/es/menu/SubMenu";
 import {Content} from "antd/es/layout/layout";
 import axios from "axios";
 import Title from "antd/es/typography/Title";
+import {Suspense} from "react";
 
 const Applications = React.lazy(() => import("./Applications"))
 const AccountDetails = React.lazy(() => import("./AccountDetails"))
@@ -182,40 +183,42 @@ class Dashboard extends React.Component {
                 </Menu>
             </Sider>
 
-            <Layout style={{ padding: '0 24px 24px', marginLeft: 200, background: this.props.darkmode ? "#222222" : null, color: this.props.darkmode ? "white" : "black" }}>
-                <Content
-                    className="site-layout-background"
-                    style={{
-                        padding: 24,
-                        margin: 0,
-                        minHeight: 280,
-                    }}
-                >
-                    <Row>
-                        <Col span={24}>
-                            <BreadcrumbPath darkmode={this.props.darkmode} style={{ margin: '16px 0' }} />&nbsp;
-                        </Col>
-                    </Row>
+            <Suspense fallback={<Skeleton />}>
+                <Layout style={{ padding: '0 24px 24px', marginLeft: 200, background: this.props.darkmode ? "#222222" : null, color: this.props.darkmode ? "white" : "black" }}>
+                    <Content
+                        className="site-layout-background"
+                        style={{
+                            padding: 24,
+                            margin: 0,
+                            minHeight: 280,
+                        }}
+                    >
+                        <Row>
+                            <Col span={24}>
+                                <BreadcrumbPath darkmode={this.props.darkmode} style={{ margin: '16px 0' }} />&nbsp;
+                            </Col>
+                        </Row>
 
-                    <Switch>
-                        <Route path={"/account/details"}>
-                            <AccountDetails darkmode={this.props.darkmode} apikey={this.props.apikey} />
-                        </Route>
+                        <Switch>
+                            <Route path={"/account/details"}>
+                                <AccountDetails darkmode={this.props.darkmode} apikey={this.props.apikey} />
+                            </Route>
 
-                        <Route path={"/account/privacy"}>
-                            <Title style={{color: this.props.darkmode ? "white" : "black"}}>WIP</Title>
-                        </Route>
+                            <Route path={"/account/privacy"}>
+                                <Title style={{color: this.props.darkmode ? "white" : "black"}}>WIP</Title>
+                            </Route>
 
-                        <Route path={"/applications"}>
-                            <Applications darkmode={this.props.darkmode} apikey={this.props.apikey}/>
-                        </Route>
+                            <Route path={"/applications"}>
+                                <Applications darkmode={this.props.darkmode} apikey={this.props.apikey}/>
+                            </Route>
 
-                        <Route path={"/account"}>
-                            <Redirect to={"/account/details"}/>
-                        </Route>
-                    </Switch>
-                </Content>
-            </Layout>
+                            <Route path={"/account"}>
+                                <Redirect to={"/account/details"}/>
+                            </Route>
+                        </Switch>
+                    </Content>
+                </Layout>
+            </Suspense>
         </Layout>
     }
 }
