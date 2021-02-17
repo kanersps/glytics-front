@@ -3,14 +3,15 @@ import BreadcrumbPath from "./BreadcrumbPath";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import Header from "./Header";
 
-import { Layout } from 'antd';
+import {Layout, Skeleton} from 'antd';
 import Home from "./Home";
 
 import {useMediaQuery} from "react-responsive";
-import Account from "./Account";
 import {withCookies} from "react-cookie";
 
-import React from "react"
+import React, { Suspense } from "react"
+
+const Account = React.lazy(() => import("./Account"))
 
 const { Content, Footer } = Layout;
 
@@ -68,32 +69,34 @@ class App extends React.Component {
     render() {
         return (
           <BrowserRouter style={{height: "100%"}}>
-              <Layout className="layout" style={{minHeight:"100vh"}}>
-                  <Desktop style={{position: "fixed"}}>
-                      <Header logout={() => {
-                          this.logout();
-                      }} updateDashboard={(a, b) => {this.updateDashboard(a, b)}} loggedIn={this.state.loggedIn} apikey={this.state.apiKey}  />
-                  </Desktop>
+              <Suspense fallback={<Skeleton />}>
+                  <Layout className="layout" style={{minHeight:"100vh"}}>
+                      <Desktop style={{position: "fixed"}}>
+                          <Header logout={() => {
+                              this.logout();
+                          }} updateDashboard={(a, b) => {this.updateDashboard(a, b)}} loggedIn={this.state.loggedIn} apikey={this.state.apiKey}  />
+                      </Desktop>
 
-                  <div style={{marginTop: 20}}>
-                      <Switch>
-                          <Route path={["/account", "/applications"]}>
-                              <Account logout={this.logout} updateDashboardTo={this.state.updateDashboardTo} updateDashboardToCategory={this.state.updateDashboardToCategory} shouldUpdateDashboard={this.state.updateDashboard} setApiKey={this.setApiKey} setLoggedIn={this.loggedIn} loggedIn={this.state.loggedIn} apikey={localStorage.getItem("apikey")}/>
-                          </Route>
+                      <div style={{marginTop: 20}}>
+                          <Switch>
+                              <Route path={["/account", "/applications"]}>
+                                  <Account logout={this.logout} updateDashboardTo={this.state.updateDashboardTo} updateDashboardToCategory={this.state.updateDashboardToCategory} shouldUpdateDashboard={this.state.updateDashboard} setApiKey={this.setApiKey} setLoggedIn={this.loggedIn} loggedIn={this.state.loggedIn} apikey={localStorage.getItem("apikey")}/>
+                              </Route>
 
-                          <Route path="/">
-                              <Content style={{ padding: '0 50px' }}>
-                                  <BreadcrumbPath style={{ margin: '16px 0' }} />
+                              <Route path="/">
+                                  <Content style={{ padding: '0 50px' }}>
+                                      <BreadcrumbPath style={{ margin: '16px 0' }} />
 
-                                  <div className="site-layout-content" style={{ margin: "16px 0"}}>
-                                      <Home />
-                                  </div>
-                              </Content>
-                          </Route>
-                      </Switch>
-                  </div>
-                  <Footer style={{ textAlign: 'center' }}>G-Development, Kane Petra &#xa9; { new Date().getFullYear() === 2021 ? new Date().getFullYear() : `2021 - ${ new Date().getFullYear() }`}</Footer>
-              </Layout>
+                                      <div className="site-layout-content" style={{ margin: "16px 0"}}>
+                                          <Home />
+                                      </div>
+                                  </Content>
+                              </Route>
+                          </Switch>
+                      </div>
+                      <Footer style={{ textAlign: 'center' }}>G-Development, Kane Petra &#xa9; { new Date().getFullYear() === 2021 ? new Date().getFullYear() : `2021 - ${ new Date().getFullYear() }`}</Footer>
+                  </Layout>
+              </Suspense>
           </BrowserRouter>
       );
   }
