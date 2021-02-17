@@ -23,7 +23,7 @@ class GHeader extends Component {
                     })}
 
                     <span className={"darkmode-toggle"} onClick={this.props.toggleDarkMode} style={{float: "right", fontSize: "20px"}}>
-                        { this.props.darkmode ? <BulbFilled /> : <BulbOutlined /> }
+                        { this.props.darkmode ? <BulbOutlined /> : <BulbFilled /> }
                     </span>
                     { !this.props.loggedIn ? null : <LoggedIn updateDashboard={this.props.updateDashboard} logout={this.props.logout} /> }
 
