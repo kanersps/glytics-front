@@ -1,7 +1,7 @@
 import React from "react";
 import Avatar from "antd/lib/avatar/avatar";
 import {UserOutlined, GlobalOutlined} from "@ant-design/icons";
-import {AutoComplete, Dropdown, Menu} from "antd";
+import {AutoComplete, Divider, Dropdown, Menu} from "antd";
 import Search from "antd/lib/input/Search";
 import axios from "axios";
 import {Link} from "react-router-dom";
@@ -116,7 +116,11 @@ class LoggedIn extends React.Component {
         const options = this.state.searchResults;
 
         const menu = (
-            <Menu style={{width: 200}}>
+            <Menu style={{width: 200, background: this.props.darkmode ? "#121212" : null, color: this.props.darkmode ? "white" : "black"}}>
+                <div style={{textAlign: "center", borderBottom: "1px solid gray", paddingBottom: 3}}>
+
+                    <span style={{fontWeight: "bold"}}>{ this.props.name || "Unknown" }</span>
+                </div>
                 <Menu.Item danger onClick={this.props.logout}>Logout</Menu.Item>
             </Menu>
         );

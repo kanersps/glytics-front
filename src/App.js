@@ -26,6 +26,7 @@ class App extends React.Component {
         this.state = {
             loggedIn: false,
             apiKey: "",
+            accountName: "",
             updateDashboard: 0,
             updateDashboardTo: "",
             updateDashboardToCategory: "",
@@ -59,6 +60,12 @@ class App extends React.Component {
         localStorage.setItem("apikey", key)
     }
 
+    setAccountName = (name) => {
+        this.setState({
+            accountName: name
+        })
+    }
+
     updateDashboard(category, to) {
         console.log(to)
         this.setState((prevState) => {
@@ -79,7 +86,7 @@ class App extends React.Component {
           <BrowserRouter style={{height: "100%"}}>
                   <Layout className="layout" style={{minHeight:"100vh", background: this.state.darkmode ? "#222222" : null }}>
                       <Desktop style={{position: "fixed"}}>
-                          <Header darkmode={this.state.darkmode} toggleDarkMode={() => {this.toggleDarkMode()}} logout={() => {
+                          <Header accountName={this.state.accountName} darkmode={this.state.darkmode} toggleDarkMode={() => {this.toggleDarkMode()}} logout={() => {
                               this.logout();
                           }} updateDashboard={(a, b) => {this.updateDashboard(a, b)}} loggedIn={this.state.loggedIn} apikey={this.state.apiKey}  />
                       </Desktop>
@@ -88,7 +95,7 @@ class App extends React.Component {
                           <div style={{marginTop: 20}}>
                               <Switch>
                                   <Route path={["/account", "/applications"]}>
-                                      <Account darkmode={this.state.darkmode} logout={this.logout} updateDashboardTo={this.state.updateDashboardTo} updateDashboardToCategory={this.state.updateDashboardToCategory} shouldUpdateDashboard={this.state.updateDashboard} setApiKey={this.setApiKey} setLoggedIn={this.loggedIn} loggedIn={this.state.loggedIn} apikey={localStorage.getItem("apikey")}/>
+                                      <Account setAccountName={(name) => {this.setAccountName(name)}} darkmode={this.state.darkmode} logout={this.logout} updateDashboardTo={this.state.updateDashboardTo} updateDashboardToCategory={this.state.updateDashboardToCategory} shouldUpdateDashboard={this.state.updateDashboard} setApiKey={this.setApiKey} setLoggedIn={this.loggedIn} loggedIn={this.state.loggedIn} apikey={localStorage.getItem("apikey")}/>
                                   </Route>
 
                                   <Route path="/">

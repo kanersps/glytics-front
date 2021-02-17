@@ -120,6 +120,11 @@ class Dashboard extends React.Component {
 
     componentDidMount() {
         this.checkApiKey(null, true)
+
+        api.get("account")
+            .then(res => {
+                this.props.setAccountName(res.data.username);
+            })
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
