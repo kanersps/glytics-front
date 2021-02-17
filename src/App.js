@@ -1,5 +1,4 @@
 import './App.css';
-import BreadcrumbPath from "./BreadcrumbPath";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import Header from "./Header";
 
@@ -30,7 +29,7 @@ class App extends React.Component {
             updateDashboard: 0,
             updateDashboardTo: "",
             updateDashboardToCategory: "",
-            darkmode: (localStorage.getItem("darkmode") == "1")
+            darkmode: (localStorage.getItem("darkmode") === "1")
         }
     }
 

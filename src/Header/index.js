@@ -3,7 +3,7 @@ import { Component } from "react";
 import {Layout, Menu} from 'antd';
 import {Link, withRouter} from "react-router-dom";
 import LoggedIn from "./LoggedIn";
-import {BulbFilled, BulbOutlined, BulbTwoTone} from "@ant-design/icons";
+import {BulbFilled, BulbOutlined} from "@ant-design/icons";
 
 const { Header } = Layout;
 
