@@ -184,7 +184,7 @@ class WebsiteSimpleDetails extends React.Component {
 
         return <Drawer
             title="Website Details"
-            className={"darkmode"}
+            className={this.props.darkmode ? "darkmode" : null}
             width={720}
             onClose={this.props.close}
             visible={this.props.visible}
