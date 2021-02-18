@@ -143,22 +143,25 @@ class Website extends React.Component {
                 }
 
                 let addInBetween = []
-                for(let i = 0; i < data.length; i++) {
-                    const shouldBeNext = new Date(data[i].timestamp);
-                    shouldBeNext.setHours(shouldBeNext.getHours() + 1);
+                let tempData = data.filter((i) => {
+                    return i.key === "Visits";
+                })
 
-                    if(data[i + 1] && new Date(data[i + 1].timestamp) !== shouldBeNext) {
+                for(let i = 0; i < tempData.length; i++) {
+                    const shouldBeNext = new Date(tempData[i].timestamp);
+                    const isN = new Date(tempData[i].timestamp);
+                    shouldBeNext.setHours(isN.getHours() + 1);
+
+                    if(tempData[i + 1] && new Date(tempData[i + 1].timestamp).getTime() !== shouldBeNext.getTime()) {
                         // Done
                         if(shouldBeNext > new Date())
                             break;
 
-                        const differenceInHours = (new Date(data[i + 1].timestamp) - new Date(data[i].timestamp)) / (60 * 60 * 1000);
-
-                        console.log(differenceInHours);
+                        const differenceInHours = (new Date(tempData[i + 1].timestamp) - new Date(tempData[i].timestamp)) / (60 * 60 * 1000);
 
                         for(let time = 0; time < differenceInHours; time++) {
-                            const tempDate = new Date(data[i].timestamp);
-                            const timestampToAdd = new Date(data[i].timestamp);
+                            const tempDate = new Date(tempData[i].timestamp);
+                            const timestampToAdd = new Date(tempData[i].timestamp);
                             timestampToAdd.setHours(tempDate.getHours() + time);
 
                             addInBetween.push({
