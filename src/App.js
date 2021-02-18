@@ -103,12 +103,13 @@ class App extends React.Component {
                                           <div className="site-layout-content" style={{ margin: "16px 0"}}>
                                               <Home darkmode={this.state.darkmode}  />
                                           </div>
+
+                                          <Footer style={{backgroundColor: this.state.darkmode ? "#222222" : null, color: this.state.darkmode ? "white" : "black", textAlign: "center"}}>G-Development, Kane Petra &#xa9; { new Date().getFullYear() === 2021 ? new Date().getFullYear() : `2021 - ${ new Date().getFullYear() }`}</Footer>
                                       </Content>
                                   </Route>
                               </Switch>
                           </div>
                       </Suspense>
-                      <Footer  style={{backgroundColor: this.state.darkmode ? "#222222" : null, color: this.state.darkmode ? "white" : "black", textAlign: "center"}}>G-Development, Kane Petra &#xa9; { new Date().getFullYear() === 2021 ? new Date().getFullYear() : `2021 - ${ new Date().getFullYear() }`}</Footer>
                   </Layout>
           </BrowserRouter>
       );

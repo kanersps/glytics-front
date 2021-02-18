@@ -5,7 +5,7 @@ import {Link, Redirect, Route, Switch} from "react-router-dom";
 import * as React from "react";
 import Sider from "antd/es/layout/Sider";
 import SubMenu from "antd/es/menu/SubMenu";
-import {Content} from "antd/es/layout/layout";
+import {Content, Footer} from "antd/es/layout/layout";
 import axios from "axios";
 import Title from "antd/es/typography/Title";
 import {Suspense} from "react";
@@ -194,8 +194,13 @@ class Dashboard extends React.Component {
                         className="site-layout-background"
                         style={{
                             padding: 24,
-                            margin: 0,
                             minHeight: 280,
+                            position: "absolute",
+                            left: 200,
+                            right: 0,
+                            top: 50,
+                            bottom: 0,
+                            overflowY: "scroll"
                         }}
                     >
                         <Row>
@@ -221,6 +226,8 @@ class Dashboard extends React.Component {
                                 <Redirect to={"/account/details"}/>
                             </Route>
                         </Switch>
+
+                        <Footer style={{backgroundColor: this.props.darkmode ? "#222222" : null, color: this.props.darkmode ? "white" : "black", textAlign: "center"}}>G-Development, Kane Petra &#xa9; { new Date().getFullYear() === 2021 ? new Date().getFullYear() : `2021 - ${ new Date().getFullYear() }`}</Footer>
                     </Content>
                 </Layout>
             </Suspense>
