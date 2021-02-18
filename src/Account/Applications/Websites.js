@@ -458,7 +458,7 @@ class Websites extends React.Component {
             <Table showSorterTooltip={false} className={this.props.darkmode ? "darkmode" : null} loading={this.state.loadingWebsites} title={() => <Title style={{color: this.props.darkmode ? "white" : "black"}} level={3}>Inactive Websites</Title>}
                    size={"medium"} dataSource={this.state.inactiveWebsites} columns={inactiveWebsiteColumns}/>
 
-            <Modal title={"Add new website"} footer="" visible={this.state.addWebsiteFormVisible}
+            <Modal onCancel={() => {this.setWebsiteFormVisible(false)}} className={this.props.darkmode ? "darkmode" : null} title={"Add new website"} footer="" visible={this.state.addWebsiteFormVisible}
                    confirmLoading={this.state.websiteFormLoading}>
                 <Form
                     {...layout}

@@ -28,6 +28,23 @@
   color: white;
 }
 
+.darkmode .ant-modal-body {
+  background: #303030;
+}
+
+.darkmode .ant-modal-title {
+  color: white;
+}
+
+.darkmode .ant-modal-header {
+  background: #303030;
+  border-radius: 0;
+}
+
+.darkmode .ant-form-item-required {
+  color: white;
+}
+
 .darkmode.autocomplete .global-outlined {
   color: #40a9ff;
 }
