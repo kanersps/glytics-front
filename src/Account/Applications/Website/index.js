@@ -133,6 +133,57 @@ class Website extends React.Component {
                     return a.timestamp > b.timestamp ? 1 : 0
                 })
 
+                const dateToFormatted = (d) => {
+                    const year = d.getFullYear();
+                    const month = ("0" + (d.getMonth() + 1)).slice(-2);
+                    const day = ("0" + d.getDate()).slice(-2);
+                    const hour = ("0" + d.getHours()).slice(-2);
+
+                    return `${year}-${month}-${day}T${hour}:00:00`;
+                }
+
+                let addInBetween = []
+                for(let i = 0; i < data.length; i++) {
+                    const shouldBeNext = new Date(data[i].timestamp);
+                    shouldBeNext.setHours(shouldBeNext.getHours() + 1);
+
+                    if(data[i + 1] !== shouldBeNext) {
+                        // Done
+                        if(shouldBeNext > new Date())
+                            break;
+
+                        const differenceInHours = (new Date(data[i + 1].timestamp) - new Date(data[i].timestamp)) / (60 * 60 * 1000);
+
+                        console.log(differenceInHours);
+
+                        for(let time = 0; time < differenceInHours; time++) {
+                            const tempDate = new Date(data[i].timestamp);
+                            const timestampToAdd = new Date(data[i].timestamp);
+                            timestampToAdd.setHours(tempDate.getHours() + time);
+
+                            addInBetween.push({
+                                timestamp: dateToFormatted(timestampToAdd),
+                                formattedTooltip: this.formatTooltip(timestampToAdd),
+                                key: "Visits",
+                                value: 0
+                            })
+
+                            addInBetween.push({
+                                timestamp: dateToFormatted(timestampToAdd),
+                                formattedTooltip: this.formatTooltip(timestampToAdd),
+                                key: "Views",
+                                value: 0
+                            })
+                        }
+                    }
+                }
+
+                data.push(...addInBetween)
+
+                data.sort((a, b) => {
+                    return a.timestamp > b.timestamp ? 1 : 0
+                })
+
                 res.data.hourly.sort((a, b) => {
                     return a.timestamp > b.timestamp ? 1 : 0
                 })
