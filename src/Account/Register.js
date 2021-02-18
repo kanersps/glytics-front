@@ -32,7 +32,12 @@ class Register extends React.Component {
             redirect: null
         }
 
+        this.captchaRef = null;
         this.onFinish = this.onFinish.bind(this);
+    }
+
+    setCaptchaRef(r) {
+        this.captchaRef = r;
     }
 
     onFinish(values) {
@@ -61,9 +66,11 @@ class Register extends React.Component {
                                     this.props.setApiKey(res.data.message);
 
                                     setTimeout(() => {
+                                        this.captchaRef.reset();
                                         this.props.loggedIn();
-                                    }, 1500)
+                                    }, 1000)
                                 } else {
+                                    this.captchaRef.reset();
                                     this.setState({
                                         err: "<span style='color: red'>" + res.data.message + "</span>",
                                         loggingIn: false
@@ -71,6 +78,7 @@ class Register extends React.Component {
                                 }
                             })
                             .catch(err => {
+                                this.captchaRef.reset();
                                 this.setState({
                                     err: "<span style='color: red'>" + err.message + "</span>",
                                     registering: false
@@ -186,7 +194,9 @@ class Register extends React.Component {
                     </Form.Item>
 
                     <Form.Item label={<span style={{color: this.props.darkmode ? "white" : "black"}}>Captcha</span>} style={{textAlign: "center", width: "100%"}} name="RecaptchaToken">
-                        <ReCAPTCHA sitekey={"6Lec9loaAAAAAHS_hxY4lrBzZIeP2tUIgn90KVBK"} />
+                        <ReCAPTCHA ref={(r) => {
+                            this.setCaptchaRef(r);
+                        }} theme={this.props.darkmode ? "dark" : "light"} sitekey={"6Lec9loaAAAAAHS_hxY4lrBzZIeP2tUIgn90KVBK"} />
                     </Form.Item>
 
                         <div style={{ marginTop: 10, marginBottom: 10 }}>
