@@ -24,10 +24,12 @@ class Account extends React.Component {
             <Switch>
                 <Route path={"/account/login"}>
                     { this.props.loggedIn === true || localStorage.getItem("apikey")  ? <Redirect to={"/account/details"} /> : <Login darkmode={this.props.darkmode} apikey={this.props.apikey} loggedIn={this.props.setLoggedIn} /> }
+                    <Footer style={{backgroundColor: this.props.darkmode ? "#222222" : null, color: this.props.darkmode ? "white" : "black", textAlign: "center"}}>G-Development, Kane Petra &#xa9; { new Date().getFullYear() === 2021 ? new Date().getFullYear() : `2021 - ${ new Date().getFullYear() }`}</Footer>
                 </Route>
 
                 <Route path={"/account/register"}>
                     { this.props.loggedIn === true || localStorage.getItem("apikey") ? <Redirect to={"/account/details"} /> : <Register darkmode={this.props.darkmode} apikey={this.props.apikey} setApiKey={this.props.setApiKey} loggedIn={this.props.setLoggedIn} /> }
+                    <Footer style={{backgroundColor: this.props.darkmode ? "#222222" : null, color: this.props.darkmode ? "white" : "black", textAlign: "center"}}>G-Development, Kane Petra &#xa9; { new Date().getFullYear() === 2021 ? new Date().getFullYear() : `2021 - ${ new Date().getFullYear() }`}</Footer>
                 </Route>
 
                 <Route path={["/account", "/applications"]}>
@@ -35,9 +37,6 @@ class Account extends React.Component {
                 </Route>
 
                 </Switch>
-
-            <Footer style={{backgroundColor: this.props.darkmode ? "#222222" : null, color: this.props.darkmode ? "white" : "black", textAlign: "center"}}>G-Development, Kane Petra &#xa9; { new Date().getFullYear() === 2021 ? new Date().getFullYear() : `2021 - ${ new Date().getFullYear() }`}</Footer>
-
         </Layout>
     }
 }
