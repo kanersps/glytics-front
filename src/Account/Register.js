@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { Form, Input, Button } from 'antd';
 import Title from "antd/es/typography/Title";
-import {Link, Redirect} from "react-router-dom";
+import {Link} from "react-router-dom";
 import axios from "axios"
 import ReCAPTCHA from "react-google-recaptcha";
 
@@ -114,12 +114,12 @@ class Register extends React.Component {
                     })
                 }
             })
-            .catch(e => {})
+            .catch(_ => {})
     }
 
     render() {
         if(this.state.redirect)
-            return <Redirect to={"/account/details"}></Redirect>
+            return <Link to={"/account/details"} />
 
         return (
             <div style={{textAlign: "center", backgroundColor: this.props.darkmode ? "#222222" : null, color: this.props.darkmode ? "white" : "black"}}>
