@@ -5,6 +5,7 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import Title from "antd/es/typography/Title";
 import {Link, Redirect} from "react-router-dom";
 import axios from "axios"
+import ReCAPTCHA from "react-google-recaptcha";
 
 const api = axios.create({
     baseURL: process.env.REACT_APP_API_URL,
@@ -21,7 +22,12 @@ class Login extends React.Component {
             redirect: null
         }
 
+        this.captchaRef = null;
         this.onFinish = this.onFinish.bind(this);
+    }
+
+    setCaptchaRef(r) {
+        this.captchaRef = r;
     }
 
     onFinish(values) {
@@ -41,6 +47,7 @@ class Login extends React.Component {
                     localStorage.setItem("apikey", res.data.message)
 
                     setTimeout(() => {
+                        this.captchaRef.reset();
                         this.props.loggedIn();
                     }, 2000)
                 } else {
@@ -48,6 +55,8 @@ class Login extends React.Component {
                         err: "<span style='color: red'>" + res.data.message + "</span>",
                         loggingIn: false
                     })
+
+                    this.captchaRef.reset();
                 }
             })
             .catch(err => {
@@ -104,11 +113,12 @@ class Login extends React.Component {
                         placeholder="Password"
                     />
                 </Form.Item>
-                <Form.Item>
-                    <Form.Item name="remember" valuePropName="checked" noStyle>
-                        <Checkbox style={{color: this.props.darkmode ? "white" : "black"}} >Remember me</Checkbox>
+
+                    <Form.Item style={{textAlign: "center", width: "100%"}} name="RecaptchaToken">
+                        <ReCAPTCHA ref={(r) => {
+                            this.setCaptchaRef(r);
+                        }} theme={this.props.darkmode ? "dark" : "light"} sitekey={"6Lec9loaAAAAAHS_hxY4lrBzZIeP2tUIgn90KVBK"} />
                     </Form.Item>
-                </Form.Item>
 
                 <Form.Item>
                     <div style={{ marginTop: 10, marginBottom: 10 }}>
