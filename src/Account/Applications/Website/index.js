@@ -147,7 +147,7 @@ class Website extends React.Component {
                     const shouldBeNext = new Date(data[i].timestamp);
                     shouldBeNext.setHours(shouldBeNext.getHours() + 1);
 
-                    if(data[i + 1] && data[i + 1] !== shouldBeNext) {
+                    if(data[i + 1] && new Date(data[i + 1].timestamp) !== shouldBeNext) {
                         // Done
                         if(shouldBeNext > new Date())
                             break;
