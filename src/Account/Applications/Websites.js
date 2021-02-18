@@ -6,6 +6,7 @@ import * as PropTypes from "prop-types";
 import Highlighter from 'react-highlight-words';
 import Modal from "antd/es/modal/Modal";
 import WebsiteSimpleDetails from "./WebsiteSimpleDetails";
+import ReCAPTCHA from "react-google-recaptcha";
 
 SearchOutlined.propTypes = {style: PropTypes.shape({color: PropTypes.any})};
 
@@ -19,6 +20,8 @@ Highlighter.propTypes = {
 class Websites extends React.Component {
     constructor(props) {
         super(props);
+
+        this.captchaRef = null;
 
         this.state = {
             activeWebsites: [],
@@ -37,6 +40,10 @@ class Websites extends React.Component {
             websiteDetailsID: "",
             shouldReloadWebsiteDetails: 0
         }
+    }
+
+    setCaptchaRef(ref) {
+        this.captchaRef = ref;
     }
 
     componentDidMount() {
@@ -421,10 +428,13 @@ class Websites extends React.Component {
                         this.setWebsiteFormLoading(false);
 
                         this.reloadWebsites()
+                        this.captchaRef.reset();
                     } else {
                         this.setState({
                             errorMessageAddWebsite: res.data.message
                         })
+
+                        this.captchaRef.reset();
                         this.setWebsiteFormLoading(false);
                     }
                 })
@@ -487,6 +497,12 @@ class Websites extends React.Component {
                         }]}
                     >
                         <Input/>
+                    </Form.Item>
+
+                    <Form.Item label={<span style={{color: this.props.darkmode ? "white" : "black"}}>Captcha</span>} style={{textAlign: "center", width: "100%"}} name="RecaptchaToken">
+                        <ReCAPTCHA ref={(r) => {
+                            this.setCaptchaRef(r);
+                        }} theme={this.props.darkmode ? "dark" : "light"} sitekey={"6Lec9loaAAAAAHS_hxY4lrBzZIeP2tUIgn90KVBK"} />
                     </Form.Item>
 
                     <div style={{textAlign: "right", padding: 10}}>

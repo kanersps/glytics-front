@@ -36,6 +36,10 @@
   color: white;
 }
 
+.darkmode div {
+  color: white;
+}
+
 .darkmode .ant-modal-header {
   background: #303030;
   border-radius: 0;
