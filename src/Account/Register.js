@@ -51,44 +51,13 @@ class Register extends React.Component {
             .then(res => {
                 if(res.data.success) {
                     this.setState({
-                        err: "Registration successful! Logging in...",
+                        err: "Registration successful! Redirecting to login page...",
                         registering: false
                     })
 
                     setTimeout(() => {
-                        api.post("account/login", {username: values.username, password: values.password})
-                            .then(res => {
-                                if (res.data.success) {
-                                    this.setState({
-                                        err: "Login successful, redirecting to home page..."
-                                    })
-
-                                    this.props.setApiKey(res.data.message);
-
-                                    setTimeout(() => {
-                                        this.captchaRef.reset();
-                                        this.props.loggedIn();
-                                    }, 1000)
-                                } else {
-                                    if(!res.data.success) {
-                                        this.captchaRef.reset();
-                                    }
-
-                                    this.setState({
-                                        err: "<span style='color: red'>" + res.data.message + "</span>",
-                                        loggingIn: false
-                                    })
-                                }
-                            })
-                            .catch(err => {
-                                this.captchaRef.reset();
-                                this.setState({
-                                    err: "<span style='color: red'>" + err.message + "</span>",
-                                    registering: false
-                                })
-                            })
+                        window.location.href = "/account/login"
                     }, 1000)
-
                 } else {
                     this.setState({
                         err: "<span style='color: red'>" + res.data.message + "</span>",
