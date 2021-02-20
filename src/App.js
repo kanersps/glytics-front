@@ -67,11 +67,10 @@ class App extends React.Component {
     }
 
     updateDashboard(category, to) {
-        console.log(to)
         this.setState((prevState) => {
             let updateDashboard = prevState.updateDashboard;
-            let updateDashboardTo = prevState.updateDashboardTo;
-            let updateDashboardToCategory = prevState.updateDashboardToCategory;
+            let updateDashboardTo;
+            let updateDashboardToCategory;
 
             updateDashboardTo = to;
             updateDashboardToCategory = category;

@@ -44,12 +44,12 @@ class Login extends React.Component {
                         loggingIn: false
                     })
 
-                    localStorage.setItem("apikey", res.data.message)
+                    localStorage.setItem("apikey", res.data.token);
 
                     setTimeout(() => {
                         this.captchaRef.reset();
                         this.props.loggedIn();
-                    }, 2000)
+                    }, 1000)
                 } else {
                     this.setState({
                         err: "<span style='color: red'>" + res.data.message + "</span>",
@@ -70,7 +70,7 @@ class Login extends React.Component {
     componentDidMount() {
 
         api.defaults.headers = {
-            "key": localStorage.getItem("apikey")
+            "Authorization": localStorage.getItem("apikey")
         }
 
         api.get("account/authenticated")
@@ -81,12 +81,12 @@ class Login extends React.Component {
                     })
                 }
             })
-            .catch(e => {})
+            .catch(_ => {})
     }
 
     render() {
         if(this.state.redirect)
-            return <Redirect to={"/account/details"}></Redirect>
+            return <Redirect to={"/account/details"} />
 
         return (
             <div style={{textAlign: "center", backgroundColor: this.props.darkmode ? "#222222" : null, color: this.props.darkmode ? "white" : "black"}}>

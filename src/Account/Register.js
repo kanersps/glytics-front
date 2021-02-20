@@ -75,7 +75,7 @@ class Register extends React.Component {
 
     componentDidMount() {
         api.defaults.headers = {
-            "key": localStorage.getItem("apikey")
+            "Authorization": localStorage.getItem("apikey")
         }
 
         api.get("account/authenticated")

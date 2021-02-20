@@ -32,7 +32,7 @@ class AccountDetails extends React.Component {
 
     componentDidMount() {
         api.defaults.headers = {
-            "key": this.props.apikey
+            "Authorization": this.props.apikey
         }
 
         setInterval(() => {

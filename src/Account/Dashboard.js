@@ -93,7 +93,7 @@ class Dashboard extends React.Component {
     checkApiKey(prevProps, force) {
         if(force || this.props.apikey !== prevProps.apikey) {
             api.defaults.headers = {
-                "key": this.props.apikey
+                "Authorization": this.props.apikey
             }
 
             api.get("account/authenticated")

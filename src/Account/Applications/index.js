@@ -16,7 +16,7 @@ export default class Applications extends React.Component {
         super(props);
 
         api.defaults.headers = {
-            "key": this.props.apikey,
+            "Authorization": this.props.apikey,
             "Content-Type": "application/json"
         }
     }
