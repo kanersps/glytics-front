@@ -70,7 +70,10 @@ class Register extends React.Component {
                                         this.props.loggedIn();
                                     }, 1000)
                                 } else {
-                                    this.captchaRef.reset();
+                                    if(!res.data.success) {
+                                        this.captchaRef.reset();
+                                    }
+
                                     this.setState({
                                         err: "<span style='color: red'>" + res.data.message + "</span>",
                                         loggingIn: false
