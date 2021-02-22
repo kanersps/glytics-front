@@ -34,9 +34,9 @@ class Statistics extends React.Component {
                 <Card className={this.props.darkmode ? "darkmode" : null}>
                     <Statistic
                         title="Visitors in the last hour"
-                        value={ this.props.fullData.length === 0 ? 0 : this.props.fullData[this.props.fullData.length - 1].visits }
+                        value={ this.props.fullData.length === 0 ? 0 : this.props.fullData[this.props.fullData.length - 1][1] }
                         precision={0}
-                        suffix={this.props.fullData.length === 0 ? " people" : (this.props.fullData[this.props.fullData.length - 1].visits > 1 ? " people" : " person")}
+                        suffix={this.props.fullData.length === 0 ? " people" : (this.props.fullData[this.props.fullData.length - 1][1] > 1 ? " people" : " person")}
                     />
                 </Card>
             </Col>
@@ -44,9 +44,9 @@ class Statistics extends React.Component {
                 <Card className={this.props.darkmode ? "darkmode" : null}>
                     <Statistic
                         title="Views in the last hour"
-                        value={ this.props.fullData.length === 0 ? 0 : this.props.fullData[this.props.fullData.length - 1].pageViews }
+                        value={ this.props.fullData.length === 0 ? 0 : this.props.fullData[this.props.fullData.length - 1][2] }
                         precision={0}
-                        suffix={this.props.fullData.length === 0 ? " pages" : (this.props.fullData[this.props.fullData.length - 1].pageViews > 1 ? " pages" : " page")}
+                        suffix={this.props.fullData.length === 0 ? " pages" : (this.props.fullData[this.props.fullData.length - 1][2] > 1 ? " pages" : " page")}
                     />
                 </Card>
             </Col>

@@ -33,6 +33,15 @@ class Website extends React.Component {
         this.loadedEnough = false;
     }
 
+    dateToFormatted = (d) => {
+        const year = d.getFullYear();
+        const month = ("0" + (d.getMonth() + 1)).slice(-2);
+        const day = ("0" + d.getDate()).slice(-2);
+        const hour = ("0" + d.getHours()).slice(-2);
+
+        return `${year}-${month}-${day}T${hour}:00:00`;
+    }
+
     formatDate(d) {
         return (("0" + d.getDate()).slice(-2) + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +
             d.getFullYear());
@@ -55,19 +64,17 @@ class Website extends React.Component {
 
                 res.data.hourly.map(hour => {
                     data.push({
-                        timestamp: hour.timestamp,
-                        label: "test",
-                        formattedTooltip: this.formatTooltip(new Date(hour.timestamp)),
+                        timestamp: this.dateToFormatted(new Date(hour[0])),
+                        formattedTooltip: this.formatTooltip(new Date(hour[0])),
                         key: "Visits",
-                        value: hour.visits
+                        value: hour[1]
                     })
 
                     data.push({
-                        timestamp: hour.timestamp,
-                        label: "test",
-                        formattedTooltip: this.formatTooltip(new Date(hour.timestamp)),
+                        timestamp: this.dateToFormatted(new Date(hour[0])),
+                        formattedTooltip: this.formatTooltip(new Date(hour[0])),
                         key: "Views",
-                        value: hour.pageViews
+                        value: hour[2]
                     })
 
                     return "";
@@ -77,15 +84,15 @@ class Website extends React.Component {
                 let tempPathsArray = [];
 
                 res.data.hourlyPaths.map(hour => {
-                    if(!tempPaths[hour.path]) {
-                        tempPaths[hour.path] = {
-                            path: hour.path,
-                            visits: hour.visits,
-                            views: hour.pageViews
+                    if(!tempPaths[hour[3]]) {
+                        tempPaths[hour[3]] = {
+                            path: hour[3],
+                            visits: hour[1],
+                            views: hour[2]
                         }
                     } else {
-                        tempPaths[hour.path].visits += hour.visits;
-                        tempPaths[hour.path].views += hour.pageViews;
+                        tempPaths[hour[3]].visits += hour[1];
+                        tempPaths[hour[3]].views += hour[2];
                     }
 
                     return "";
@@ -105,15 +112,15 @@ class Website extends React.Component {
                 let tempBrowsersArray = [];
 
                 res.data.hourlyBrowsers.map(hour => {
-                    if(!tempBrowsers[hour.browser]) {
-                        tempBrowsers[hour.browser] = {
-                            browser: hour.browser,
-                            visits: hour.visits,
-                            views: hour.pageViews
+                    if(!tempBrowsers[hour[3]]) {
+                        tempBrowsers[hour[3]] = {
+                            browser: hour[3],
+                            visits: hour[1],
+                            views: hour[2]
                         }
                     } else {
-                        tempBrowsers[hour.browser].visits += hour.visits;
-                        tempBrowsers[hour.browser].views += hour.pageViews;
+                        tempBrowsers[hour[3]][1] += hour[1];
+                        tempBrowsers[hour[3]][2] += hour[2];
                     }
 
                     return "";
@@ -132,15 +139,6 @@ class Website extends React.Component {
                 data.sort((a, b) => {
                     return a.timestamp > b.timestamp ? 1 : 0
                 })
-
-                const dateToFormatted = (d) => {
-                    const year = d.getFullYear();
-                    const month = ("0" + (d.getMonth() + 1)).slice(-2);
-                    const day = ("0" + d.getDate()).slice(-2);
-                    const hour = ("0" + d.getHours()).slice(-2);
-
-                    return `${year}-${month}-${day}T${hour}:00:00`;
-                }
 
                 let addInBetween = []
                 let tempData = data.filter((i) => {
@@ -165,14 +163,14 @@ class Website extends React.Component {
                             timestampToAdd.setHours(tempDate.getHours() + time);
 
                             addInBetween.push({
-                                timestamp: dateToFormatted(timestampToAdd),
+                                timestamp: this.dateToFormatted(timestampToAdd),
                                 formattedTooltip: this.formatTooltip(timestampToAdd),
                                 key: "Visits",
                                 value: 0
                             })
 
                             addInBetween.push({
-                                timestamp: dateToFormatted(timestampToAdd),
+                                timestamp: this.dateToFormatted(timestampToAdd),
                                 formattedTooltip: this.formatTooltip(timestampToAdd),
                                 key: "Views",
                                 value: 0
@@ -195,8 +193,8 @@ class Website extends React.Component {
                 let lastMonthVisits = 0;
 
                 res.data.hourly.map(h => {
-                    lastMonthViews += h.pageViews
-                    lastMonthVisits += h.visits
+                    lastMonthViews += h[2]
+                    lastMonthVisits += h[1]
 
                     return "";
                 })
