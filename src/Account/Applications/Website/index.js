@@ -287,11 +287,20 @@ class Website extends React.Component {
                 title: 'Visitors',
                 dataIndex: 'visits',
                 key: 'visits',
+                defaultSortOrder: 'descend',
+                sorter: (a, b) => {
+                    if(a.visits < b.visits) return -1;
+                    if(a.visits > b.visits) return 1;
+                },
             },
             {
                 title: 'Views',
                 dataIndex: 'views',
                 key: 'views',
+                sorter: (a, b) => {
+                    if(a.views < b.views) return -1;
+                    if(a.views > b.views) return 1;
+                },
             }
         ]
 
@@ -305,11 +314,20 @@ class Website extends React.Component {
                 title: 'Visitors',
                 dataIndex: 'visits',
                 key: 'visits',
+                defaultSortOrder: 'descend',
+                sorter: (a, b) => {
+                    if(a.visits < b.visits) return -1;
+                    if(a.visits > b.visits) return 1;
+                },
             },
             {
                 title: 'Views',
                 dataIndex: 'views',
                 key: 'views',
+                sorter: (a, b) => {
+                    if(a.views < b.views) return -1;
+                    if(a.views > b.views) return 1;
+                },
             }
         ]
 
@@ -376,13 +394,13 @@ class Website extends React.Component {
             { this.state.hourlyPathsTable.length <= 1 ? "" : (
                 <Col span={12}>
                     <Title style={{color: this.props.darkmode ? "white" : "black"}} level={3}>Top { this.state.hourlyPathsTable.length } paths</Title>
-                    <Table className={this.props.darkmode ? "darkmode" : null} dataSource={this.state.hourlyPathsTable} columns={activeWebsiteColumns} pagination={false} />
+                    <Table showSorterTooltip={false} className={this.props.darkmode ? "darkmode" : null} dataSource={this.state.hourlyPathsTable} columns={activeWebsiteColumns} pagination={false} />
                 </Col>) }
 
             { this.state.hourlyBrowsersTable.length <= 0 ? "" : (
                 <Col span={12}>
                     <Title style={{color: this.props.darkmode ? "white" : "black"}} level={3}>Top { this.state.hourlyBrowsersTable.length } browsers</Title>
-                    <Table className={this.props.darkmode ? "darkmode" : null} dataSource={this.state.hourlyBrowsersTable} columns={browserColumns} pagination={false} />
+                    <Table showSorterTooltip={false} className={this.props.darkmode ? "darkmode" : null} dataSource={this.state.hourlyBrowsersTable} columns={browserColumns} pagination={false} />
                 </Col>) }
         </Row>;
     }
