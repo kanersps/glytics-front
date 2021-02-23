@@ -52,6 +52,11 @@ class Website extends React.Component {
             d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
     }
 
+    roundToHour(date) {
+        const p = 60 * 60 * 1000; // milliseconds in an hour
+        return new Date(Math.round(date.getTime() / p ) * p);
+    }
+
     reloadWebsite(range) {
         this.setState({
             reloading: true,
@@ -153,8 +158,9 @@ class Website extends React.Component {
 
                     if(tempData[i + 1] && new Date(tempData[i + 1].timestamp).getTime() !== shouldBeNext.getTime()) {
                         // Done
-                        if(shouldBeNext > new Date())
+                        if(shouldBeNext > new Date()) {
                             break;
+                        }
 
                         const differenceInHours = (new Date(tempData[i + 1].timestamp) - new Date(tempData[i].timestamp)) / (60 * 60 * 1000);
 
@@ -177,6 +183,32 @@ class Website extends React.Component {
                                 value: 0
                             })
                         }
+                    }
+                }
+
+                if(new Date(tempData[tempData.length - 1].timestamp) !== (this.roundToHour(new Date()))) {
+                    const differenceInHours = (this.roundToHour(new Date()).getTime() - new Date(tempData[tempData.length - 1].timestamp).getTime()) / (60 * 60 * 1000);
+
+                    console.log(differenceInHours)
+
+                    for(let time = 0; time < differenceInHours; time++) {
+                        const tempDate = new Date(tempData[tempData.length - 1].timestamp);
+                        const timestampToAdd = new Date(tempData[tempData.length - 1].timestamp);
+                        timestampToAdd.setHours(tempDate.getHours() + time);
+
+                        addInBetween.push({
+                            timestamp: this.dateToFormatted(timestampToAdd),
+                            formattedTooltip: this.formatTooltip(timestampToAdd),
+                            key: "Visits",
+                            value: 0
+                        })
+
+                        addInBetween.push({
+                            timestamp: this.dateToFormatted(timestampToAdd),
+                            formattedTooltip: this.formatTooltip(timestampToAdd),
+                            key: "Views",
+                            value: 0
+                        })
                     }
                 }
 
