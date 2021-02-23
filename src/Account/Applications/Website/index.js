@@ -409,7 +409,7 @@ class Website extends React.Component {
             </Col>
 
             <Col span={24}>
-                <Statistics reloading={this.state.reloading} darkmode={this.props.darkmode} range={this.state.dataRange}  fullData={this.state.fullData} lastMonthVisits={this.state.lastMonthVisits} lastMonthViews={this.state.lastMonthViews} />
+                <Statistics reloading={this.state.reloading} darkmode={this.props.darkmode} range={this.state.dataRange}  fullData={this.state.hourly} lastMonthVisits={this.state.lastMonthVisits} lastMonthViews={this.state.lastMonthViews} />
             </Col>
 
             <Col span={24} style={{marginTop: 25, width: 300}} >
