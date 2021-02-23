@@ -54,7 +54,8 @@ class Website extends React.Component {
 
     reloadWebsite(range) {
         this.setState({
-            reloading: true
+            reloading: true,
+            hourly: []
         })
 
         this.props.api.post("application/website/details", { trackingCode: this.props.match.params.id, range: range ? range : this.state.dataRange })
