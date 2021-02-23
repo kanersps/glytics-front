@@ -49,14 +49,11 @@ class Website extends React.Component {
 
     formatTooltip(d) {
         return d.toLocaleString(undefined, {timeZoneName: "short"});
-
-        return ("0" + d.getDate()).slice(-2) + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +
-            d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
     }
 
     roundToHour(date) {
         const p = 60 * 60 * 1000; // milliseconds in an hour
-        return new Date(Math.round(date.getTime() / p ) * p);
+        return new Date(Math.round(Math.floor(date.getTime() / p )) * p);
     }
 
     reloadWebsite(range) {
@@ -221,7 +218,7 @@ class Website extends React.Component {
                 })
 
                 res.data.hourly.sort((a, b) => {
-                    return a.timestamp > b.timestamp ? 1 : 0
+                    return a[0] > b[0] ? 1 : 0
                 })
 
                 let lastMonthViews = 0;
@@ -409,7 +406,7 @@ class Website extends React.Component {
             </Col>
 
             <Col span={24}>
-                <Statistics reloading={this.state.reloading} darkmode={this.props.darkmode} range={this.state.dataRange}  fullData={this.state.hourly} lastMonthVisits={this.state.lastMonthVisits} lastMonthViews={this.state.lastMonthViews} />
+                <Statistics reloading={this.state.reloading} darkmode={this.props.darkmode} range={this.state.dataRange}  fullData={this.state.fullData} lastMonthVisits={this.state.lastMonthVisits} lastMonthViews={this.state.lastMonthViews} />
             </Col>
 
             <Col span={24} style={{marginTop: 25, width: 300}} >

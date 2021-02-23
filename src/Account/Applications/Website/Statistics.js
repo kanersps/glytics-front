@@ -28,14 +28,27 @@ class Statistics extends React.Component {
         }
     }
 
+    roundToHour(date) {
+        const p = 60 * 60 * 1000; // milliseconds in an hour
+        return new Date(Math.round(Math.floor(date.getTime() / p )) * p);
+    }
+
     render() {
+        let lastHourVisitors = 0;
+        let lastHourViews = 0;
+
+        if(new Date(this.props.fullData[this.props.fullData.length - 1][0]).getTime() === this.roundToHour(new Date()).getTime()) {
+            lastHourVisitors = this.props.fullData[this.props.fullData.length - 1][1]
+            lastHourViews = this.props.fullData[this.props.fullData.length - 1][2]
+        }
+
         return <Row style={{background: this.props.darkmode ? "#222222" : null, color: this.props.darkmode ? "white" : "black"}} gutter={16}>
             <Col span={6}>
                 <Spin spinning={this.props.reloading}>
                     <Card className={this.props.darkmode ? "darkmode" : null}>
                         <Statistic
                             title="Visitors in the last hour"
-                            value={ this.props.fullData.length === 0 ? 0 : this.props.fullData[this.props.fullData.length - 1][1] }
+                            value={ this.props.fullData.length === 0 ? 0 : lastHourVisitors }
                             precision={0}
                             suffix={this.props.fullData.length === 0 ? " people" : (this.props.fullData[this.props.fullData.length - 1][1] > 1 ? " people" : " person")}
                         />
@@ -48,7 +61,7 @@ class Statistics extends React.Component {
                     <Card className={this.props.darkmode ? "darkmode" : null}>
                         <Statistic
                             title="Views in the last hour"
-                            value={ this.props.fullData.length === 0 ? 0 : this.props.fullData[this.props.fullData.length - 1][2] }
+                            value={ this.props.fullData.length === 0 ? 0 : lastHourViews }
                             precision={0}
                             suffix={this.props.fullData.length === 0 ? " pages" : (this.props.fullData[this.props.fullData.length - 1][2] > 1 ? " pages" : " page")}
                         />
