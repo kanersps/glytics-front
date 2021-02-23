@@ -1,5 +1,5 @@
 import React from "react";
-import {Col, Divider, Row, Skeleton, Table, Radio} from "antd";
+import {Col, Divider, Row, Skeleton, Table, Radio, Spin} from "antd";
 import Title from "antd/lib/typography/Title";
 import Line from "@ant-design/charts/lib/line";
 import Column from "@ant-design/charts/lib/column";
@@ -375,7 +375,7 @@ class Website extends React.Component {
             </Col>
 
             <Col span={24}>
-                <Statistics darkmode={this.props.darkmode} range={this.state.dataRange}  fullData={this.state.fullData} lastMonthVisits={this.state.lastMonthVisits} lastMonthViews={this.state.lastMonthViews} />
+                <Statistics reloading={this.state.reloading} darkmode={this.props.darkmode} range={this.state.dataRange}  fullData={this.state.fullData} lastMonthVisits={this.state.lastMonthVisits} lastMonthViews={this.state.lastMonthViews} />
             </Col>
 
             <Col span={24} style={{marginTop: 25, width: 300}} >
@@ -385,7 +385,9 @@ class Website extends React.Component {
             </Col>
 
             <Col span={24} style={{marginTop: 25}} >
-                { this.state.chartType === "Line" ? <Line {...configHourlyData} /> : <Column {...configHourlyData} /> }
+                <Spin spinning={this.state.reloading}>
+                    { this.state.chartType === "Line" ? <Line {...configHourlyData} /> : <Column {...configHourlyData} /> }
+                </Spin>
             </Col>
 
             <Col span={24}>
@@ -395,13 +397,17 @@ class Website extends React.Component {
             { this.state.hourlyPathsTable.length <= 1 ? "" : (
                 <Col span={12}>
                     <Title style={{color: this.props.darkmode ? "white" : "black"}} level={3}>Top { this.state.hourlyPathsTable.length } paths</Title>
-                    <Table showSorterTooltip={false} className={this.props.darkmode ? "darkmode" : null} dataSource={this.state.hourlyPathsTable} columns={activeWebsiteColumns} pagination={false} />
+                    <Spin spinning={this.state.reloading}>
+                        <Table showSorterTooltip={false} className={this.props.darkmode ? "darkmode" : null} dataSource={this.state.hourlyPathsTable} columns={activeWebsiteColumns} pagination={false} />
+                    </Spin>
                 </Col>) }
 
             { this.state.hourlyBrowsersTable.length <= 0 ? "" : (
                 <Col span={12}>
                     <Title style={{color: this.props.darkmode ? "white" : "black"}} level={3}>Top { this.state.hourlyBrowsersTable.length } browsers</Title>
-                    <Table showSorterTooltip={false} className={this.props.darkmode ? "darkmode" : null} dataSource={this.state.hourlyBrowsersTable} columns={browserColumns} pagination={false} />
+                    <Spin spinning={this.state.reloading}>
+                        <Table showSorterTooltip={false} className={this.props.darkmode ? "darkmode" : null} dataSource={this.state.hourlyBrowsersTable} columns={browserColumns} pagination={false} />
+                    </Spin>
                 </Col>) }
         </Row>;
     }
