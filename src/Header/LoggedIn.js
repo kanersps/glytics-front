@@ -60,7 +60,7 @@ class LoggedIn extends React.Component {
     search(s) {
         this.setState(prevState => {
             this.api.defaults.headers = {
-                "key": localStorage.getItem("apikey")
+                "Authorization": localStorage.getItem("apikey")
             }
 
             let searchResults = Object.assign([], prevState.searchResults);
