@@ -185,7 +185,7 @@ class Website extends React.Component {
                     }
                 }
 
-                if(new Date(tempData[tempData.length - 1].timestamp) !== (this.roundToHour(new Date()))) {
+                if(tempData[tempData.length - 1] && new Date(tempData[tempData.length - 1].timestamp) !== (this.roundToHour(new Date()))) {
                     const differenceInHours = (this.roundToHour(new Date()).getTime() - new Date(tempData[tempData.length - 1].timestamp).getTime()) / (60 * 60 * 1000);
 
                     console.log(differenceInHours)
