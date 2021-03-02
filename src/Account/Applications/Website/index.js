@@ -232,7 +232,7 @@ class Website extends React.Component {
                 })
 
                 let otherData = false;
-                if(data.length > 720) {
+                if(res.data.hourly.length > 720) {
                     otherData = []
                     let otherTempData = {}
 
