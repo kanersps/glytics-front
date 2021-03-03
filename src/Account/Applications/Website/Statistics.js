@@ -34,16 +34,6 @@ class Statistics extends React.Component {
     }
 
     render() {
-        console.log(this.props.fullData);
-
-        let lastHourVisitors = 0;
-        let lastHourViews = 0;
-
-        if(new Date(this.props.fullData[this.props.fullData.length - 1][0]).getTime() === this.roundToHour(new Date()).getTime()) {
-            lastHourVisitors = this.props.fullData[this.props.fullData.length - 1][1]
-            lastHourViews = this.props.fullData[this.props.fullData.length - 1][2]
-        }
-
         return <Row style={{background: this.props.darkmode ? "#222222" : null, color: this.props.darkmode ? "white" : "black"}} gutter={16}>
             <Col span={6}>
                 <Spin spinning={this.props.reloading}>
