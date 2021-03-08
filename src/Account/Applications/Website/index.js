@@ -477,7 +477,7 @@ class Website extends React.Component {
                     <Title style={{color: this.props.darkmode ? "white" : "black"}}
                            level={3}>Top {this.state.hourlyPathsTable.length} paths</Title>
                     <Spin spinning={this.state.reloading}>
-                        <Table size={"medium"} showSorterTooltip={false}
+                        <Table size={"small"} showSorterTooltip={false}
                                className={this.props.darkmode ? "darkmode" : null}
                                dataSource={this.state.hourlyPathsTable} columns={activeWebsiteColumns}
                                pagination={false}/>
@@ -489,7 +489,7 @@ class Website extends React.Component {
                     <Title style={{color: this.props.darkmode ? "white" : "black"}}
                            level={3}>Top {this.state.hourlyBrowsersTable.length} browsers</Title>
                     <Spin spinning={this.state.reloading}>
-                        <Table size={"medium"} showSorterTooltip={false}
+                        <Table size={"small"} showSorterTooltip={false}
                                className={this.props.darkmode ? "darkmode" : null}
                                dataSource={this.state.hourlyBrowsersTable} columns={browserColumns} pagination={false}/>
                     </Spin>

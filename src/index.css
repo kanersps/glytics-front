@@ -13,8 +13,5 @@ code {
 }
 
 .table-padding-percentage {
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-top: 3px;
-    padding-bottom: 3px;
+    padding: 3px 10px;
 }
