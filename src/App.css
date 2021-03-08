@@ -156,6 +156,10 @@ body {
         display: none;
     }
 
+    .register-page {
+        padding: 10px;
+    }
+
     .mobile-menu {
         position: fixed;
         top: 15px;

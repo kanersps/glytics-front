@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Form, Input, Button } from 'antd';
+import {Form, Input, Button} from 'antd';
 import Title from "antd/es/typography/Title";
 import {Link} from "react-router-dom";
 import axios from "axios"
@@ -13,12 +13,12 @@ const api = axios.create({
 
 const formItemLayout = {
     labelCol: {
-        xs: { span: 24 },
-        sm: { span: 8 },
+        xs: {span: 24},
+        sm: {span: 8},
     },
     wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 16 },
+        xs: {span: 24},
+        sm: {span: 16},
     },
 };
 
@@ -49,7 +49,7 @@ class Register extends React.Component {
 
         api.post("account/register", values)
             .then(res => {
-                if(res.data.success) {
+                if (res.data.success) {
                     this.setState({
                         err: "Registration successful! Redirecting to login page...",
                         registering: false
@@ -80,21 +80,26 @@ class Register extends React.Component {
 
         api.get("account/authenticated")
             .then(res => {
-                if(res.data.success) {
+                if (res.data.success) {
                     this.setState({
                         redirect: true
                     })
                 }
             })
-            .catch(_ => {})
+            .catch(_ => {
+            })
     }
 
     render() {
-        if(this.state.redirect)
-            return <Link to={"/account/details"} />
+        if (this.state.redirect)
+            return <Link to={"/account/details"}/>
 
         return (
-            <div style={{textAlign: "center", backgroundColor: this.props.darkmode ? "#222222" : null, color: this.props.darkmode ? "white" : "black"}}>
+            <div className={"register-page"} style={{
+                textAlign: "center",
+                backgroundColor: this.props.darkmode ? "#222222" : null,
+                color: this.props.darkmode ? "white" : "black"
+            }}>
                 <Title>Register</Title>
                 <Form
                     {...formItemLayout}
@@ -106,9 +111,9 @@ class Register extends React.Component {
                     <Form.Item
                         label={<span style={{color: this.props.darkmode ? "white" : "black"}}>Username</span>}
                         name="username"
-                        rules={[{ required: true, message: 'Please input your Username!' }]}
+                        rules={[{required: true, message: 'Please input your Username!'}]}
                     >
-                        <Input />
+                        <Input/>
                     </Form.Item>
 
                     <Form.Item
@@ -125,7 +130,7 @@ class Register extends React.Component {
                             },
                         ]}
                     >
-                        <Input />
+                        <Input/>
                     </Form.Item>
 
                     <Form.Item
@@ -139,7 +144,7 @@ class Register extends React.Component {
                         ]}
                         hasFeedback
                     >
-                        <Input.Password />
+                        <Input.Password/>
                     </Form.Item>
 
                     <Form.Item
@@ -152,7 +157,7 @@ class Register extends React.Component {
                                 required: true,
                                 message: 'Please confirm your password!',
                             },
-                            ({ getFieldValue }) => ({
+                            ({getFieldValue}) => ({
                                 validator(_, value) {
                                     if (!value || getFieldValue('password') === value) {
                                         return Promise.resolve();
@@ -162,27 +167,33 @@ class Register extends React.Component {
                             }),
                         ]}
                     >
-                        <Input.Password />
+                        <Input.Password/>
                     </Form.Item>
 
-                    <Form.Item label={<span style={{color: this.props.darkmode ? "white" : "black"}}>Captcha</span>} style={{textAlign: "center", width: "100%"}} name="RecaptchaToken">
+                    <Form.Item label={<span style={{color: this.props.darkmode ? "white" : "black"}}>Captcha</span>}
+                               style={{textAlign: "center", width: "100%"}} name="RecaptchaToken">
                         <ReCAPTCHA ref={(r) => {
                             this.setCaptchaRef(r);
-                        }} theme={this.props.darkmode ? "dark" : "light"} sitekey={"6Lec9loaAAAAAHS_hxY4lrBzZIeP2tUIgn90KVBK"} />
+                        }} theme={this.props.darkmode ? "dark" : "light"}
+                                   sitekey={"6Lec9loaAAAAAHS_hxY4lrBzZIeP2tUIgn90KVBK"}/>
                     </Form.Item>
 
-                        <div style={{ marginTop: 10, marginBottom: 10 }}>
-                            { (this.state.err && !this.state.registering) ? <div style={{color: this.props.darkmode ? "white" : "black"}} dangerouslySetInnerHTML={{__html: this.state.err}} /> : <div>&nbsp;</div> }
-                        </div>
+                    <div style={{marginTop: 10, marginBottom: 10}}>
+                        {(this.state.err && !this.state.registering) ?
+                            <div style={{color: this.props.darkmode ? "white" : "black"}}
+                                 dangerouslySetInnerHTML={{__html: this.state.err}}/> : <div>&nbsp;</div>}
+                    </div>
 
-                        <Button loading={this.state.registering} style={{width: "70%"}} size={"large"} type="primary" htmlType="submit" className="login-form-button">
-                            Register
-                        </Button> <br />
-                    <span style={{color: this.props.darkmode ? "white" : "black"}}>Or</span> <br /><Link to={"/account/login"}>
-                        <Button style={{width: "70%"}}>
-                            Login
-                        </Button>
-                    </Link>
+                    <Button loading={this.state.registering} style={{width: "70%"}} size={"large"} type="primary"
+                            htmlType="submit" className="login-form-button">
+                        Register
+                    </Button> <br/>
+                    <span style={{color: this.props.darkmode ? "white" : "black"}}>Or</span> <br/><Link
+                    to={"/account/login"}>
+                    <Button style={{width: "70%"}}>
+                        Login
+                    </Button>
+                </Link>
                 </Form>
             </div>
         )
