@@ -43,7 +43,7 @@ class Website extends React.Component {
     }
 
     formatDate(d) {
-        return (("0" + d.getDate()).slice(-2) + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +
+        return (("0" + d.getDate()).slice(-2) + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" +
             d.getFullYear());
     }
 
@@ -53,7 +53,7 @@ class Website extends React.Component {
 
     roundToHour(date) {
         const p = 60 * 60 * 1000; // milliseconds in an hour
-        return new Date(Math.round(Math.floor(date.getTime() / p )) * p);
+        return new Date(Math.round(Math.floor(date.getTime() / p)) * p);
     }
 
     reloadWebsite(range) {
@@ -62,7 +62,10 @@ class Website extends React.Component {
             hourly: []
         })
 
-        this.props.api.post("application/website/details", { trackingCode: this.props.match.params.id, range: range ? range : this.state.dataRange })
+        this.props.api.post("application/website/details", {
+            trackingCode: this.props.match.params.id,
+            range: range ? range : this.state.dataRange
+        })
             .then(res => {
                 let data = [];
                 let dataPaths = [];
@@ -89,7 +92,7 @@ class Website extends React.Component {
                 let tempPathsArray = [];
 
                 res.data.hourlyPaths.map(hour => {
-                    if(!tempPaths[hour[3]]) {
+                    if (!tempPaths[hour[3]]) {
                         tempPaths[hour[3]] = {
                             path: hour[3],
                             visits: hour[1],
@@ -103,7 +106,7 @@ class Website extends React.Component {
                     return "";
                 })
 
-                for(let path in tempPaths) {
+                for (let path in tempPaths) {
                     tempPathsArray.push(tempPaths[path]);
                 }
 
@@ -117,21 +120,21 @@ class Website extends React.Component {
                 let tempBrowsersArray = [];
 
                 res.data.hourlyBrowsers.map(hour => {
-                    if(!tempBrowsers[hour[3]]) {
+                    if (!tempBrowsers[hour[3]]) {
                         tempBrowsers[hour[3]] = {
                             browser: hour[3],
                             visits: hour[1],
                             views: hour[2]
                         }
                     } else {
-                        tempBrowsers[hour[3]][1] += hour[1];
-                        tempBrowsers[hour[3]][2] += hour[2];
+                        tempBrowsers[hour[3]].visits += hour[1];
+                        tempBrowsers[hour[3]].views += hour[2];
                     }
 
                     return "";
                 })
 
-                for(let path in tempBrowsers) {
+                for (let path in tempBrowsers) {
                     tempBrowsersArray.push(tempBrowsers[path]);
                 }
 
@@ -150,20 +153,20 @@ class Website extends React.Component {
                     return i.key === "Visits";
                 })
 
-                for(let i = 0; i < tempData.length; i++) {
+                for (let i = 0; i < tempData.length; i++) {
                     const shouldBeNext = new Date(tempData[i].timestamp);
                     const isN = new Date(tempData[i].timestamp);
                     shouldBeNext.setHours(isN.getHours() + 1);
 
-                    if(tempData[i + 1] && new Date(tempData[i + 1].timestamp).getTime() !== shouldBeNext.getTime()) {
+                    if (tempData[i + 1] && new Date(tempData[i + 1].timestamp).getTime() !== shouldBeNext.getTime()) {
                         // Done
-                        if(shouldBeNext > new Date()) {
+                        if (shouldBeNext > new Date()) {
                             break;
                         }
 
                         const differenceInHours = (new Date(tempData[i + 1].timestamp) - new Date(tempData[i].timestamp)) / (60 * 60 * 1000);
 
-                        for(let time = 0; time < differenceInHours; time++) {
+                        for (let time = 0; time < differenceInHours; time++) {
                             const tempDate = new Date(tempData[i].timestamp);
                             const timestampToAdd = new Date(tempData[i].timestamp);
                             timestampToAdd.setHours(tempDate.getHours() + time);
@@ -185,12 +188,12 @@ class Website extends React.Component {
                     }
                 }
 
-                if(tempData[tempData.length - 1] && new Date(tempData[tempData.length - 1].timestamp) !== (this.roundToHour(new Date()))) {
+                if (tempData[tempData.length - 1] && new Date(tempData[tempData.length - 1].timestamp) !== (this.roundToHour(new Date()))) {
                     const differenceInHours = (this.roundToHour(new Date()).getTime() - new Date(tempData[tempData.length - 1].timestamp).getTime()) / (60 * 60 * 1000);
 
                     console.log(differenceInHours)
 
-                    for(let time = 0; time < differenceInHours; time++) {
+                    for (let time = 0; time < differenceInHours; time++) {
                         const tempDate = new Date(tempData[tempData.length - 1].timestamp);
                         const timestampToAdd = new Date(tempData[tempData.length - 1].timestamp);
                         timestampToAdd.setHours(tempDate.getHours() + time);
@@ -232,12 +235,12 @@ class Website extends React.Component {
                 })
 
                 let otherData = false;
-                if(res.data.hourly.length > 720) {
+                if (res.data.hourly.length > 720) {
                     otherData = []
                     let otherTempData = {}
 
-                    for(let d of data) {
-                        if(!otherTempData[this.formatDate(new Date(d.timestamp))]) {
+                    for (let d of data) {
+                        if (!otherTempData[this.formatDate(new Date(d.timestamp))]) {
                             otherTempData[this.formatDate(new Date(d.timestamp))] = [{
                                 timestamp: d.timestamp,
                                 formattedTooltip: this.formatTooltip(new Date(d.timestamp)),
@@ -245,7 +248,7 @@ class Website extends React.Component {
                                 value: d.value
                             }]
                         } else {
-                            if(!otherTempData[this.formatDate(new Date(d.timestamp))][1])
+                            if (!otherTempData[this.formatDate(new Date(d.timestamp))][1])
                                 otherTempData[this.formatDate(new Date(d.timestamp))].push({
                                     timestamp: d.timestamp,
                                     formattedTooltip: this.formatTooltip(new Date(d.timestamp)),
@@ -253,14 +256,14 @@ class Website extends React.Component {
                                     value: d.value
                                 })
 
-                            if(d.key === otherTempData[this.formatDate(new Date(d.timestamp))][0].key)
+                            if (d.key === otherTempData[this.formatDate(new Date(d.timestamp))][0].key)
                                 otherTempData[this.formatDate(new Date(d.timestamp))][0].value += d.value;
-                            if(d.key === otherTempData[this.formatDate(new Date(d.timestamp))][1].key)
+                            if (d.key === otherTempData[this.formatDate(new Date(d.timestamp))][1].key)
                                 otherTempData[this.formatDate(new Date(d.timestamp))][1].value += d.value;
                         }
                     }
 
-                    for(let d in otherTempData) {
+                    for (let d in otherTempData) {
                         otherData.push(otherTempData[d][0]);
                         otherData.push(otherTempData[d][1]);
                     }
@@ -280,12 +283,13 @@ class Website extends React.Component {
                 })
             })
     }
+
     componentDidMount() {
         this.reloadWebsite();
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if(prevProps.match.params.id !== this.props.match.params.id) {
+        if (prevProps.match.params.id !== this.props.match.params.id) {
             this.reloadWebsite();
             this.loadedEnough = false;
         }
@@ -306,7 +310,7 @@ class Website extends React.Component {
     }
 
     render() {
-        if(this.state.loading)
+        if (this.state.loading)
             return <Skeleton/>
 
         const activeWebsiteColumns = [
@@ -321,8 +325,8 @@ class Website extends React.Component {
                 key: 'visits',
                 defaultSortOrder: 'descend',
                 sorter: (a, b) => {
-                    if(a.visits < b.visits) return -1;
-                    if(a.visits > b.visits) return 1;
+                    if (a.visits < b.visits) return -1;
+                    if (a.visits > b.visits) return 1;
                 },
             },
             {
@@ -330,8 +334,8 @@ class Website extends React.Component {
                 dataIndex: 'views',
                 key: 'views',
                 sorter: (a, b) => {
-                    if(a.views < b.views) return -1;
-                    if(a.views > b.views) return 1;
+                    if (a.views < b.views) return -1;
+                    if (a.views > b.views) return 1;
                 },
             }
         ]
@@ -348,8 +352,8 @@ class Website extends React.Component {
                 key: 'visits',
                 defaultSortOrder: 'descend',
                 sorter: (a, b) => {
-                    if(a.visits < b.visits) return -1;
-                    if(a.visits > b.visits) return 1;
+                    if (a.visits < b.visits) return -1;
+                    if (a.visits > b.visits) return 1;
                 },
             },
             {
@@ -357,8 +361,8 @@ class Website extends React.Component {
                 dataIndex: 'views',
                 key: 'views',
                 sorter: (a, b) => {
-                    if(a.views < b.views) return -1;
-                    if(a.views > b.views) return 1;
+                    if (a.views < b.views) return -1;
+                    if (a.views > b.views) return 1;
                 },
             }
         ]
@@ -386,11 +390,12 @@ class Website extends React.Component {
             }
         }
 
-        if(!this.loadedEnough && this.state.hourly.length <= 24) {
+        if (!this.loadedEnough && this.state.hourly.length <= 24) {
             return <div>
-                <Title style={{color: this.props.darkmode ? "white" : "black"}}>{ this.state.name }</Title>
-                <p>Currently we have not gathered enough information about this application, please check back later.</p>
-                <p>Gathered { this.state.hourly.length } out of 25 entries needed </p>
+                <Title style={{color: this.props.darkmode ? "white" : "black"}}>{this.state.name}</Title>
+                <p>Currently we have not gathered enough information about this application, please check back
+                    later.</p>
+                <p>Gathered {this.state.hourly.length} out of 25 entries needed </p>
             </div>
         }
 
@@ -402,22 +407,25 @@ class Website extends React.Component {
                     this.setDataRange(range);
                 }} reloading={this.state.reloading} name={this.state.name} reloadWebsite={() => {
                     this.reloadWebsite();
-                }} />
+                }}/>
             </Col>
 
             <Col span={24}>
-                <Statistics reloading={this.state.reloading} darkmode={this.props.darkmode} range={this.state.dataRange}  fullData={this.state.fullData} lastMonthVisits={this.state.lastMonthVisits} lastMonthViews={this.state.lastMonthViews} />
+                <Statistics reloading={this.state.reloading} darkmode={this.props.darkmode} range={this.state.dataRange}
+                            fullData={this.state.fullData} lastMonthVisits={this.state.lastMonthVisits}
+                            lastMonthViews={this.state.lastMonthViews}/>
             </Col>
 
-            <Col span={24} style={{marginTop: 25, width: 300}} >
+            <Col span={24} style={{marginTop: 25, width: 300}}>
                 <Radio.Group options={["Line", "Bar"]} onChange={(t) => {
                     this.setChartType(t)
-                }} value={this.state.chartType} buttonStyle={"solid"} optionType="button" />
+                }} value={this.state.chartType} buttonStyle={"solid"} optionType="button"/>
             </Col>
 
-            <Col span={24} style={{marginTop: 25}} >
+            <Col span={24} style={{marginTop: 25}}>
                 <Spin spinning={this.state.reloading}>
-                    { this.state.chartType === "Line" ? <Line {...configHourlyData} /> : <Column {...configHourlyData} /> }
+                    {this.state.chartType === "Line" ? <Line {...configHourlyData} /> :
+                        <Column {...configHourlyData} />}
                 </Spin>
             </Col>
 
@@ -425,21 +433,26 @@ class Website extends React.Component {
                 <Divider/>
             </Col>
 
-            { this.state.hourlyPathsTable.length <= 1 ? "" : (
+            {this.state.hourlyPathsTable.length <= 1 ? "" : (
                 <Col span={12}>
-                    <Title style={{color: this.props.darkmode ? "white" : "black"}} level={3}>Top { this.state.hourlyPathsTable.length } paths</Title>
+                    <Title style={{color: this.props.darkmode ? "white" : "black"}}
+                           level={3}>Top {this.state.hourlyPathsTable.length} paths</Title>
                     <Spin spinning={this.state.reloading}>
-                        <Table showSorterTooltip={false} className={this.props.darkmode ? "darkmode" : null} dataSource={this.state.hourlyPathsTable} columns={activeWebsiteColumns} pagination={false} />
+                        <Table showSorterTooltip={false} className={this.props.darkmode ? "darkmode" : null}
+                               dataSource={this.state.hourlyPathsTable} columns={activeWebsiteColumns}
+                               pagination={false}/>
                     </Spin>
-                </Col>) }
+                </Col>)}
 
-            { this.state.hourlyBrowsersTable.length <= 0 ? "" : (
+            {this.state.hourlyBrowsersTable.length <= 0 ? "" : (
                 <Col span={12}>
-                    <Title style={{color: this.props.darkmode ? "white" : "black"}} level={3}>Top { this.state.hourlyBrowsersTable.length } browsers</Title>
+                    <Title style={{color: this.props.darkmode ? "white" : "black"}}
+                           level={3}>Top {this.state.hourlyBrowsersTable.length} browsers</Title>
                     <Spin spinning={this.state.reloading}>
-                        <Table showSorterTooltip={false} className={this.props.darkmode ? "darkmode" : null} dataSource={this.state.hourlyBrowsersTable} columns={browserColumns} pagination={false} />
+                        <Table showSorterTooltip={false} className={this.props.darkmode ? "darkmode" : null}
+                               dataSource={this.state.hourlyBrowsersTable} columns={browserColumns} pagination={false}/>
                     </Spin>
-                </Col>) }
+                </Col>)}
         </Row>;
     }
 }
