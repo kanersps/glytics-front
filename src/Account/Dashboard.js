@@ -126,6 +126,10 @@ class Dashboard extends React.Component {
             .then(res => {
                 this.props.setAccountName(res.data.username);
             })
+
+        window.addEventListener('resize', () => {
+            this.updateDimensions();
+        });
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -171,12 +175,6 @@ class Dashboard extends React.Component {
         } else {
             this.setState({sideCollapsed: false, onMobile: false});
         }
-    }
-
-    componentDidMount() {
-        window.addEventListener('resize', () => {
-            this.updateDimensions();
-        });
     }
 
     componentWillUnmount() {
@@ -263,7 +261,8 @@ class Dashboard extends React.Component {
                             </Route>
 
                             <Route path={"/applications"}>
-                                <Applications mobile={this.state.onMobile}  darkmode={this.props.darkmode} apikey={this.props.apikey}/>
+                                <Applications mobile={this.state.onMobile} darkmode={this.props.darkmode}
+                                              apikey={this.props.apikey}/>
                             </Route>
 
                             <Route path={"/account"}>
