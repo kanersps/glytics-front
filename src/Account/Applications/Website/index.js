@@ -508,7 +508,7 @@ class Website extends React.Component {
                            level={3}>Top {this.state.hourlyPathsTable.length} paths</Title>
                     <Spin spinning={this.state.reloading}>
                         <Table size={"small"} showSorterTooltip={false}
-                               className={this.props.darkmode ? "darkmode" : null}
+                               className={this.props.darkmode ? "darkmode noselect" : "noselect"}
                                dataSource={this.state.hourlyPathsTable} columns={activeWebsiteColumns}
                                pagination={false}/>
                     </Spin>
@@ -520,7 +520,7 @@ class Website extends React.Component {
                            level={3}>Top {this.state.hourlyBrowsersTable.length} browsers</Title>
                     <Spin spinning={this.state.reloading}>
                         <Table size={"small"} showSorterTooltip={false}
-                               className={this.props.darkmode ? "darkmode" : null}
+                               className={this.props.darkmode ? "darkmode noselect" : "noselect"}
                                dataSource={this.state.hourlyBrowsersTable} columns={browserColumns} pagination={false}/>
                     </Spin>
                 </Col>)}
