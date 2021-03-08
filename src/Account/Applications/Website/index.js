@@ -317,7 +317,24 @@ class Website extends React.Component {
             {
                 title: 'Path',
                 dataIndex: 'path',
-                key: 'path'
+                key: 'path',
+                render: (text, record) => {
+                    return <div className={"table-padding-percentage"}>
+                        <div style={{
+                            position: "absolute",
+                            width: (100 / this.state.lastMonthVisits) * record.visits + "%",
+                            height: "100%",
+                            top: 0,
+                            left: 0,
+                            background: "#0050b3",
+                            zIndex: 50
+                        }}/>
+                        <div style={{zIndex: 999, position: "absolute"}}>
+                            {text}
+                        </div>
+                        <div>{text}</div>
+                    </div>
+                }
             },
             {
                 title: 'Visitors',
@@ -328,6 +345,7 @@ class Website extends React.Component {
                     if (a.visits < b.visits) return -1;
                     if (a.visits > b.visits) return 1;
                 },
+                render: (text) => <div className={"table-padding-percentage"}>{text}</div>
             },
             {
                 title: 'Views',
@@ -337,6 +355,7 @@ class Website extends React.Component {
                     if (a.views < b.views) return -1;
                     if (a.views > b.views) return 1;
                 },
+                render: (text) => <div className={"table-padding-percentage"}>{text}</div>
             }
         ]
 
@@ -344,7 +363,25 @@ class Website extends React.Component {
             {
                 title: 'Browser',
                 dataIndex: 'browser',
-                key: 'browser'
+                key: 'browser',
+                render: (text, record) => {
+                    return <div className={"table-padding-percentage"}>
+                        <div style={{
+                            position: "absolute",
+                            width: (100 / this.state.lastMonthVisits) * record.visits + "%",
+                            height: "100%",
+                            top: 0,
+                            left: 0,
+                            background: "#0050b3",
+                            zIndex: 50
+                        }}/>
+
+                        <div style={{zIndex: 999, position: "absolute"}}>
+                            {text}
+                        </div>
+                        <div>{text}</div>
+                    </div>
+                }
             },
             {
                 title: 'Visitors',
@@ -355,6 +392,7 @@ class Website extends React.Component {
                     if (a.visits < b.visits) return -1;
                     if (a.visits > b.visits) return 1;
                 },
+                render: (text) => <div className={"table-padding-percentage"}>{text}</div>
             },
             {
                 title: 'Views',
@@ -364,6 +402,7 @@ class Website extends React.Component {
                     if (a.views < b.views) return -1;
                     if (a.views > b.views) return 1;
                 },
+                render: (text) => <div className={"table-padding-percentage"}>{text}</div>
             }
         ]
 
@@ -438,7 +477,8 @@ class Website extends React.Component {
                     <Title style={{color: this.props.darkmode ? "white" : "black"}}
                            level={3}>Top {this.state.hourlyPathsTable.length} paths</Title>
                     <Spin spinning={this.state.reloading}>
-                        <Table showSorterTooltip={false} className={this.props.darkmode ? "darkmode" : null}
+                        <Table size={"medium"} showSorterTooltip={false}
+                               className={this.props.darkmode ? "darkmode" : null}
                                dataSource={this.state.hourlyPathsTable} columns={activeWebsiteColumns}
                                pagination={false}/>
                     </Spin>
@@ -449,7 +489,8 @@ class Website extends React.Component {
                     <Title style={{color: this.props.darkmode ? "white" : "black"}}
                            level={3}>Top {this.state.hourlyBrowsersTable.length} browsers</Title>
                     <Spin spinning={this.state.reloading}>
-                        <Table showSorterTooltip={false} className={this.props.darkmode ? "darkmode" : null}
+                        <Table size={"medium"} showSorterTooltip={false}
+                               className={this.props.darkmode ? "darkmode" : null}
                                dataSource={this.state.hourlyBrowsersTable} columns={browserColumns} pagination={false}/>
                     </Spin>
                 </Col>)}
