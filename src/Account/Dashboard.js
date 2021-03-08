@@ -1,5 +1,5 @@
 import {Row, Col, Layout, Menu, Skeleton} from "antd";
-import {HomeOutlined, UserOutlined} from "@ant-design/icons";
+import {HomeOutlined, MenuOutlined, UserOutlined} from "@ant-design/icons";
 import BreadcrumbPath from "../BreadcrumbPath";
 import {Link, Redirect, Route, Switch} from "react-router-dom";
 import * as React from "react";
@@ -21,7 +21,7 @@ const api = axios.create({
 const categories = [
     {
         name: "Account",
-        icon: <UserOutlined />,
+        icon: <UserOutlined/>,
         items: [
             {
                 path: "/account/details",
@@ -35,7 +35,7 @@ const categories = [
     },
     {
         name: "Applications",
-        icon: <HomeOutlined />,
+        icon: <HomeOutlined/>,
         items: [
             {
                 path: "/applications/websites",
@@ -51,7 +51,9 @@ class Dashboard extends React.Component {
 
         this.state = {
             openSelection: {},
-            activeMenus: [this.getActiveCategory()]
+            activeMenus: [this.getActiveCategory()],
+            sideCollapsed: window.innerWidth < 992,
+            onMobile: window.innerWidth < 992
         }
 
         this.menuRef = null;
@@ -61,20 +63,19 @@ class Dashboard extends React.Component {
         }
     }
 
-    capitalizeFirstLetter(string)
-    {
+    capitalizeFirstLetter(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
     getActiveCategory() {
-        for(let category of categories) {
-            for(let item of category.items) {
-                if(item.path === window.location.pathname)
+        for (let category of categories) {
+            for (let item of category.items) {
+                if (item.path === window.location.pathname)
                     return category.name;
             }
         }
 
-        if(window.location.pathname.split("/").length > 1) {
+        if (window.location.pathname.split("/").length > 1) {
             return this.capitalizeFirstLetter(window.location.pathname.split("/")[1]);
         }
 
@@ -82,8 +83,8 @@ class Dashboard extends React.Component {
     }
 
     getActivePage() {
-        if(window.location.pathname.split("/").length > 1) {
-            if(window.location.pathname.split("/")[2] === "website")
+        if (window.location.pathname.split("/").length > 1) {
+            if (window.location.pathname.split("/")[2] === "website")
                 return "/applications/websites";
         }
 
@@ -91,14 +92,14 @@ class Dashboard extends React.Component {
     }
 
     checkApiKey(prevProps, force) {
-        if(force || this.props.apikey !== prevProps.apikey) {
+        if (force || this.props.apikey !== prevProps.apikey) {
             api.defaults.headers = {
                 "Authorization": this.props.apikey
             }
 
             api.get("account/authenticated")
                 .then(res => {
-                    if(!res.data.success) {
+                    if (!res.data.success) {
                         localStorage.clear();
                         window.location.href = "/account/login"
                     } else {
@@ -130,8 +131,8 @@ class Dashboard extends React.Component {
     componentDidUpdate(prevProps, prevState, snapshot) {
         this.checkApiKey(prevProps);
 
-        if(prevProps.update !== this.props.update) {
-            if(!this.props.updateDashboardTo) {
+        if (prevProps.update !== this.props.update) {
+            if (!this.props.updateDashboardTo) {
                 this.setState({
                     openSelection: {
                         openKeys: [...this.state.activeMenus, "Applications"],
@@ -160,15 +161,51 @@ class Dashboard extends React.Component {
         }
     }
 
+    onCollapse = collapsed => {
+        this.setState({sideCollapsed: collapsed});
+    };
+
+    updateDimensions() {
+        if (window.innerWidth <= 992) {
+            this.setState({sideCollapsed: true, onMobile: true});
+        } else {
+            this.setState({sideCollapsed: false, onMobile: false});
+        }
+    }
+
+    componentDidMount() {
+        window.addEventListener('resize', () => {
+            this.updateDimensions();
+        });
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', () => {
+            this.updateDimensions();
+        });
+    }
+
+    clickedOutSideMenu() {
+        if (this.state.onMobile) {
+            this.onCollapse(true);
+        }
+    }
+
     render() {
-        return <Layout style={{background: this.props.darkmode ? "#222222" : null, color: this.props.darkmode ? "white" : "black"}}>
-            <Sider width={200} className="site-layout-background" style={{position: "fixed", bottom: 40, top: 80}}>
+        return <Layout style={{
+            background: this.props.darkmode ? "#222222" : null,
+            color: this.props.darkmode ? "white" : "black"
+        }}>
+            <Sider collapsible collapsed={this.state.sideCollapsed} width={this.state.onMobile ? "80%" : 200}
+                   onCollapse={this.onCollapse}
+                   className="site-layout-background sider-menu"
+                   style={{position: "fixed", bottom: 40, top: 64}}>
                 <Menu
                     theme={this.props.darkmode ? "dark" : "light"}
                     mode="inline"
                     defaultSelectedKeys={[this.getActivePage()]}
                     defaultOpenKeys={[this.getActiveCategory()]}
-                    style={{ height: '100%', borderRight: 0, background: this.props.darkmode ? "#141414" : null }}
+                    style={{height: '100%', borderRight: 0, background: this.props.darkmode ? "#141414" : null}}
                     onOpenChange={(v) => {
                         this.onMenuOpenChange(v)
                     }}
@@ -176,22 +213,28 @@ class Dashboard extends React.Component {
                     {...this.state.openSelection}
                 >
 
-                    { categories.map(category => {
+                    {categories.map(category => {
                         return <SubMenu key={category.name} icon={category.icon} title={category.name}>
-                            { category.items.map(item => {
+                            {category.items.map(item => {
                                 return <Menu.Item key={item.path}>
-                                    <Link to={item.path}>{ item.name }</Link>
+                                    <Link to={item.path}>{item.name}</Link>
                                 </Menu.Item>
                             })}
                         </SubMenu>
-                    }) }
+                    })}
                 </Menu>
             </Sider>
 
-            <Suspense fallback={<Skeleton />}>
-                <Layout style={{ padding: '0 24px 24px', marginLeft: 200, background: this.props.darkmode ? "#222222" : null, color: this.props.darkmode ? "white" : "black" }}>
+            <Suspense fallback={<Skeleton/>}>
+                <Layout onClick={() => {
+                    this.clickedOutSideMenu();
+                }} style={{
+                    padding: '0 24px 24px',
+                    background: this.props.darkmode ? "#222222" : null,
+                    color: this.props.darkmode ? "white" : "black"
+                }}>
                     <Content
-                        className="site-layout-background"
+                        className="site-layout-background page-content"
                         style={{
                             padding: 24,
                             minHeight: 280,
@@ -200,18 +243,19 @@ class Dashboard extends React.Component {
                             right: 0,
                             top: 50,
                             bottom: 0,
-                            overflowY: "scroll"
+                            overflowWrap: "break-word",
+                            overflowY: "auto"
                         }}
                     >
                         <Row>
                             <Col span={24}>
-                                <BreadcrumbPath darkmode={this.props.darkmode} style={{ margin: '16px 0' }} />&nbsp;
+                                <BreadcrumbPath darkmode={this.props.darkmode} style={{margin: '16px 0'}}/>&nbsp;
                             </Col>
                         </Row>
 
                         <Switch>
                             <Route path={"/account/details"}>
-                                <AccountDetails darkmode={this.props.darkmode} apikey={this.props.apikey} />
+                                <AccountDetails darkmode={this.props.darkmode} apikey={this.props.apikey}/>
                             </Route>
 
                             <Route path={"/account/privacy"}>
@@ -219,7 +263,7 @@ class Dashboard extends React.Component {
                             </Route>
 
                             <Route path={"/applications"}>
-                                <Applications darkmode={this.props.darkmode} apikey={this.props.apikey}/>
+                                <Applications mobile={this.state.onMobile}  darkmode={this.props.darkmode} apikey={this.props.apikey}/>
                             </Route>
 
                             <Route path={"/account"}>
@@ -227,10 +271,19 @@ class Dashboard extends React.Component {
                             </Route>
                         </Switch>
 
-                        <Footer style={{backgroundColor: this.props.darkmode ? "#222222" : null, color: this.props.darkmode ? "white" : "black", textAlign: "center"}}>G-Development, Kane Petra &#xa9; { new Date().getFullYear() === 2021 ? new Date().getFullYear() : `2021 - ${ new Date().getFullYear() }`}</Footer>
+                        <Footer style={{
+                            backgroundColor: this.props.darkmode ? "#222222" : null,
+                            color: this.props.darkmode ? "white" : "black",
+                            textAlign: "center"
+                        }}>G-Development, Kane
+                            Petra &#xa9; {new Date().getFullYear() === 2021 ? new Date().getFullYear() : `2021 - ${new Date().getFullYear()}`}</Footer>
                     </Content>
                 </Layout>
             </Suspense>
+
+            <MenuOutlined className={"mobile-menu"} onClick={() => {
+                this.onCollapse(!this.state.sideCollapsed)
+            }}/>
         </Layout>
     }
 }

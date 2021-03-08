@@ -4,16 +4,16 @@ import Title from "antd/lib/typography/Title";
 import moment from "moment";
 import {ReloadOutlined} from "@ant-design/icons";
 
-const { RangePicker } = DatePicker;
+const {RangePicker} = DatePicker;
 
 class Header extends React.Component {
     render() {
         return <Row>
-            <Col span={12}>
-                <Title style={{color: this.props.darkmode ? "white" : "black"}}>{ this.props.name }</Title>
+            <Col>
+                <Title style={{color: this.props.darkmode ? "white" : "black"}}>{this.props.name}</Title>
             </Col>
-            <Col span={12} style={{textAlign: "right"}}>
-                <RangePicker onChange={(date) => {
+            <Col flex={"auto"} style={{textAlign: "right"}}>
+                <RangePicker showTime={this.props.mobile} onChange={(date) => {
                     this.props.setDataRange(date);
                 }} ranges={{
                     Today: [moment().startOf("day"), moment()],
@@ -23,8 +23,10 @@ class Header extends React.Component {
                     'Last 30 days': [moment().add(-30, 'days'), moment()],
                     'Last Year': [moment().add(-365, 'days'), moment()],
                     'All Time': [moment("1970-1-1"), moment()],
-                }}  defaultValue={[moment().add(-30, 'days'), moment()]} format="YYYY-MM-DD"/>
-                <Button onClick={() => {this.props.reloadWebsite()}} loading={ this.props.reloading } icon={ <ReloadOutlined/> }>Reload</Button>
+                }} defaultValue={[moment().add(-30, 'days'), moment()]} format="YYYY-MM-DD"/>
+                <Button onClick={() => {
+                    this.props.reloadWebsite()
+                }} loading={this.props.reloading} icon={<ReloadOutlined/>}>Reload</Button>
             </Col>
         </Row>
     }

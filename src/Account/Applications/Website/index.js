@@ -472,7 +472,7 @@ class Website extends React.Component {
 
         return <Row gutter={8}>
             <Col span={24}>
-                <Header darkmode={this.props.darkmode} setDataRange={(range) => {
+                <Header mobile={this.props.mobile} darkmode={this.props.darkmode} setDataRange={(range) => {
                     this.setDataRange(range);
                 }} reloading={this.state.reloading} name={this.state.name} reloadWebsite={() => {
                     this.reloadWebsite();
@@ -503,7 +503,7 @@ class Website extends React.Component {
             </Col>
 
             {this.state.hourlyPathsTable.length <= 1 ? "" : (
-                <Col ref={this.startTableRef} span={12}>
+                <Col ref={this.startTableRef} md={{span: 12}} xs={{span: 24}}>
                     <Title style={{color: this.props.darkmode ? "white" : "black"}}
                            level={3}>Top {this.state.hourlyPathsTable.length} paths</Title>
                     <Spin spinning={this.state.reloading}>
@@ -515,7 +515,7 @@ class Website extends React.Component {
                 </Col>)}
 
             {this.state.hourlyBrowsersTable.length <= 0 ? "" : (
-                <Col span={12}>
+                <Col md={{span: 12}} xs={{span: 24}}>
                     <Title style={{color: this.props.darkmode ? "white" : "black"}}
                            level={3}>Top {this.state.hourlyBrowsersTable.length} browsers</Title>
                     <Spin spinning={this.state.reloading}>

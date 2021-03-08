@@ -110,7 +110,7 @@ class Websites extends React.Component {
                     textToHighlight={text ? text.toString() : ''}
                 />
             ) : (
-                <span>{ text }</span>
+                <span>{text}</span>
             ),
     });
 
@@ -169,7 +169,7 @@ class Websites extends React.Component {
 
     setPopupActive(id, bool) {
         this.setState(prevState => {
-            if(id.split("_")[0] === ("delete") || id.split("_")[0] === ("deactivate")) {
+            if (id.split("_")[0] === ("delete") || id.split("_")[0] === ("deactivate")) {
                 id = "actionmenu_" + id.split("_")[1];
             }
 
@@ -184,7 +184,7 @@ class Websites extends React.Component {
         const key = this.state.actionMenuTarget;
         const action = key.split("_");
 
-        if(action[0] === "delete" || action[0] === "deactivate")
+        if (action[0] === "delete" || action[0] === "deactivate")
             this.setLoaderActive("actionmenu_" + action[1], true);
         else
             this.setLoaderActive(key, true);
@@ -196,10 +196,10 @@ class Websites extends React.Component {
                     trackingCode: action[1]
                 })
                     .then(_ => {
-                        if(action[0] === "delete" || action[0] === "deactivate") {
+                        if (action[0] === "delete" || action[0] === "deactivate") {
                             this.setLoaderActive("actionmenu_" + action[1], false);
                             this.setPopupActive("actionmenu_" + action[1], false);
-                        }else {
+                        } else {
                             this.setLoaderActive(key, false);
                             this.setPopupActive(key, false)
                         }
@@ -209,10 +209,10 @@ class Websites extends React.Component {
                     .catch(err => {
                         alert(err.message)
 
-                        if(action[0] === "delete" || action[0] === "deactivate") {
+                        if (action[0] === "delete" || action[0] === "deactivate") {
                             this.setLoaderActive("actionmenu_" + action[1], false);
                             this.setPopupActive("actionmenu_" + action[1], false);
-                        }else {
+                        } else {
                             this.setLoaderActive(key, false);
                             this.setPopupActive(key, false)
                         }
@@ -225,10 +225,10 @@ class Websites extends React.Component {
                     trackingCode: action[1]
                 })
                     .then(_ => {
-                        if(action[0] === "delete" || action[0] === "deactivate") {
+                        if (action[0] === "delete" || action[0] === "deactivate") {
                             this.setLoaderActive("actionmenu_" + action[1], false);
                             this.setPopupActive("actionmenu_" + action[1], false);
-                        }else {
+                        } else {
                             this.setLoaderActive(key, false);
                             this.setPopupActive(key, false)
                         }
@@ -238,10 +238,10 @@ class Websites extends React.Component {
                     .catch(err => {
                         alert(err.message)
 
-                        if(action[0] === "delete" || action[0] === "deactivate") {
+                        if (action[0] === "delete" || action[0] === "deactivate") {
                             this.setLoaderActive("actionmenu_" + action[1], false);
                             this.setPopupActive("actionmenu_" + action[1], false);
-                        }else {
+                        } else {
                             this.setLoaderActive(key, false);
                             this.setPopupActive(key, false)
                         }
@@ -301,8 +301,8 @@ class Websites extends React.Component {
                 dataIndex: 'name',
                 key: 'name',
                 sorter: (a, b) => {
-                    if(a.name < b.name) return -1;
-                    if(a.name > b.name) return 1;
+                    if (a.name < b.name) return -1;
+                    if (a.name > b.name) return 1;
                 },
             },
             {
@@ -310,14 +310,14 @@ class Websites extends React.Component {
                 dataIndex: 'address',
                 key: 'address',
                 sorter: (a, b) => {
-                    if(a.address < b.address) return -1;
-                    if(a.address > b.address) return 1;
+                    if (a.address < b.address) return -1;
+                    if (a.address > b.address) return 1;
                 },
             },
             {
                 title: 'Tracking Code',
                 dataIndex: 'trackingCode',
-                key: 'trackingCode'
+                key: 'trackingCode',
             },
             {
                 title: "Action",
@@ -334,7 +334,8 @@ class Websites extends React.Component {
                                 okButtonProps={{loading: this.state.loaderActive["actionmenu_" + record.trackingCode]}}
                                 onConfirm={() => {
                                     this.handleActionMenu();
-                                }} title={"Are you sure you want to " + this.state.actionMenuAction + " " + record.name + "?"}>
+                                }}
+                                title={"Are you sure you want to " + this.state.actionMenuAction + " " + record.name + "?"}>
                         <Dropdown trigger={"click"} overlay={
                             <Menu>
                                 <Menu.Item onClick={() => {
@@ -367,8 +368,8 @@ class Websites extends React.Component {
                 dataIndex: 'name',
                 key: 'name',
                 sorter: (a, b) => {
-                    if(a.name < b.name) return -1;
-                    if(a.name > b.name) return 1;
+                    if (a.name < b.name) return -1;
+                    if (a.name > b.name) return 1;
                 },
             },
             {
@@ -376,14 +377,16 @@ class Websites extends React.Component {
                 dataIndex: 'address',
                 key: 'address',
                 sorter: (a, b) => {
-                    if(a.address < b.address) return -1;
-                    if(a.address > b.address) return 1;
+                    if (a.address < b.address) return -1;
+                    if (a.address > b.address) return 1;
                 },
+                responsive: ['md'],
             },
             {
                 title: 'Tracking Code',
                 dataIndex: 'trackingCode',
                 key: 'trackingCode',
+                responsive: ['md'],
             },
             {
                 title: "Action",
@@ -395,16 +398,16 @@ class Websites extends React.Component {
                             loading={this.state.loaderActive["d-activate_" + record.trackingCode]}
                             style={{marginRight: 5}}>Activate</Button>
 
-                        <Popconfirm onCancel={() => this.setPopupActive("d-delete_" + record.trackingCode, false)}
-                                    onClick={() => this.setPopupActive("d-delete_" + record.trackingCode, true)}
-                                    visible={this.state.popupActive["d-delete_" + record.trackingCode]}
-                                    okButtonProps={{loading: this.state.loaderActive["d-delete_" + record.trackingCode]}}
-                                    onConfirm={() => {
-                                        this.setActionMenuTarget("d-delete_" + record.trackingCode)
-                                        this.handleActionMenu();
-                                    }} title={"Are you sure you want to delete " + record.name + "?"}>
-                            <Button danger>Delete</Button>
-                        </Popconfirm>
+                    <Popconfirm onCancel={() => this.setPopupActive("d-delete_" + record.trackingCode, false)}
+                                onClick={() => this.setPopupActive("d-delete_" + record.trackingCode, true)}
+                                visible={this.state.popupActive["d-delete_" + record.trackingCode]}
+                                okButtonProps={{loading: this.state.loaderActive["d-delete_" + record.trackingCode]}}
+                                onConfirm={() => {
+                                    this.setActionMenuTarget("d-delete_" + record.trackingCode)
+                                    this.handleActionMenu();
+                                }} title={"Are you sure you want to delete " + record.name + "?"}>
+                        <Button danger>Delete</Button>
+                    </Popconfirm>
                 </div>
             }
         ]
@@ -447,12 +450,17 @@ class Websites extends React.Component {
         }
 
         return <div>
-            <Table showSorterTooltip={false} className={this.props.darkmode ? "darkmode" : null} loading={this.state.loadingWebsites} title={() => <div>
-                <Row style={{background: this.props.darkmode ? "#303030" : null, color: this.props.darkmode ? "white" : "black"}}>
-                    <Col span={20}>
-                        <Title style={{color: this.props.darkmode ? "white" : "black"}} level={3}>Active Websites</Title>
+            <Table showSorterTooltip={false} className={this.props.darkmode ? "darkmode" : null}
+                   loading={this.state.loadingWebsites} title={() => <div>
+                <Row style={{
+                    background: this.props.darkmode ? "#303030" : null,
+                    color: this.props.darkmode ? "white" : "black"
+                }}>
+                    <Col>
+                        <Title style={{color: this.props.darkmode ? "white" : "black"}} level={3}>Active
+                            Websites</Title>
                     </Col>
-                    <Col span={4}>
+                    <Col flex="auto">
                         <div style={{textAlign: "right"}}>
                             <Button loading={this.state.loadingWebsites} onClick={() => {
                                 this.reloadWebsites()
@@ -465,10 +473,16 @@ class Websites extends React.Component {
 
             <Divider/>
 
-            <Table showSorterTooltip={false} className={this.props.darkmode ? "darkmode" : null} loading={this.state.loadingWebsites} title={() => <Title style={{color: this.props.darkmode ? "white" : "black"}} level={3}>Inactive Websites</Title>}
+            <Table showSorterTooltip={false} className={this.props.darkmode ? "darkmode" : null}
+                   loading={this.state.loadingWebsites}
+                   title={() => <Title style={{color: this.props.darkmode ? "white" : "black"}} level={3}>Inactive
+                       Websites</Title>}
                    size={"medium"} dataSource={this.state.inactiveWebsites} columns={inactiveWebsiteColumns}/>
 
-            <Modal onCancel={() => {this.setWebsiteFormVisible(false)}} className={this.props.darkmode ? "darkmode" : null} title={"Add new website"} footer="" visible={this.state.addWebsiteFormVisible}
+            <Modal onCancel={() => {
+                this.setWebsiteFormVisible(false)
+            }} className={this.props.darkmode ? "darkmode" : null} title={"Add new website"} footer=""
+                   visible={this.state.addWebsiteFormVisible}
                    confirmLoading={this.state.websiteFormLoading}>
                 <Form
                     {...layout}
@@ -499,10 +513,12 @@ class Websites extends React.Component {
                         <Input/>
                     </Form.Item>
 
-                    <Form.Item label={<span style={{color: this.props.darkmode ? "white" : "black"}}>Captcha</span>} style={{textAlign: "center", width: "100%"}} name="RecaptchaToken">
+                    <Form.Item label={<span style={{color: this.props.darkmode ? "white" : "black"}}>Captcha</span>}
+                               style={{textAlign: "center", width: "100%"}} name="RecaptchaToken">
                         <ReCAPTCHA ref={(r) => {
                             this.setCaptchaRef(r);
-                        }} theme={this.props.darkmode ? "dark" : "light"} sitekey={"6Lec9loaAAAAAHS_hxY4lrBzZIeP2tUIgn90KVBK"} />
+                        }} theme={this.props.darkmode ? "dark" : "light"}
+                                   sitekey={"6Lec9loaAAAAAHS_hxY4lrBzZIeP2tUIgn90KVBK"}/>
                     </Form.Item>
 
                     <div style={{textAlign: "right", padding: 10}}>
@@ -528,7 +544,9 @@ class Websites extends React.Component {
                 </Form>
             </Modal>
 
-            <WebsiteSimpleDetails darkmode={this.props.darkmode} api={this.props.api} reload={this.state.shouldReloadWebsiteDetails} code={this.state.websiteDetailsID} visible={this.state.websiteDetailsVisible} close={() => {
+            <WebsiteSimpleDetails darkmode={this.props.darkmode} api={this.props.api}
+                                  reload={this.state.shouldReloadWebsiteDetails} code={this.state.websiteDetailsID}
+                                  visible={this.state.websiteDetailsVisible} close={() => {
                 this.hideWebsiteDetails();
             }}/>
         </div>

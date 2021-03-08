@@ -133,7 +133,7 @@ class LoggedIn extends React.Component {
                         </div>
                     </li>
                 </Dropdown>
-                <li className={"ant-menu-item ant-menu-item-only-child"} style={{float: "right"}}>
+                <li className={"ant-menu-item ant-menu-item-only-child search-bar"} style={{float: "right"}}>
                         <AutoComplete
                             dropdownClassName={`${this.props.darkmode ? "darkmode" : null} autocomplete`}
                             dropdownMatchSelectWidth={500}

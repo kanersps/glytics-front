@@ -1,9 +1,5 @@
 @import '~antd/dist/antd.css';
 
-.App {
-    text-align: center;
-}
-
 .login-form {
     margin-left: auto;
     margin-right: auto;
@@ -120,17 +116,6 @@
     margin-right: 50px;
 }
 
-.App-logo {
-    height: 40vmin;
-    pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-    .App-logo {
-        animation: App-logo-spin infinite 20s linear;
-    }
-}
-
 .anticon-loading {
     margin-left: auto !important;
     margin-right: auto !important;
@@ -141,30 +126,96 @@
     margin-right: auto !important;
 }
 
-.App-header {
-    background-color: #282c34;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
-}
-
-.App-link {
-    color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
-}
-
 body {
     height: 100%
+}
+
+.ant-layout-sider-dark {
+    background: rgb(20, 20, 20);
+}
+
+/* Mobile
+------------------------*/
+@media screen and (max-width: 992px) {
+    .sider-menu {
+        z-index: 5000;
+        width: 80% !important;
+        height: 100%;
+    }
+
+    .ant-layout-sider-collapsed {
+        z-index: 0;
+    }
+
+    .ant-menu-inline-collapsed {
+        display: none;
+        z-index: -1;
+    }
+
+    .ant-layout-sider-trigger {
+        display: none;
+    }
+
+    .mobile-menu {
+        position: fixed;
+        top: 15px;
+        left: 10px;
+        z-index: 5;
+        font-size: 35px;
+        color: white;
+    }
+
+    .ant-layout-sider {
+        width: 80%;
+        background: none;
+    }
+
+    .search-bar {
+        display: none;
+    }
+
+    .ant-picker-range {
+        width: 232px;
+        float: left;
+
+    }
+
+    .ant-card {
+        margin-top: 10px;
+    }
+
+    .ant-picker-time-panel {
+        display: none;
+    }
+
+    .ant-drawer-content-wrapper {
+        width: 100% !important;
+    }
+
+    .page-content {
+        left: 0px !important;
+        top: 25px !important;
+    }
+
+    .ant-table {
+        overflow: auto;
+    }
+
+    .ant-breadcrumb {
+        display: none;
+    }
+}
+
+@media screen and (min-width: 992px) {
+    .ant-layout-sider-trigger {
+        display: none;
+    }
+
+    .sider-menu {
+        bottom: 0 !important;
+    }
+
+    .mobile-menu {
+        display: none;
+    }
 }
