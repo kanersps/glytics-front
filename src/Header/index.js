@@ -14,7 +14,8 @@ class GHeader extends Component {
         return (
             <Header style={{position: "fixed", width: "100%", zIndex: 3, background: "#141414"}}>
                 <Menu style={{background: "#141414"}} theme="dark" mode="horizontal" selectedKeys={[""]}>
-                    <li style={{background: "#141414"}} className={"ant-menu-item ant-menu-item-only-child brand"}><Link
+                    <li style={{background: "#141414", padding: 0, paddingLeft: 15}}
+                        className={"ant-menu-item ant-menu-item-only-child brand"}><Link
                         onClick={() => {
                             this.props.updateDashboard("Account", "/account/details")
                         }} to={this.props.loggedIn ? "/account" : "/"}><span>G-Lytics {this.props.apikey}</span></Link>
