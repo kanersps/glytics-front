@@ -27,9 +27,11 @@ class Website extends React.Component {
             previousMonthVisitors: 0,
             previousMonthViews: 0,
             chartType: "Line",
-            dataRange: []
+            dataRange: [],
+            theReference: null
         }
 
+        this.startTableRef = React.createRef();
         this.loadedEnough = false;
     }
 
@@ -319,14 +321,18 @@ class Website extends React.Component {
                 dataIndex: 'path',
                 key: 'path',
                 render: (text, record) => {
+                    let width = 1;
+                    if (this.startTableRef && this.startTableRef.current)
+                        width = this.startTableRef.current.clientWidth || 1;
+
                     return <div className={"table-padding-percentage"}>
                         <div style={{
                             position: "absolute",
-                            width: (100 / this.state.lastMonthVisits) * record.visits + "%",
+                            width: (width / this.state.lastMonthVisits) * record.visits + "px",
                             height: "100%",
                             top: 0,
                             left: 0,
-                            background: "#0050b3",
+                            background: this.props.darkmode ? "#0050b3" : "#bae7ff",
                             zIndex: 50
                         }}/>
                         <div style={{zIndex: 999, position: "absolute"}}>
@@ -345,7 +351,12 @@ class Website extends React.Component {
                     if (a.visits < b.visits) return -1;
                     if (a.visits > b.visits) return 1;
                 },
-                render: (text) => <div className={"table-padding-percentage"}>{text}</div>
+                render: (text) => <div className={"table-padding-percentage"}>
+                    <div style={{zIndex: 999, position: "absolute"}}>
+                        {text}
+                    </div>
+                    <div>{text}</div>
+                </div>
             },
             {
                 title: 'Views',
@@ -355,7 +366,12 @@ class Website extends React.Component {
                     if (a.views < b.views) return -1;
                     if (a.views > b.views) return 1;
                 },
-                render: (text) => <div className={"table-padding-percentage"}>{text}</div>
+                render: (text) => <div className={"table-padding-percentage"}>
+                    <div style={{zIndex: 999, position: "absolute"}}>
+                        {text}
+                    </div>
+                    <div>{text}</div>
+                </div>
             }
         ]
 
@@ -365,14 +381,18 @@ class Website extends React.Component {
                 dataIndex: 'browser',
                 key: 'browser',
                 render: (text, record) => {
+                    let width = 1;
+                    if (this.startTableRef && this.startTableRef.current)
+                        width = this.startTableRef.current.clientWidth || 1;
+
                     return <div className={"table-padding-percentage"}>
                         <div style={{
                             position: "absolute",
-                            width: (100 / this.state.lastMonthVisits) * record.visits + "%",
+                            width: (width / this.state.lastMonthVisits) * record.visits + "px",
                             height: "100%",
                             top: 0,
                             left: 0,
-                            background: "#0050b3",
+                            background: this.props.darkmode ? "#0050b3" : "#bae7ff",
                             zIndex: 50
                         }}/>
 
@@ -392,7 +412,12 @@ class Website extends React.Component {
                     if (a.visits < b.visits) return -1;
                     if (a.visits > b.visits) return 1;
                 },
-                render: (text) => <div className={"table-padding-percentage"}>{text}</div>
+                render: (text) => <div className={"table-padding-percentage"}>
+                    <div style={{zIndex: 999, position: "absolute"}}>
+                        {text}
+                    </div>
+                    <div>{text}</div>
+                </div>
             },
             {
                 title: 'Views',
@@ -402,7 +427,12 @@ class Website extends React.Component {
                     if (a.views < b.views) return -1;
                     if (a.views > b.views) return 1;
                 },
-                render: (text) => <div className={"table-padding-percentage"}>{text}</div>
+                render: (text) => <div className={"table-padding-percentage"}>
+                    <div style={{zIndex: 999, position: "absolute"}}>
+                        {text}
+                    </div>
+                    <div>{text}</div>
+                </div>
             }
         ]
 
@@ -473,7 +503,7 @@ class Website extends React.Component {
             </Col>
 
             {this.state.hourlyPathsTable.length <= 1 ? "" : (
-                <Col span={12}>
+                <Col ref={this.startTableRef} span={12}>
                     <Title style={{color: this.props.darkmode ? "white" : "black"}}
                            level={3}>Top {this.state.hourlyPathsTable.length} paths</Title>
                     <Spin spinning={this.state.reloading}>
